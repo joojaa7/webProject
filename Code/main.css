@@ -86,18 +86,22 @@ body {
 }
 
 .menu_item_image {
-    width: 45%;
-    margin: 1rem 1rem 1rem 0;
+    width: calc(50% - 0.5rem);
+    box-sizing: border-box;
+    margin-right: 1rem;
+    margin-bottom: 1rem;
     border-radius: 0 1rem 1rem 0;
     border: 5px rgb(84, 141, 122) solid;
 
 }
 
 .item_description {
+    width: calc(50% - 0.5rem);
+    box-sizing: border-box;
+    margin-bottom: 1rem;
+    margin-top: 0;
+    padding: 1rem;
+    border-radius: 1rem 0 0 1rem;
     border: 5px rgb(50, 90, 77) solid;
-    margin: 1rem 0 1rem 0;
-    padding: 0.5rem;
-    border-radius: 1rem;
-    width: 45%;
     background-color: rgb(84, 141, 122);
 }
