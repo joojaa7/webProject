@@ -1,15 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="login.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="login.js" defer></script>
     <title>Login</title>
-</head>
-<body>
-    <p> Lorem, ipsum dolor sit amet consectetur adipisicing elit. 
-        Aliquid dolore, aliquam illum sunt repellat nam illo qui fugiat ipsum assumenda vel dignissimos, eveniet repudiandae totam sed esse,
-         beatae temporibus nesciunt.
-    </p>
-    <p>Käyttäjän profiili</p>
-</body>
+  </head>
+  <body>
+    <div class="container">
+      <div class="banner">
+        <div class="banner_content">
+          <img src="placeholder.jpg" alt="placeholder" class="banner_image" />
+          <div class="banner_text">
+            <h1>WELCOME TO THE WEBSITE</h1>
+            <p>Here you can modify your personal information!</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebanner">
+        <div class="sidebanner_content">
+          <h2 id="options-toggle">Options</h2>
+          <div class="options-items">
+            <ul>
+                <li><a href="#" id="avatar-link"><i class="fas fa-user-circle"></i> My Avatar</a></li>
+                <li><a href="#" id="bio-link"><i class="fas fa-user-edit"></i> Username & Bio</a></li>
+                <li><a href="#" id="contact_info-link"><i class="fas fa-address-card"></i> Contact Information</a></li>
+                <li><a href="#" id="preferences-link"><i class="fas fa-cog"></i> Preferences</a></li>
+                <li><a href="#" id="order_history-link"><i class="fas fa-history"></i> Order History</a></li>
+                <li><a href="#" id="bonus-link"><i class="fas fa-gift"></i> My Bonus Program</a></li>
+            </ul>
+            
+          </div>
+        </div>
+
+        <div
+          class="options-item-detail"
+          id="avatar-content"
+          style="display: none"
+        >
+          <p>Upload and change your avatar here.</p>
+          <!-- Form or input elements -->
+        </div>
+        <div class="options-item-detail" id="bio-content" style="display: none">
+          <p>Update your username and bio information.</p>
+          <!-- Form or input elements -->
+        </div>
+        <div
+          class="options-item-detail"
+          id="contact_info-content"
+          style="display: none"
+        >
+          <p>Manage your contact details here.</p>
+          <!-- Form or input elements -->
+        </div>
+        <div
+          class="options-item-detail"
+          id="preferences-content"
+          style="display: none"
+        >
+          <p>Set your dining preferences.</p>
+          <!-- Form or input elements -->
+        </div>
+        <div
+          class="options-item-detail"
+          id="order_history-content"
+          style="display: none"
+        >
+          <p>View and manage your order history.</p>
+          <!-- Additional elements like tables or lists -->
+        </div>
+        <div
+          class="options-item-detail"
+          id="bonus-content"
+          style="display: none"
+        >
+          <p>Details about your bonus program and benefits.</p>
+          <!-- Information and possibly progress indicators -->
+        </div>
+      </div>
+    </div>
+    <!-- Modal Structure -->
+    <div id="myModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <div id="modal-body"></div>
+      </div>
+    </div>
+  </body>
 </html>
