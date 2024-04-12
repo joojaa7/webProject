@@ -1,0 +1,104 @@
+html {
+    font-family: Arial, sans-serif;
+}
+
+body {
+    margin: 0;
+}
+.container {
+    width: 100%;
+}
+
+.banner {
+}
+.banner_content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    background-color: rgb(110, 233, 192);
+    padding: 2rem;
+}
+
+.banner_image {
+    max-width: 20%;
+    border-radius: 50%;
+    border-style: solid;
+    border-width: 0.5rem;
+    border-color: rgb(84, 141, 122);
+}
+
+.banner_name {
+    white-space: nowrap;
+    width: 50%;
+    padding: 5rem;
+    font-size: 50px;
+}
+
+.login_button {
+    position: absolute;
+    right: 3rem;
+    top: 1rem;
+    width: min-content;
+    height: min-content;
+    background-color: rgb(84, 141, 122);
+}
+
+.login_content {
+    padding: 0.3rem 1rem 0.3rem 1rem;
+}
+
+.menu {
+    width: 80%;
+    margin: auto;
+}
+
+
+.weekday_buttons {
+    width: 100%;
+    margin: auto;
+}
+
+.weekdays {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    padding: 0;
+}
+
+.weekday_link {
+    background-color: rgb(84, 141, 122);
+    padding: 1rem;
+}
+
+.menu_items {
+    width: 70%;
+    margin: auto;
+    background-color: rgb(110, 233, 192);
+    padding: 2rem;
+}
+
+.menu_entry {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    margin: auto;
+}
+
+.menu_item_image {
+    float: left;
+    width: 45%;
+    margin: 1rem 1rem 1rem 0;
+    border-radius: 0 1rem 1rem 0;
+    border: 5px rgb(84, 141, 122) solid;
+
+}
+
+.item_description {
+    border: 5px rgb(50, 90, 77) solid;
+    margin: 1rem 0 1rem 0;
+    padding: 0.5rem;
+    border-radius: 1rem;
+    width: 45%;
+    background-color: rgb(84, 141, 122);
+}
