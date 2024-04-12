@@ -1,3 +1,6 @@
+* {
+    box-sizing: border-box;
+}
 html {
     font-family: Arial, sans-serif;
 }
@@ -87,7 +90,6 @@ body {
 
 .menu_item_image {
     width: calc(50% - 0.5rem);
-    box-sizing: border-box;
     margin-right: 1rem;
     margin-bottom: 1rem;
     border-radius: 0 1rem 1rem 0;
@@ -97,7 +99,6 @@ body {
 
 .item_description {
     width: calc(50% - 0.5rem);
-    box-sizing: border-box;
     margin-bottom: 1rem;
     margin-top: 0;
     padding: 1rem;
