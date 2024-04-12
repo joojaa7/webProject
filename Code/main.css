@@ -19,6 +19,7 @@ body {
     flex-wrap: wrap;
     justify-content: space-around;
     background-color: rgb(110, 233, 192);
+    background-image: linear-gradient(to right,rgb(51, 92, 78), rgb(110, 233, 192) );
     padding: 2rem;
 }
 
@@ -70,7 +71,7 @@ body {
 }
 
 .weekday_link {
-    background-color: rgb(84, 141, 122);
+    background-image: linear-gradient(to right,rgb(121, 180, 161), rgb(110, 233, 192) );
     padding: 1rem;
 }
 
@@ -78,7 +79,7 @@ body {
     width: 70%;
     margin: auto;
     margin-bottom: 2rem;
-    background-color: rgb(110, 233, 192);
+    background-image: linear-gradient(to right,rgb(75, 119, 104), rgb(110, 233, 192) );
     padding: 2rem;
 }
 
