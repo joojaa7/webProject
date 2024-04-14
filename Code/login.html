@@ -174,16 +174,49 @@
             style="display: none"
           >
             <h3>Here you can select your favourite foods!</h3>
+            <form id="preferences-form" class="form">
+              <div class="form-group">
+                <label for="food">Select your favourite food:</label>
+                <select id="food" name="food" required>
+                  <option value="pizza">Pizza</option>
+                  <option value="burger">Burger</option>
+                  <option value="pasta">Kebab</option>
+                </select>
+              </div>
+            </form>
           </div>
-          <div
-            id="order_history-content"
-            class="form-content"
-            style="display: none"
-          >
+
+          <!-- Modifications added here -->
+          <div id="order_history-content" class="form-content">
             <h3>Order history here</h3>
+            <form id="order-history-form" class="form">
+              <div class="form-group">
+                <label for="order-id">Order ID:</label>
+                <input
+                  type="text"
+                  id="order-id"
+                  name="order-id"
+                  placeholder="Enter your order ID"
+                  required
+                />
+              </div>
+            </form>
           </div>
+
           <div id="bonus-content" class="form-content" style="display: none">
             <h3>Details about your personal bonus system</h3>
+            <form id="bonus-form" class="form">
+              <div class="form-group">
+                <label for="bonus-points">Bonus Points:</label>
+                <input
+                  type="number"
+                  id="bonus-points"
+                  name="bonus-points"
+                  placeholder="Enter your bonus points"
+                  required
+                />
+              </div>
+            </form>
           </div>
         </div>
       </div>
