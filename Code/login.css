@@ -9,16 +9,33 @@ body {
     width: 100%;
 }
 
+.content-wrapper {
+    display: flex;
+    align-items: start;
+}
 .sidebanner {
     width: 20vw;
+    height: 35vh;
     margin-top: 70px;
     margin-left: 10px;
-    height: 50vh;
     background-color: rgb(110, 233, 192);
     padding: 10px;
     overflow: auto;
     border-radius: 10px;
     /*border: 1px solid #000;*/
+}
+.options-input{
+    width: 70vw;
+    height: 55vh;
+    max-height: none;
+    background-color: aqua;
+    margin-left: 10px;
+    margin-top: 70px;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    box-sizing: border-box;
+    overflow: auto;
 }
 
 .banner_content {
@@ -84,53 +101,20 @@ h2 {
 }
 
 
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0,0,0,0.4);
-   
-    align-items: center;
-    justify-content: center;
-}
-
-/* Modal Content */
-.modal-content {
-    width: 50%;
-    background-color: #fefefe;
-    position: relative;
-    padding: 20px;
-    border: 1px solid #888;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
-
-
-.close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-}
-
-.close:hover,
-.close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-}
 
 @media (max-width: 600px) {
-    .modal-content {
-        width: 90%; 
-        margin: 20% auto; 
+    .content-wrapper {
+        flex-direction: column;
+    }
+    .options-input {
+        margin-left: 10px;
+        width: 90vw;
+        min-height: 60vh;
+    }
+
+    .sidebanner {
+        width: 90vw;
+        height: 35vh;
     }
 }
 
