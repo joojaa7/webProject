@@ -25,10 +25,16 @@
           </div>
         </div>
       </div>
+      <select id="roleSelector">
+        <option value="user">User</option>
+        <option value="admin">Admin</option>
+      </select>
+
       <div class="content-wrapper">
         <div class="sidebanner">
           <div class="sidebanner_content">
             <h2 id="options-toggle">Options</h2>
+
             <div class="options-items">
               <ul>
                 <li>
@@ -59,6 +65,23 @@
                 <li>
                   <a href="#" id="bonus-link"
                     ><i class="fas fa-gift"></i> My Bonus Program</a
+                  >
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="admin-only" id="adminSection">
+            <h2>Admin Settings</h2>
+            <div class="admin-items">
+              <ul>
+                <li>
+                  <a href="reservations.html"
+                    ><i class="fas fa-user-shield"></i> Table reservations</a
+                  >
+                </li>
+                <li>
+                  <a href="#" id="admin_update_menu-link"
+                    ><i class="fa-solid fa-burger"></i> Update menus</a
                   >
                 </li>
               </ul>
@@ -219,6 +242,27 @@
                   placeholder="Enter your bonus points"
                   required
                 />
+              </div>
+            </form>
+          </div>
+          <div
+            id="admin-update-menu-content"
+            class="form-content"
+            style="display: none"
+          >
+            <h3>Update the menu</h3>
+            <form id="update-menu-form">
+              <div class="form-group">
+                <label for="menu-item">Select a menu to update</label>
+                <select id="menu" name="menu-selector" required>
+                  <option value="menu_1">Menu 1</option>
+                  <option value="menu_2">Menu 2</option>
+                  <option value="menu_3">Menu 3</option>
+                  <option value="menu_4">Menu 4</option>
+                  <option value="menu_5">Menu 5</option>
+                  <option value="menu_6">Menu 6</option>
+                  <option value="menu_7">Menu 7</option>
+                </select>
               </div>
             </form>
           </div>

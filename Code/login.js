@@ -5,7 +5,9 @@ const linksToContentMap = {
   "preferences-link": "preferences-content",
   "order_history-link": "order_history-content",
   "bonus-link": "bonus-content",
+  "admin_update_menu-link": "admin-update-menu-content",
 };
+
 const optionsInput = document.querySelector(".options-input");
 let currentVisibleContent = null; // To keep track of the currently displayed content
 
@@ -32,5 +34,23 @@ Object.keys(linksToContentMap).forEach((linkId) => {
       event.preventDefault(); // Prevent default anchor behavior
       updateOptionsInput(linksToContentMap[linkId]);
     });
+  }
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+  const roleSelector = document.getElementById("roleSelector");
+  const adminSection = document.getElementById("adminSection");
+
+  roleSelector.addEventListener("change", function () {
+    if (this.value === "admin") {
+      adminSection.style.display = "block";
+    } else {
+      adminSection.style.display = "none";
+    }
+  });
+
+  // Initial check in case the default selected role is 'admin'
+  if (roleSelector.value === "admin") {
+    adminSection.style.display = "block";
   }
 });
