@@ -1,3 +1,5 @@
+"use strict";
+
 const linksToContentMap = {
   "avatar-link": "avatar-content",
   "bio-link": "bio-content",
@@ -88,12 +90,43 @@ const hamburgers = [
       "Simple Veggie Burger: A delightful blend of vegetables and beans, topped with fresh greens and tzatziki sauce.",
   },
 ];
+
 const menus = [
-  { hamburgerId: 1, date: "2024-04-20" },
-  { hamburgerId: 2, date: "2024-04-21" },
-  { hamburgerId: 3, date: "2024-04-22" },
-  { hamburgerId: 4, date: "2024-04-23" },
-  { hamburgerId: 5, date: "2024-04-24" },
+  {
+    hamburgerId: 1,
+    date: "2024-04-20",
+    name: "Classic Combo",
+    price: 8.99,
+    description: "A classic burger with cheese and special sauce.",
+  },
+  {
+    hamburgerId: 2,
+    date: "2024-04-21",
+    name: "Cheese Lovers Delight",
+    price: 9.99,
+    description: "Loaded with three types of cheese.",
+  },
+  {
+    hamburgerId: 3,
+    date: "2024-04-22",
+    name: "Bacon Bonanza",
+    price: 10.99,
+    description: "Crispy bacon and smoky barbecue sauce.",
+  },
+  {
+    hamburgerId: 4,
+    date: "2024-04-23",
+    name: "Spicy Special",
+    price: 11.99,
+    description: "Spicy jalapeños and hot chipotle mayo.",
+  },
+  {
+    hamburgerId: 5,
+    date: "2024-04-24",
+    name: "Veggie Favorite",
+    price: 7.99,
+    description: "A fresh veggie patty with green fixins.",
+  },
 ];
 
 const ingredients = [
@@ -180,7 +213,23 @@ const populateUserSelector = () => {
   });
 };
 
-populateUserSelector();
+const populateMenuSelector = () => {
+  const menuSelector = document.getElementById("menu");
+
+  menus.forEach((menu) => {
+    const option = document.createElement("option");
+    option.value = menu.hamburgerId;
+    option.textContent = `${menu.name}`;
+    menuSelector.appendChild(option);
+  });
+};
+
+const populateMockData = () => {
+  populateUserSelector();
+  populateMenuSelector();
+};
+
+populateMockData();
 
 const optionsInput = document.querySelector(".options-input");
 let currentVisibleContent = null; // To keep track of the currently displayed content

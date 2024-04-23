@@ -260,15 +260,31 @@
               <div class="form-group">
                 <label for="menu-item">Select a menu to update</label>
                 <select id="menu" name="menu-selector" required>
-                  <option value="menu_1">Menu 1</option>
-                  <option value="menu_2">Menu 2</option>
-                  <option value="menu_3">Menu 3</option>
-                  <option value="menu_4">Menu 4</option>
-                  <option value="menu_5">Menu 5</option>
-                  <option value="menu_6">Menu 6</option>
-                  <option value="menu_7">Menu 7</option>
+                  <!-- Menus will be added dynamically-->
                 </select>
               </div>
+              <div class="form-group">
+                <label for="menu-name">Menu Name:</label>
+                <input type="text" id="menu-name" name="menu-name" />
+              </div>
+              <div class="form-group">
+                <label for="menu-price">Price:</label>
+                <input
+                  type="number"
+                  id="menu-price"
+                  name="menu-price"
+                  step="0.01"
+                />
+              </div>
+              <div class="form-group">
+                <label for="menu-description">Description:</label>
+                <textarea
+                  id="menu-description"
+                  name="menu-description"
+                ></textarea>
+              </div>
+              <!-- Add fields for ingredients and allergens as needed -->
+              <button type="submit">Update Menu</button>
             </form>
           </div>
           <div
