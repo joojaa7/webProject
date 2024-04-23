@@ -14,11 +14,18 @@ body {
   width: 100%;
 }
 
+.banner {
+}
 .banner_content {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
   background-color: rgb(110, 233, 192);
+  background-image: linear-gradient(
+    to right,
+    rgb(51, 92, 78),
+    rgb(110, 233, 192)
+  );
   padding: 2rem;
 }
 
