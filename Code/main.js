@@ -73,3 +73,28 @@ document
     e.preventDefault();
     window.location = "login.html";
   });
+
+document.addEventListener("DOMContentLoaded", function () {
+  const mainPage = document.getElementById("mainPage");
+  const profilePage = document.getElementById("profilePage");
+  const profileButton = document.getElementById("profileButton");
+  const backButton = document.getElementById("backButton");
+
+  // Function to show profile page and hide main page
+  function goToProfilePage() {
+    mainPage.style.display = "none";
+    profilePage.style.display = "block";
+  }
+
+  // Function to show main page and hide profile page
+  function goToMainPage() {
+    profilePage.style.display = "none";
+    mainPage.style.display = "block";
+  }
+
+  // Event listener for profile button
+  profileButton.addEventListener("click", goToProfilePage);
+
+  // Event listener for back button
+  backButton.addEventListener("click", goToMainPage);
+});

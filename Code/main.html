@@ -8,7 +8,7 @@
     <title>Main</title>
   </head>
   <body>
-    <div class="container">
+    <div class="container" id="mainPage">
       <div class="banner">
         <div class="banner_content">
           <img src="placeholder.jpg" alt="placeholder" class="banner_image" />
@@ -75,20 +75,6 @@
               </p>
             </div>
           </div>
-          <div class="menu_entry">
-            <img
-              src="hampurilaiset.jpg"
-              alt="hampurilaiset"
-              class="menu_item_image"
-            />
-            <div class="item_description">
-              <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos
-                perspiciatis consequatur ab aspernatur explicabo dolore minima,
-                ipsam nostrum nihil fugit, voluptates distinctio aperiam numquam
-                rerum tempore maiores rem soluta ducimus?
-              </p>
-            </div>
           </div>
           <div class="menu_entry">
             <img
@@ -149,9 +135,125 @@
                 rerum tempore maiores rem soluta ducimus?
               </p>
             </div>
+          </div>
+          <div class="menu_entry">
+            <img
+              src="hampurilaiset.jpg"
+              alt="hampurilaiset"
+              class="menu_item_image"
+            />
+            <div class="item_description">
+              <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos
+                perspiciatis consequatur ab aspernatur explicabo dolore minima,
+                ipsam nostrum nihil fugit, voluptates distinctio aperiam numquam
+                rerum tempore maiores rem soluta ducimus?
+              </p>
+            </div>
+        </div>
+      </div>
+      <button class="profile-button" id="profileButton">Profile</button>
+    </div>
+
+    <div class="container" id="profilePage" style="display: none;">
+      <div class="banner">
+        <div class="banner_content">
+          <a href="main.html">
+            <img src="placeholder.jpg" alt="placeholder" class="banner_image" />
+          </a>
+          <div class="banner_text">
+            <h1>WELCOME TO THE WEBSITE</h1>
+            <p>Here you can modify your personal information!</p>
           </div>
         </div>
       </div>
+      <div class="content-wrapper">
+        <div class="sidebanner">
+          <div class="sidebanner_content">
+            <h2 id="options-toggle">Options</h2>
+            <div class="options-items">
+              <ul>
+                <li>
+                  <a href="#" id="avatar-link"
+                    ><i class="fas fa-user-circle"></i> My Avatar</a
+                  >
+                </li>
+                <li>
+                  <a href="#" id="bio-link"
+                    ><i class="fas fa-user-edit"></i> Username & Bio</a
+                  >
+                </li>
+                <li>
+                  <a href="#" id="contact_info-link"
+                    ><i class="fas fa-address-card"></i> Contact Information</a
+                  >
+                </li>
+                <li>
+                  <a href="#" id="preferences-link"
+                    ><i class="fas fa-cog"></i> Preferences</a
+                  >
+                </li>
+                <li>
+                  <a href="#" id="order_history-link"
+                    ><i class="fas fa-history"></i> Order History</a
+                  >
+                </li>
+                <li>
+                  <a href="#" id="bonus-link"
+                    ><i class="fas fa-gift"></i> My Bonus Program</a
+                  >
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="options-input">
+          <div id="avatar-content" class="form-content" style="display: none">
+            <form id="avatar-form" class="form">
+              <label for="avatar-upload">Upload new avatar:</label>
+              <input
+                type="file"
+                id="avatar-upload"
+                name="avatar"
+                accept="image/*"
+              />
+              <button type="submit">Upload</button>
+            </form>
+          </div>
+          <div id="order_history-content" class="form-content" style="display: none">
+            <h3>Order history here</h3>
+            <form id="order-history-form" class="form">
+              <div class="form-group">
+                <label for="order-id">Order ID:</label>
+                <input
+                  type="text"
+                  id="order-id"
+                  name="order-id"
+                  placeholder="Enter your order ID"
+                  required
+                />
+              </div>
+            </form>
+          </div>
+
+          <div id="bonus-content" class="form-content" style="display: none">
+            <h3>Details about your personal bonus system</h3>
+            <form id="bonus-form" class="form">
+              <div class="form-group">
+                <label for="bonus-points">Bonus Points:</label>
+                <input
+                  type="number"
+                  id="bonus-points"
+                  name="bonus-points"
+                  placeholder="Enter your bonus points"
+                  required
+                />
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <button class="back-button" id="backButton">Back to Main</button>
     </div>
   </body>
 </html>
