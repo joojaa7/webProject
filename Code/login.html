@@ -84,6 +84,11 @@
                     ><i class="fa-solid fa-burger"></i> Update menus</a
                   >
                 </li>
+                <li>
+                  <a href="#" id="admin_update_users-link"
+                    ><i class="fa-solid fa-users"></i> Manage users</a
+                  >
+                </li>
               </ul>
             </div>
           </div>
@@ -250,7 +255,7 @@
             class="form-content"
             style="display: none"
           >
-            <h3>Update the menu</h3>
+            <h3>Update menus:</h3>
             <form id="update-menu-form">
               <div class="form-group">
                 <label for="menu-item">Select a menu to update</label>
@@ -262,6 +267,21 @@
                   <option value="menu_5">Menu 5</option>
                   <option value="menu_6">Menu 6</option>
                   <option value="menu_7">Menu 7</option>
+                </select>
+              </div>
+            </form>
+          </div>
+          <div
+            id="admin-update-users-content"
+            class="form-content"
+            style="display: none"
+          >
+            <h3>Manage users:</h3>
+            <form id="update-users-form">
+              <div class="form-group">
+                <label for="user">Select a user to update</label>
+                <select id="user" name="user-selector" required>
+                  <!-- Users will be added dynamically-->
                 </select>
               </div>
             </form>
