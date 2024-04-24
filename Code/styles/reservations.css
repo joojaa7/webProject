@@ -73,6 +73,8 @@
 
 #currentTable {
   margin-left: 300px;
+  font-size: large;
+  font-weight: bold;
 }
 
 #detailsContainer {
