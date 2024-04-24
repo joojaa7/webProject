@@ -10,4 +10,18 @@ const getUserByName = async (user) => {
       return rows[0];
     };
 
-export { getUserByName };
+const addUser = async (user, file) => {
+  const {firstname, lastname, address, username, password, cardnumber, phonenumber} = user;
+  const sql = `INSERT INTO users (Firstname, Lastname, Address, Role, Username, Password, Cardnumber, Filename, phone_number)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
+  const avatar = file?.filename || null;
+  const data = [firstname, lastname, address, 'Guest', username, password, cardnumber, avatar, phonenumber];
+  const rows = await promisePool.execute(sql, data);
+  if (rows[0].affectedRows === 0){
+    return false
+  }
+  console.log( 'Success.')
+  return {user_id: rows[0].insertId};
+}
+
+export { getUserByName, addUser };
