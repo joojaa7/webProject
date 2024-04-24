@@ -21,23 +21,32 @@
 #dayCarousel {
   width: 80%;
   display: flex;
-  gap: 30vw;
+  gap: 15vw;
   margin: 20px 0;
   margin-left: 20px;
 }
 
+#loadReservationsForDate {
+  padding: 10px;
+  margin: 10px;
+}
+
 #dayCarousel button {
-  padding: 10px 20px; /* Adds padding inside the buttons */
-  background-color: #4caf50; /* A pleasant green background */
-  color: white; /* White text color */
-  border: none; /* No borders */
-  border-radius: 5px; /* Rounded corners */
-  cursor: pointer; /* Cursor indicates the button can be clicked */
-  transition: background-color 0.3s; /* Smooth transition for hover effect */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100px;
+  padding: 10px 20px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
 #dayCarousel button:hover {
-  background-color: #367b35; /* Darker green background on hover */
+  background-color: #367b35;
 }
 
 #reservationDetails {

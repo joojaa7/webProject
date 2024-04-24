@@ -17,21 +17,21 @@
         <label for="tableLocation">Describe location: </label>
         <input type="text" id="tableLocation" name="tableLocation" required />
         <button id="addTableButton">Submit</button>
-        <button id="removeTableButton">Remove selected table</button>
+        <!--<button id="removeTableButton">Remove selected table</button> -->
       </form>
     </div>
     <a href="/Code/views/login.html">Back to login</a>
-    <div id="dateSelector">
-      <h2>Select a Date</h2>
-      <input type="date" id="reservationDate" />
-      <button id="loadReservationsForDate">Load Reservations</button>
-    </div>
+
     <div id="tablesGrid">
       <!-- Tables will be dynamically loaded here -->
     </div>
     <div id="dayCarousel">
       <button id="previousDayBtn">Previous</button>
-      <!-- <button id="selectedDayBtn">Selected</button> -->
+      <div id="dateSelector">
+        <h2>Select a Date</h2>
+        <input type="date" id="reservationDate" />
+        <button id="loadReservationsForDate">Load Reservations</button>
+      </div>
       <button id="nextDayBtn">Next</button>
     </div>
     <div id="currentTable">Details for table:</div>

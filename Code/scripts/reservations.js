@@ -3,7 +3,8 @@
 import { tablesUrl } from "./variables.js";
 import { reservationsUrl } from "./variables.js";
 
-let currentTableId = 10;
+let currentTableId = 1;
+const initialDate = new Date();
 
 document
   .getElementById("loadReservationsForDate")
@@ -75,7 +76,7 @@ document.addEventListener("DOMContentLoaded", () => {
     .addEventListener("click", () => changeDate(1));
 
   // Initialize with today's date and load initial table reservations
-  const initialDate = new Date();
+
   updateDateInput(initialDate);
   loadTablesAndReservations(initialDate);
 });
@@ -98,7 +99,7 @@ function updateDateInput(date) {
   document.getElementById("reservationDate").value = dateStr; // Updates the date input
 }
 
-// Function to add a new table
+// Function to add a new table to the database
 const addTable = async () => {
   const capacityInput = document.getElementById("tableCapacity");
   const locationInput = document.getElementById("tableLocation");
@@ -123,14 +124,14 @@ const addTable = async () => {
     }
     const addedTable = await response.json();
     alert("New table added: ID " + addedTable.id);
-    fetchTables(); // Refresh the list of tables
+    loadTablesAndReservations(initialDate);
 
     // Clear the input fields after successful submission
     capacityInput.value = "";
     locationInput.value = "";
   } catch (err) {
     console.error(err);
-    alert(err.message); // Show the error message if something goes wrong
+    alert(err.message);
   }
 };
 
@@ -166,9 +167,10 @@ function loadTablesAndReservations(date) {
       });
       setupTableClickHandlers();
 
+      /*
       if (currentTableId) {
         displayTableReservations(currentTableId, date);
-      }
+      }*/
     })
     .catch((error) => {
       console.error("Error loading tables:", error);
@@ -253,7 +255,7 @@ async function fetchCustomerByReservationId(reservationId) {
 // TODO: Implement the updateReservation function to send a PUT request to the API to modify a reservation
 // TODO: Modify add reservation form to ask for customer data, save customer details as reservation is being made
 // TODO: Create "add new customer" and "use existing customer" buttons in the add reservation form
-// TODO: Implement calendar between previous and next day buttons to select the date
+
 // TODO: Implement a way to delete reservations
 // TODO: Implement a way to change the status of a reservation (e.g., from "Confirmed" to "Cancelled")
 // TODO: Display amount of customers and reservations and other data for a selected date
