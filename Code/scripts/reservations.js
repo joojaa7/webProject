@@ -2,9 +2,11 @@
 
 import { tablesUrl } from "./variables.js";
 import { reservationsUrl } from "./variables.js";
+import { customersUrl } from "./variables.js";
 
 let currentTableId = 1;
 const initialDate = new Date();
+loadTablesAndReservations(initialDate);
 
 document
   .getElementById("loadReservationsForDate")
@@ -15,6 +17,7 @@ document
       return;
     }
     displayTableReservations(currentTableId, date);
+    console.log("currentTableId and date in click log:", currentTableId, date);
     document.getElementById(
       "currentTable"
     ).textContent = `Details for table: ${currentTableId}`;
@@ -52,6 +55,7 @@ function generateTimeSlots() {
   return slots;
 }
 
+// click handlers for table elements
 function setupTableClickHandlers() {
   const tables = document.querySelectorAll(".table");
   tables.forEach((table) => {
@@ -75,23 +79,27 @@ document.addEventListener("DOMContentLoaded", () => {
     .getElementById("nextDayBtn")
     .addEventListener("click", () => changeDate(1));
 
-  // Initialize with today's date and load initial table reservations
-
   updateDateInput(initialDate);
-  loadTablesAndReservations(initialDate);
 });
 
 function changeDate(dayChange) {
-  const currentDate = new Date(
-    document.getElementById("reservationDate").value
-  );
+  const dateInput = document.getElementById("reservationDate");
+  const currentDate = new Date(dateInput.value);
   currentDate.setDate(currentDate.getDate() + dayChange);
-  document.getElementById("reservationDate").value = currentDate
-    .toISOString()
-    .split("T")[0];
+  const dateString = currentDate.toISOString().split("T")[0];
+  dateInput.value = dateString; // Set the input to the new date string in YYYY-MM-DD format
 
-  // Load new table data for the updated date
-  loadTablesAndReservations(currentDate);
+  // Retrieve the current table ID from the text content
+  const currentTableText = document.getElementById("currentTable").textContent;
+  const tableIdMatch = currentTableText.match(/table: (\d+)/);
+  if (tableIdMatch && tableIdMatch[1]) {
+    const tableId = tableIdMatch[1]; // Extracted table ID
+    console.log("Current table ID:", tableId);
+    console.log("New date:", dateString);
+    displayTableReservations(tableId, dateString); // Assuming displayTableReservations accepts a table ID and a date string
+  } else {
+    console.error("No table ID found or table is not selected");
+  }
 }
 
 function updateDateInput(date) {
@@ -166,11 +174,6 @@ function loadTablesAndReservations(date) {
         tablesGrid.appendChild(tableDiv);
       });
       setupTableClickHandlers();
-
-      /*
-      if (currentTableId) {
-        displayTableReservations(currentTableId, date);
-      }*/
     })
     .catch((error) => {
       console.error("Error loading tables:", error);
@@ -184,30 +187,52 @@ function createAddReservationForm(timeSlot) {
 
   // Create a form dynamically
   const form = document.createElement("form");
-  form.onsubmit = (e) => {
-    e.preventDefault();
-    const date = document.getElementById("reservationDate").value;
-    const customerId = customerIdInput.value;
-    const numberOfGuests = numberOfGuestsInput.value;
-    addReservation(timeSlot, customerId, numberOfGuests, date);
-  };
 
-  // Input for customer ID
-  const customerIdInput = document.createElement("input");
-  customerIdInput.type = "number";
-  customerIdInput.placeholder = "Customer ID";
-  customerIdInput.required = true;
+  // Define elements like `customerNameInput` and `customerContactInfoInput` that you'll need to retrieve values from
+  const customerNameInput = document.createElement("input");
+  customerNameInput.type = "text";
+  customerNameInput.placeholder = "Customer Name";
+  customerNameInput.required = true;
+  form.appendChild(customerNameInput);
 
-  // Input for number of guests
+  const customerContactInfoInput = document.createElement("input");
+  customerContactInfoInput.type = "email";
+  customerContactInfoInput.placeholder = "Contact Info";
+  customerContactInfoInput.required = true;
+  form.appendChild(customerContactInfoInput);
+
   const numberOfGuestsInput = document.createElement("input");
   numberOfGuestsInput.type = "number";
   numberOfGuestsInput.placeholder = "Number of Guests";
   numberOfGuestsInput.required = true;
+  form.appendChild(numberOfGuestsInput);
+
+  form.onsubmit = async (e) => {
+    e.preventDefault();
+    const date = document.getElementById("reservationDate").value;
+    const numberOfGuests = numberOfGuestsInput.value;
+
+    try {
+      const { customer_id } = await addCustomer(
+        customerNameInput.value,
+        customerContactInfoInput.value
+      );
+      if (!customer_id) {
+        throw new Error("No customer ID returned");
+      }
+
+      // Proceed to add the reservation with the retrieved customer ID
+      addReservation(timeSlot, customer_id, numberOfGuests, date);
+    } catch (error) {
+      console.error("Failed to add customer or reservation:", error);
+    }
+  };
 
   // Add reservation button
   const addButton = document.createElement("button");
   addButton.type = "submit";
   addButton.textContent = "Add Reservation";
+  form.appendChild(addButton);
 
   // Close button
   const closeButton = document.createElement("button");
@@ -216,14 +241,10 @@ function createAddReservationForm(timeSlot) {
   closeButton.onclick = () => {
     modificationsDiv.style.display = "none";
   };
-
-  // Append inputs and button to form
-  form.appendChild(customerIdInput);
-  form.appendChild(numberOfGuestsInput);
-  form.appendChild(addButton);
   form.appendChild(closeButton);
 
   // Append the form to the modificationsDiv
+
   modificationsDiv.appendChild(form);
   modificationsDiv.style.display = "block";
 }
@@ -351,6 +372,7 @@ function addReservation(timeSlot, customerId, numberOfGuests, date) {
 }
 
 function displayTableReservations(tableId, dateString) {
+  console.log("displayTableReservations called");
   // Convert dateString to a Date object first
   const date = new Date(dateString);
   const dateStr = date.toISOString().split("T")[0];
@@ -396,3 +418,29 @@ function displayTableReservations(tableId, dateString) {
       reservationDetails.textContent = "Error loading reservations.";
     });
 }
+
+const addCustomer = async (name, email) => {
+  const postData = {
+    customer_name: name,
+    contact_info: email,
+  };
+  console.log(postData);
+  try {
+    const response = await fetch(customersUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(postData),
+    });
+    if (!response.ok) {
+      throw new Error("Failed to add new customer: " + response.statusText);
+    }
+    const addedCustomer = await response.json();
+    console.log("Added a new customer: ", addedCustomer);
+    return addedCustomer;
+  } catch (err) {
+    console.error(err);
+    alert(err.message);
+  }
+};

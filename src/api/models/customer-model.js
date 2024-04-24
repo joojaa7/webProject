@@ -1,12 +1,12 @@
-import promisePool from '../../utils/database.js';
+import promisePool from "../../utils/database.js";
 
 // Function to list all customers
 const listAllCustomers = async () => {
   try {
-    const [rows] = await promisePool.query('SELECT * FROM customers');
+    const [rows] = await promisePool.query("SELECT * FROM customers");
     return rows;
   } catch (err) {
-    console.error('Error listing all customers:', err.message);
+    console.error("Error listing all customers:", err.message);
     throw err;
   }
 };
@@ -15,12 +15,12 @@ const listAllCustomers = async () => {
 const getCustomerById = async (customer_id) => {
   try {
     const [rows] = await promisePool.query(
-      'SELECT * FROM customers WHERE customer_id = ?',
+      "SELECT * FROM customers WHERE customer_id = ?",
       [customer_id]
     );
     return rows.length ? rows[0] : null;
   } catch (err) {
-    console.error('Error getting customer by ID:', err.message);
+    console.error("Error getting customer by ID:", err.message);
     throw err;
   }
 };
@@ -29,12 +29,12 @@ const getCustomerById = async (customer_id) => {
 const getCustomerByName = async (customer_name) => {
   try {
     const [rows] = await promisePool.query(
-      'SELECT * FROM customers WHERE name = ?',
+      "SELECT * FROM customers WHERE name = ?",
       [customer_name]
     );
     return rows;
   } catch (err) {
-    console.error('Error getting customer by name:', err.message);
+    console.error("Error getting customer by name:", err.message);
     throw err;
   }
 };
@@ -43,13 +43,14 @@ const getCustomerByName = async (customer_name) => {
 const addCustomer = async (customer_name, contact_info) => {
   try {
     const [result] = await promisePool.execute(
-      'INSERT INTO customers (name, contact_info) VALUES (?, ?)',
+      "INSERT INTO customers (name, contact_info) VALUES (?, ?)",
       [customer_name, contact_info]
     );
-    return {customer_id: result.insertId, name: customer_name, contact_info};
+    console.log("Database insert result:", result);
+    return { customer_id: result.insertId, name: customer_name, contact_info };
   } catch (err) {
-    console.error('Error adding customer:', err.message);
-    throw err;
+    console.error("Error adding customer:", err.message);
+    throw err; // Make sure the error is thrown to be caught in the calling function
   }
 };
 
@@ -57,12 +58,12 @@ const addCustomer = async (customer_name, contact_info) => {
 const removeCustomer = async (customer_id) => {
   try {
     const [result] = await promisePool.execute(
-      'DELETE FROM customers WHERE customer_id = ?',
+      "DELETE FROM customers WHERE customer_id = ?",
       [customer_id]
     );
     return result.affectedRows;
   } catch (err) {
-    console.error('Error removing customer:', err.message);
+    console.error("Error removing customer:", err.message);
     throw err;
   }
 };
@@ -71,12 +72,12 @@ const removeCustomer = async (customer_id) => {
 const modifyCustomer = async (customer_id, customer_name, contact_info) => {
   try {
     const [result] = await promisePool.execute(
-      'UPDATE customers SET name = ?, contact_info = ? WHERE customer_id = ?',
+      "UPDATE customers SET name = ?, contact_info = ? WHERE customer_id = ?",
       [customer_name, contact_info, customer_id]
     );
     return result.affectedRows;
   } catch (err) {
-    console.error('Error modifying customer:', err.message);
+    console.error("Error modifying customer:", err.message);
     throw err;
   }
 };
