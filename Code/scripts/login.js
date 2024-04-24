@@ -264,9 +264,19 @@ Object.keys(linksToContentMap).forEach((linkId) => {
 // Role-based display logic
 const roleSelector = document.getElementById("roleSelector");
 const adminSection = document.getElementById("adminSection");
+const adminFormUsersField = document.getElementById(
+  "admin-update-users-content"
+);
+const adminFormMenuField = document.getElementById(
+  "admin-update-users-content"
+);
 
 roleSelector.addEventListener("change", () => {
   adminSection.style.display =
+    roleSelector.value === "admin" ? "block" : "none";
+  adminFormUsersField.style.display =
+    roleSelector.value === "admin" ? "block" : "none";
+  adminFormMenuField.style.display =
     roleSelector.value === "admin" ? "block" : "none";
 });
 

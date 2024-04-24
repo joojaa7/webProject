@@ -4,12 +4,23 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Restaurant Reservations</title>
-    <link rel="stylesheet" href="reservations.css" />
-    <script src="reservations.js" type="module" defer></script>
+    <link rel="stylesheet" href="../styles/reservations.css" />
+    <script src="../scripts/reservations.js" type="module" defer></script>
   </head>
   <body>
     <h1>Restaurant Reservations</h1>
-    <a href="/Code/login.html">Back to login</a>
+    <div>
+      <h1>Add new table</h1>
+      <form id="addTableForm">
+        <label for="tableCapacity">Table seats: </label>
+        <input type="number" id="tableCapacity" name="tableCapacity" required />
+        <label for="tableLocation">Describe location: </label>
+        <input type="text" id="tableLocation" name="tableLocation" required />
+        <button id="addTableButton">Submit</button>
+        <button id="removeTableButton">Remove selected table</button>
+      </form>
+    </div>
+    <a href="/Code/views/login.html">Back to login</a>
     <div id="dateSelector">
       <h2>Select a Date</h2>
       <input type="date" id="reservationDate" />

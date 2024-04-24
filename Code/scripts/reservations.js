@@ -98,6 +98,47 @@ function updateDateInput(date) {
   document.getElementById("reservationDate").value = dateStr; // Updates the date input
 }
 
+// Function to add a new table
+const addTable = async () => {
+  const capacityInput = document.getElementById("tableCapacity");
+  const locationInput = document.getElementById("tableLocation");
+
+  const capacity = capacityInput.value;
+  const location = locationInput.value;
+  const postData = {
+    capacity: parseInt(capacity, 10),
+    location,
+  };
+
+  try {
+    const response = await fetch(tablesUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(postData),
+    });
+    if (!response.ok) {
+      throw new Error("Failed to add new table: " + response.statusText);
+    }
+    const addedTable = await response.json();
+    alert("New table added: ID " + addedTable.id);
+    fetchTables(); // Refresh the list of tables
+
+    // Clear the input fields after successful submission
+    capacityInput.value = "";
+    locationInput.value = "";
+  } catch (err) {
+    console.error(err);
+    alert(err.message); // Show the error message if something goes wrong
+  }
+};
+
+document.getElementById("addTableForm").addEventListener("submit", (event) => {
+  event.preventDefault();
+  addTable();
+});
+
 function loadTablesAndReservations(date) {
   const url = `${tablesUrl}?date=${date.toISOString().split("T")[0]}`;
   fetch(url)
