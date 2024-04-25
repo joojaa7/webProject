@@ -79,6 +79,23 @@ document.getElementById("login").addEventListener("click", function () {
   }
 });
 
+
+// event listener for register button
+document.getElementById("register").addEventListener("click", function () {
+  var registerForm = document.getElementById("registerForm");
+  var loginForm = document.getElementById("loginForm");
+  if (
+    registerForm.style.display === "none" ||
+    registerForm.style.display === ""
+  ) {
+    registerForm.style.display = "block";
+    loginForm.style.display = "none"; // Hide the login form if register form is shown
+  } else {
+    registerForm.style.display = "none";
+  }
+});
+
+// login submit
 document.getElementById("login-apply").addEventListener("click", async (e) => {
   const loginForm = document.getElementById("loginForm");
   const name = document.getElementById('loginUsername').value;
@@ -104,27 +121,20 @@ document.getElementById("login-apply").addEventListener("click", async (e) => {
     sessionStorage.setItem('token', json.token);
     sessionStorage.setItem('user', JSON.stringify(json.user));
     loginForm.style.display = "none";
+    window.location = 'login.html';
   }
 });
 
-// event listener for register button
-document.getElementById("register").addEventListener("click", function () {
-  var registerForm = document.getElementById("registerForm");
-  var loginForm = document.getElementById("loginForm");
-  if (
-    registerForm.style.display === "none" ||
-    registerForm.style.display === ""
-  ) {
-    registerForm.style.display = "block";
-    loginForm.style.display = "none"; // Hide the login form if register form is shown
-  } else {
-    registerForm.style.display = "none";
-  }
-});
+// TODO: luo logout nappi
 
+// logout
+// document.getElementById('logout_button').addEventListener('click', () => {
+//   sessionStorage.removeItem('user')
+//   sessionStorage.removeItem('token')
+// })
 
 document
-  .getElementById("register-submit-btn")
+.getElementById("register-submit-btn")
   .addEventListener("click", async (e) => {
     e.preventDefault();
     console.log("Registering user");
