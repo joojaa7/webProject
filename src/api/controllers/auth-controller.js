@@ -6,19 +6,21 @@ import jwt from 'jsonwebtoken';
 const login = async (req, res) => {
   console.log('login', req.body);
   const loginUser = await getUser(req.body.username);
+  console.log(bcrypt.hashSync(req.body.password, 5));
+  console.log(loginUser.Password);
   if (!loginUser) {
     console.log('noUser')
     res.sendStatus(401);
     return;
   }
-  if (!bcrypt.compareSync(req.body.password, loginUser.password)) {
+  if (!bcrypt.compareSync(req.body.password, loginUser.Password)) {
     console.log('compare sync')
     res.sendStatus(401);
     return;
   }
   const userWithNoPassword = {
     username: loginUser.Username,
-    avatar: loginUser.avatar,
+    avatar: loginUser.Filename,
     role: loginUser.Role
   };
 

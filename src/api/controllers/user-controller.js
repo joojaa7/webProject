@@ -6,7 +6,7 @@ const getUser = async (username) => {
     const user = await getUserByName(username);
     console.log('get user', user)
     if (user){
-        return res.json(user);
+        return user;
       } else {
         return
       }

@@ -66,16 +66,11 @@ for (let button of weekdayButtons) {
             </div>`;
   });
 }
-/*
-document.getElementById('login').addEventListener('click', () => {
-    window.location = 'login.html';
-})
-*/
 
 // event listener for login button
-document.getElementById("login").addEventListener("click", async () => {
-  const loginForm = document.getElementById("loginForm");
-  const registerForm = document.getElementById("registerForm");
+document.getElementById("login").addEventListener("click", function () {
+  var loginForm = document.getElementById("loginForm");
+  var registerForm = document.getElementById("registerForm");
   if (loginForm.style.display === "none" || loginForm.style.display === "") {
     loginForm.style.display = "block";
     registerForm.style.display = "none"; // Hide the register form if login form is shown
@@ -127,9 +122,6 @@ document.getElementById("register").addEventListener("click", function () {
   }
 });
 
-// DEV only
-// event listener for submit button, directs to login page
-// to be replaced later with actual login functionality
 
 document
   .getElementById("register-submit-btn")
@@ -167,35 +159,9 @@ document
     };
     console.log(options);
     const response = await fetch(
-      "http://127.0.0.1:3000/users/register",
+      "http://127.0.0.1:3000/api/v1/users/register",
       options
     );
     registerForm.style.display = "none";
     console.log(response);
   });
-
-
-
-// IIFE
-
-(async () => {
-  if (sessionStorage.getItem('token') && sessionStorage.getItem('user')){
-    try {
-      const options = {
-        headers: {
-          'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
-          'Content-Type': 'application/json'
-        }
-      }
-      const response = await fetch('http://127.0.0.1:3000/restaurant/login/verify', options)
-      console.log(response)
-      if (response.ok) {
-        console.log('OK');
-      } else {
-      }
-    } catch (e) {
-      console.log(e)
-    }
-  }
-
-})();
