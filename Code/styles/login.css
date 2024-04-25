@@ -216,3 +216,8 @@ h2 {
 .admin-only {
   display: none;
 }
+
+#add-burger-btn,
+#add-menu-btn {
+  margin-top: 5px;
+}

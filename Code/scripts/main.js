@@ -1,5 +1,4 @@
 console.log("In use.");
-console.log(document.getElementById("register-submit-btn"));
 
 const fileInput = document.getElementById("file");
 
@@ -15,6 +14,36 @@ const data = [
     Pvm: "02.01.2024",
   },
 ];
+document.addEventListener("DOMContentLoaded", () => {
+  setWeekDates();
+});
+
+function setWeekDates() {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const dayOfWeek = today.getDay(); // Get current day of week as a number (0-6, where 0 is Sunday)
+
+  const currentWeek = Array.from({ length: 7 }).map((_, i) => {
+    const day = new Date(today);
+    day.setDate(today.getDate() - dayOfWeek + i + 1); // Adjust days to align with week start from Monday
+    return day;
+  });
+
+  currentWeek.forEach((date, index) => {
+    const dayElement = document.getElementById(`day${index}`);
+    dayElement.textContent = formatDate(date); // Update textContent with formatted date
+    if (date.getTime() === today.getTime()) {
+      dayElement.classList.add("today"); // Add 'today' class if it's the current date
+    } else {
+      dayElement.classList.remove("today"); // Remove class if it's not today
+    }
+  });
+}
+
+function formatDate(date) {
+  // Format the date as "DD.MM."
+  return `${date.getDate()}.${date.getMonth() + 1}.`;
+}
 
 const weekdayButtons = document.getElementsByClassName("weekday_link");
 
@@ -22,16 +51,19 @@ for (let button of weekdayButtons) {
   button.addEventListener("click", (e) => {
     console.log(e);
     console.log(e.target.innerText);
+    for (let button of weekdayButtons) {
+      button.classList.remove("active");
+    }
+
+    e.target.classList.add("active");
     document.getElementsByClassName("menu_items")[0].innerHTML = `
             <p>Menu for: ${e.target.innerText}</p>
             <div class="menu_entry">
                 <img src="../hampurilaiset.jpg" alt="hampurilaiset" class="menu_item_image">
                 <div class="item_description">
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos perspiciatis consequatur ab aspernatur explicabo dolore minima, 
-                        ipsam nostrum nihil fugit, voluptates distinctio aperiam numquam rerum tempore maiores rem soluta ducimus?</p>
+                    <p>testing</p>
                 </div>
             </div>`;
-    // Elementit luodaat dynaamisesti datasta.s
   });
 }
 /*

@@ -12,8 +12,13 @@ body {
   width: 100%;
 }
 
-.banner {
+.weekday_link.today {
+  background-color: #2314c3;
+  color: white;
+  border: 2px solid #2314c3;
+  border-radius: 5px;
 }
+
 .banner_content {
   display: flex;
   flex-wrap: wrap;
@@ -80,12 +85,27 @@ body {
 }
 
 .weekday_link {
-  background-image: linear-gradient(
+  /*background-image: linear-gradient(
     to right,
     rgb(121, 180, 161),
     rgb(110, 233, 192)
-  );
+  );*/
+  background-color: rgb(75, 119, 104);
+  cursor: pointer;
   padding: 1rem;
+  transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.weekday_link:hover,
+.weekday_link:focus {
+  background-color: rgba(115, 164, 233, 0.5);
+  outline: none;
+}
+
+.active {
+  border: 2px solid #2314c3;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: rgba(115, 164, 233, 0.3);
 }
 
 .menu_items {

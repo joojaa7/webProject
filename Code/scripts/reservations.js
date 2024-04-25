@@ -8,6 +8,29 @@ let currentTableId = 1;
 const initialDate = new Date();
 loadTablesAndReservations(initialDate);
 
+document.addEventListener("DOMContentLoaded", () => {
+  const addForm = document.getElementById("addTableForm");
+  const deleteForm = document.getElementById("deleteTableForm");
+
+  document
+    .getElementById("toggleAddFormButton")
+    .addEventListener("click", () => {
+      addForm.style.display =
+        addForm.style.display === "none" || addForm.style.display === ""
+          ? "block"
+          : "none";
+    });
+
+  document
+    .getElementById("toggleDeleteFormButton")
+    .addEventListener("click", () => {
+      deleteForm.style.display =
+        deleteForm.style.display === "none" || deleteForm.style.display === ""
+          ? "block"
+          : "none";
+    });
+});
+
 document
   .getElementById("loadReservationsForDate")
   .addEventListener("click", async function () {
@@ -152,8 +175,30 @@ document.getElementById("addTableForm").addEventListener("submit", (event) => {
 });
 
 const deleteTable = async () => {
-  const tableId = document.getElementById();
+  const tableId = document.getElementById("tableId").value;
+  console.log(tableId);
+  const url = `${tablesUrl}/${tableId}`;
+  try {
+    const response = await fetch(url, {
+      method: "DELETE",
+    });
+    if (!response.ok) {
+      throw new Error("Failed to delete table: " + response.statusText);
+    }
+    alert("Table deleted successfully!");
+    loadTablesAndReservations(initialDate);
+  } catch (error) {
+    console.error("Error deleting table:", error);
+    alert("Error deleting table: " + error.message);
+  }
 };
+
+document
+  .getElementById("submitDeleteTableButton")
+  .addEventListener("click", (event) => {
+    event.preventDefault();
+    deleteTable();
+  });
 
 // create table elements
 function loadTablesAndReservations(date) {

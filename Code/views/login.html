@@ -9,7 +9,7 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
     />
-    <script src="../scripts/login.js" defer></script>
+    <script src="../scripts/login.js" type="module"></script>
     <title>Login</title>
   </head>
   <body>
@@ -88,11 +88,13 @@
                     ><i class="fa-solid fa-burger"></i> Update menus</a
                   >
                 </li>
+                <!--
                 <li>
                   <a href="#" id="admin_update_users-link"
                     ><i class="fa-solid fa-users"></i> Manage users</a
                   >
                 </li>
+                -->
               </ul>
             </div>
           </div>
@@ -259,38 +261,35 @@
             class="admin-form-content"
             style="display: none"
           >
-            <h3>Update menus:</h3>
-            <form id="update-menu-form">
+            <h3>Add a burger</h3>
+            <form id="add-burger-form">
               <div class="form-group">
-                <label for="menu-item">Select a menu to update</label>
-                <select id="menu" name="menu-selector" required>
-                  <!-- Menus will be added dynamically-->
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="menu-name">Menu Name:</label>
-                <input type="text" id="menu-name" name="menu-name" />
-              </div>
-              <div class="form-group">
-                <label for="menu-price">Price:</label>
+                <label for="add-burger"></label>
                 <input
-                  type="number"
-                  id="menu-price"
-                  name="menu-price"
-                  step="0.01"
+                  type="text"
+                  name="add-burger"
+                  id="add-burger"
+                  placeholder="Enter the name for a burger"
+                  required
                 />
               </div>
+              <button type="submit" id="add-burger-btn">Add Burger</button>
+            </form>
+            <h3>Add a menu:</h3>
+            <form id="update-menu-form">
               <div class="form-group">
-                <label for="menu-description">Description:</label>
-                <textarea
-                  id="menu-description"
-                  name="menu-description"
-                ></textarea>
+                <label for="menu-burger">Select a burger: </label>
+                <select id="menu-burger" name="menu-burger" required>
+                  <!-- Burgers will be added dynamically-->
+                </select>
+                <label for="menu-date">Set menu date: </label>
+                <input type="date" id="menu-date" name="menu-date" required />
               </div>
-              <!-- Add fields for ingredients and allergens as needed -->
-              <button type="submit">Update Menu</button>
+
+              <button type="submit" id="add-menu-btn">Add Menu</button>
             </form>
           </div>
+          <!--
           <div
             id="admin-update-users-content"
             class="admin-form-content"
@@ -301,11 +300,11 @@
               <div class="form-group">
                 <label for="user">Select a user to update</label>
                 <select id="user" name="user-selector" required>
-                  <!-- Users will be added dynamically-->
+                  Users will be added dynamically
                 </select>
               </div>
             </form>
-          </div>
+          </div>-->
         </div>
       </div>
     </div>

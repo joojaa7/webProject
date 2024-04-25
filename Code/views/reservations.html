@@ -9,26 +9,53 @@
   </head>
   <body>
     <h1>Restaurant Reservations</h1>
-    <div>
-      <h1>Add new table</h1>
-      <form id="addTableForm">
-        <label for="tableCapacity">Table seats: </label>
-        <input type="number" id="tableCapacity" name="tableCapacity" required />
-        <label for="tableLocation">Describe location: </label>
-        <input type="text" id="tableLocation" name="tableLocation" required />
-        <button id="addTableButton">Submit</button>
-        <!--<button id="removeTableButton">Remove selected table</button> -->
-      </form>
-    </div>
-    <div>
-      <h1>Delete table by id</h1>
-      <form id="deleteTableForm">
-        <label for="tableId">Table id: </label>
-        <input type="number" id="tableId" name="tableId" required />
-        <button id="deleteTableButton">Delete</button>
-      </form>
-    </div>
     <a href="/Code/views/login.html">Back to login</a>
+    <div class="table-management">
+      <section class="add-table">
+        <h1>
+          Add New Table
+          <button class="toggle-button" id="toggleAddFormButton">
+            Hide/Show
+          </button>
+        </h1>
+        <form id="addTableForm">
+          <fieldset>
+            <legend>Table Details</legend>
+            <label for="tableCapacity">Table seats:</label>
+            <input
+              type="number"
+              id="tableCapacity"
+              name="tableCapacity"
+              required
+            />
+            <label for="tableLocation">Describe location:</label>
+            <input
+              type="text"
+              id="tableLocation"
+              name="tableLocation"
+              required
+            />
+          </fieldset>
+          <button type="submit" id="submitAddTableButton">Submit</button>
+        </form>
+      </section>
+      <section class="delete-table">
+        <h1>
+          Delete Table by ID
+          <button class="toggle-button" id="toggleDeleteFormButton">
+            Hide/Show
+          </button>
+        </h1>
+        <form id="deleteTableForm">
+          <fieldset>
+            <legend>Identification</legend>
+            <label for="tableId">Table ID:</label>
+            <input type="number" id="tableId" name="tableId" required />
+          </fieldset>
+          <button type="submit" id="submitDeleteTableButton">Delete</button>
+        </form>
+      </section>
+    </div>
 
     <div id="tablesGrid">
       <!-- Tables will be dynamically loaded here -->
