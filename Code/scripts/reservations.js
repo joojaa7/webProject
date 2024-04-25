@@ -46,6 +46,7 @@ const formatReservationTime = (isoString) => {
   });
 };
 
+// helper function to generate time slots for reservations listing
 function generateTimeSlots() {
   const slots = [];
   for (let hour = 8; hour < 21; hour++) {
@@ -70,6 +71,7 @@ function setupTableClickHandlers() {
   });
 }
 
+// Calendar buttons
 document.addEventListener("DOMContentLoaded", () => {
   document
     .getElementById("previousDayBtn")
@@ -96,15 +98,16 @@ function changeDate(dayChange) {
     const tableId = tableIdMatch[1]; // Extracted table ID
     console.log("Current table ID:", tableId);
     console.log("New date:", dateString);
-    displayTableReservations(tableId, dateString); // Assuming displayTableReservations accepts a table ID and a date string
+    displayTableReservations(tableId, dateString);
   } else {
+    alert("Please select a table");
     console.error("No table ID found or table is not selected");
   }
 }
 
 function updateDateInput(date) {
   const dateStr = date.toISOString().split("T")[0];
-  document.getElementById("reservationDate").value = dateStr; // Updates the date input
+  document.getElementById("reservationDate").value = dateStr;
 }
 
 // Function to add a new table to the database
@@ -148,6 +151,7 @@ document.getElementById("addTableForm").addEventListener("submit", (event) => {
   addTable();
 });
 
+// create table elements
 function loadTablesAndReservations(date) {
   const url = `${tablesUrl}?date=${date.toISOString().split("T")[0]}`;
   fetch(url)
@@ -181,14 +185,13 @@ function loadTablesAndReservations(date) {
     });
 }
 
+// function to add a new customer and make them a reservation
 function createAddReservationForm(timeSlot) {
   const modificationsDiv = document.getElementById("reservationModifications");
   modificationsDiv.innerHTML = "";
 
-  // Create a form dynamically
   const form = document.createElement("form");
 
-  // Define elements like `customerNameInput` and `customerContactInfoInput` that you'll need to retrieve values from
   const customerNameInput = document.createElement("input");
   customerNameInput.type = "text";
   customerNameInput.placeholder = "Customer Name";
@@ -249,6 +252,7 @@ function createAddReservationForm(timeSlot) {
   modificationsDiv.style.display = "block";
 }
 
+// modify existing reservation
 async function modifyReservationForm(reservationId) {
   try {
     const userDetails = await fetchCustomerByReservationId(reservationId);
@@ -265,12 +269,13 @@ async function modifyReservationForm(reservationId) {
   }
 }
 
+// helper function for modifyReservationForm to fetch customer details by reservation ID
 async function fetchCustomerByReservationId(reservationId) {
   const response = await fetch(`${reservationsUrl}customer/${reservationId}`);
   if (!response.ok) {
     throw new Error("Failed to fetch customer details");
   }
-  return await response.json(); // Assuming the API returns customer details directly
+  return await response.json();
 }
 
 // TODO: Implement the updateReservation function to send a PUT request to the API to modify a reservation
@@ -283,7 +288,6 @@ async function fetchCustomerByReservationId(reservationId) {
 // TODO: Implement a way to filter reservations by status (e.g., show only "Confirmed" reservations)
 // TODO: Implement visual to table reservations (e.g., color the table divs based on the number of reservations or customers)
 // TODO: Implement a way to search for reservations by customer name or ID
-// TODO: Implement a user friendly guided method to add a new reservation
 
 function displayModifyReservationForm(userDetails, reservationId) {
   const modificationsDiv = document.getElementById("reservationModifications");
@@ -322,19 +326,25 @@ function displayModifyReservationForm(userDetails, reservationId) {
   saveButton.type = "submit";
   saveButton.textContent = "Save Changes";
 
+  const deleteButton = document.createElement("button");
+  deleteButton.type = "button";
+  deleteButton.textContent = "Delete Reservation";
+  deleteButton.onclick = () => deleteReservation(reservationId);
+
   form.appendChild(nameInput);
   form.appendChild(contactInfoInput);
   form.appendChild(numberOfGuestsInput);
   form.appendChild(saveButton);
   form.appendChild(closeButton);
+  form.appendChild(deleteButton);
 
   modificationsDiv.appendChild(form);
   modificationsDiv.style.display = "block";
 }
 
 function addReservation(timeSlot, customerId, numberOfGuests, date) {
-  const startTime = new Date(`${date}T${timeSlot}:00Z`); // Construct the start time for the reservation
-  const endTime = new Date(startTime.getTime() + 60 * 60000); // End time, assuming 1 hour duration
+  const startTime = new Date(`${date}T${timeSlot}:00Z`);
+  const endTime = new Date(startTime.getTime() + 60 * 60000);
 
   // Format dates to MySQL acceptable format
   const startTimeFormatted = formatToMySQLDateTime(startTime);
@@ -369,6 +379,27 @@ function addReservation(timeSlot, customerId, numberOfGuests, date) {
       console.error("Error adding reservation:", error);
       alert("Error adding reservation: " + error.message);
     });
+}
+
+async function deleteReservation(reservationId) {
+  try {
+    const response = await fetch(`${reservationsUrl}/${reservationId}`, {
+      method: "DELETE",
+    });
+    if (!response.ok) {
+      throw new Error("Failed to delete reservation: " + response.statusText);
+    }
+    alert("Reservation deleted successfully!");
+    const currentDate = document.getElementById("reservationDate").value;
+    const currentTableText =
+      document.getElementById("currentTable").textContent;
+    const tableIdMatch = currentTableText.match(/table: (\d+)/);
+    console.log("in deleteReservations: ", tableIdMatch, currentDate);
+    displayTableReservations(tableIdMatch, currentDate);
+  } catch (error) {
+    console.error("Error deleting reservation:", error);
+    alert("Error deleting reservation: " + error.message);
+  }
 }
 
 function displayTableReservations(tableId, dateString) {

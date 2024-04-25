@@ -1,7 +1,7 @@
 console.log("In use.");
-console.log(document.getElementById('register-submit-btn'));
+console.log(document.getElementById("register-submit-btn"));
 
-const fileInput = document.getElementById('file')
+const fileInput = document.getElementById("file");
 
 const date = "01.01.2024";
 
@@ -25,7 +25,7 @@ for (let button of weekdayButtons) {
     document.getElementsByClassName("menu_items")[0].innerHTML = `
             <p>Menu for: ${e.target.innerText}</p>
             <div class="menu_entry">
-                <img src="hampurilaiset.jpg" alt="hampurilaiset" class="menu_item_image">
+                <img src="../hampurilaiset.jpg" alt="hampurilaiset" class="menu_item_image">
                 <div class="item_description">
                     <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos perspiciatis consequatur ab aspernatur explicabo dolore minima, 
                         ipsam nostrum nihil fugit, voluptates distinctio aperiam numquam rerum tempore maiores rem soluta ducimus?</p>
@@ -77,48 +77,52 @@ document
     window.location = "login.html";
   });
 
+document
+  .getElementById("register-submit-btn")
+  .addEventListener("click", async (e) => {
+    e.preventDefault();
+    console.log("Registering user");
+    let avatar = null;
+    const formData = new FormData();
+    const firstName = document.getElementById("firstname").value;
+    const lastName = document.getElementById("lastname").value;
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
+    const cardNumber = document.getElementById("cardnumber").value;
+    const phoneNumber = document.getElementById("phone-number").value;
+    const address = document.getElementById("address").value;
+    const email = document.getElementById("email").value;
+    // const inputs = [firstName, lastName, username, password, cardNumber, phoneNumber, address, email];
+    // inputs.forEach(input => {
+    //   if (!input) {
+    //     alert('Please fill in all fields');
+    //     return;
+    //   }
+    // });
 
-document.getElementById('register-submit-btn').addEventListener('click', async (e) => {
-  e.preventDefault();
-  console.log('Registering user');
-  let avatar = null;
-  const formData = new FormData();
-  const firstName = document.getElementById('firstname').value;
-  const lastName = document.getElementById('lastname').value;
-  const username = document.getElementById('username').value;
-  const password = document.getElementById('password').value;
-  const cardNumber = document.getElementById('cardnumber').value;
-  const phoneNumber = document.getElementById('phone-number').value;
-  const address = document.getElementById('address').value;
-  const email = document.getElementById('email').value;
-  // const inputs = [firstName, lastName, username, password, cardNumber, phoneNumber, address, email];
-  // inputs.forEach(input => {
-  //   if (!input) {
-  //     alert('Please fill in all fields');
-  //     return;
-  //   }
-  // });
-    
-  if (fileInput.files[0]) {
-    avatar = fileInput.files[0].name;
-    formData.append('file', fileInput.files[0])
-  }
-  formData.append('firstname', firstName);
-  formData.append('lastname', lastName);
-  formData.append('username', username);
-  formData.append('password', password)
-  formData.append('cardnumber', cardNumber);
-  formData.append('phonenumber', phoneNumber);
-  formData.append('address', address);
-  formData.append('email', email);
-  formData.append('avatar', avatar)
-  console.log(formData)
-  const options = {
-    method: 'POST',
-    body: formData,
-  };
-  console.log(options)
-  const response = await fetch('http://127.0.0.1:3000/users/register', options);
-  registerForm.style.display = "none";
-  console.log(response)
-})
+    if (fileInput.files[0]) {
+      avatar = fileInput.files[0].name;
+      formData.append("file", fileInput.files[0]);
+    }
+    formData.append("firstname", firstName);
+    formData.append("lastname", lastName);
+    formData.append("username", username);
+    formData.append("password", password);
+    formData.append("cardnumber", cardNumber);
+    formData.append("phonenumber", phoneNumber);
+    formData.append("address", address);
+    formData.append("email", email);
+    formData.append("avatar", avatar);
+    console.log(formData);
+    const options = {
+      method: "POST",
+      body: formData,
+    };
+    console.log(options);
+    const response = await fetch(
+      "http://127.0.0.1:3000/users/register",
+      options
+    );
+    registerForm.style.display = "none";
+    console.log(response);
+  });

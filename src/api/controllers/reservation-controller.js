@@ -5,7 +5,7 @@ import {
   deleteReservation as deleteReservationModel,
   fetchReservationsForTableAndDate,
   fetchCustomerByReservationId,
-} from '../models/reservation-model.js';
+} from "../models/reservation-model.js";
 
 // Controller to fetch all reservations
 const getAllReservations = async (req, res) => {
@@ -13,10 +13,13 @@ const getAllReservations = async (req, res) => {
     const reservations = await getAllReservationsModel();
     res.json(reservations);
   } catch (error) {
-    console.error('Error fetching reservations:', error);
+    console.error("Error fetching reservations:", error);
     res
       .status(500)
-      .json({message: 'Failed to retrieve reservations', error: error.message});
+      .json({
+        message: "Failed to retrieve reservations",
+        error: error.message,
+      });
   }
 };
 
@@ -30,7 +33,7 @@ const addReservation = async (req, res) => {
     end_time,
     status,
   } = req.body;
-  console.log('Adding reservation in controller:', req.body);
+  console.log("Adding reservation in controller:", req.body);
   try {
     const newReservation = await addReservationModel(
       table_id,
@@ -42,10 +45,10 @@ const addReservation = async (req, res) => {
     );
     res.status(201).json(newReservation);
   } catch (error) {
-    console.error('Error adding reservation:', error);
+    console.error("Error adding reservation:", error);
     res
       .status(500)
-      .json({message: 'Failed to add reservation', error: error.message});
+      .json({ message: "Failed to add reservation", error: error.message });
   }
 };
 
@@ -56,15 +59,15 @@ const updateReservation = async (req, res) => {
   try {
     const result = await updateReservationModel(reservationId, updates);
     if (result > 0) {
-      res.json({message: 'Reservation updated successfully'});
+      res.json({ message: "Reservation updated successfully" });
     } else {
-      res.status(404).json({message: 'Reservation not found'});
+      res.status(404).json({ message: "Reservation not found" });
     }
   } catch (error) {
-    console.error('Error updating reservation:', error);
+    console.error("Error updating reservation:", error);
     res
       .status(500)
-      .json({message: 'Failed to update reservation', error: error.message});
+      .json({ message: "Failed to update reservation", error: error.message });
   }
 };
 
@@ -74,31 +77,34 @@ const deleteReservation = async (req, res) => {
   try {
     const result = await deleteReservationModel(reservationId);
     if (result > 0) {
-      res.json({message: 'Reservation deleted successfully'});
+      res.json({ message: "Reservation deleted successfully" });
     } else {
-      res.status(404).json({message: 'Reservation not found'});
+      res.status(404).json({ message: "Reservation not found" });
     }
   } catch (error) {
-    console.error('Error deleting reservation:', error);
+    console.error("Error deleting reservation:", error);
     res
       .status(500)
-      .json({message: 'Failed to delete reservation', error: error.message});
+      .json({ message: "Failed to delete reservation", error: error.message });
   }
 };
 
-// reservation-controller.js
+// Controller to fetch reservations for a specific table on a given date
 const getReservationsByTableAndDate = async (req, res) => {
-  const {tableId} = req.params;
-  const {date} = req.query;
+  const { tableId } = req.params;
+  const { date } = req.query;
 
   try {
     const reservations = await fetchReservationsForTableAndDate(tableId, date);
     res.json(reservations);
   } catch (error) {
-    console.error('Error fetching reservations:', error);
+    console.error("Error fetching reservations:", error);
     res
       .status(500)
-      .json({message: 'Failed to retrieve reservations', error: error.message});
+      .json({
+        message: "Failed to retrieve reservations",
+        error: error.message,
+      });
   }
 };
 
@@ -109,11 +115,11 @@ const getCustomerByReservationId = async (req, res) => {
     if (customer) {
       res.json(customer);
     } else {
-      res.status(404).send('Customer not found for this reservation');
+      res.status(404).send("Customer not found for this reservation");
     }
   } catch (error) {
-    console.error('Failed to fetch customer by reservation ID:', error);
-    res.status(500).send('Error fetching customer details');
+    console.error("Failed to fetch customer by reservation ID:", error);
+    res.status(500).send("Error fetching customer details");
   }
 };
 
