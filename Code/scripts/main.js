@@ -2,7 +2,7 @@ console.log("In use.");
 
 const fileInput = document.getElementById("file");
 
-const date = "02.01.2024"; // Muuta tätä päivämäärää testataksesi eri päivämääriä
+const date = "02.01.2024"; // Muuta tätä päivämäärää testataksesi eri päivämääriä alla olevasta datasta
 
 const data = [
   {
