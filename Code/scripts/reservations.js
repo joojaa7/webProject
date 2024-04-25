@@ -151,6 +151,10 @@ document.getElementById("addTableForm").addEventListener("submit", (event) => {
   addTable();
 });
 
+const deleteTable = async () => {
+  const tableId = document.getElementById();
+};
+
 // create table elements
 function loadTablesAndReservations(date) {
   const url = `${tablesUrl}?date=${date.toISOString().split("T")[0]}`;
