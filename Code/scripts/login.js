@@ -91,3 +91,40 @@ roleSelector.addEventListener("change", () => {
 
 // Initial display check based on selector's default value
 adminSection.style.display = roleSelector.value === "admin" ? "block" : "none";
+
+
+
+document.getElementById('avatar-submit').addEventListener('click', async (e) => {
+  const avatarFile = document.querySelector('#avatar-file');
+  const inputForm = document.getElementById('avatar-form');
+  console.log(e)
+  let avatar = null;
+  const formData = new FormData();
+  if (avatarFile.files[0]) {
+    avatar = avatarFile.files[0].name;
+    formData.append('file', avatarFile.files[0])
+  } else {
+    alert('SELECT FILE')
+    return
+  }
+  const userData = JSON.parse(sessionStorage.getItem('user'))
+  formData.append('avatar', avatar);
+  formData.append('username', userData.username);
+  const options = {
+    method: 'PUT',
+    body: formData,
+  };
+  if (userData.username) {
+    const response = await fetch('http://127.0.0.1:3000/api/v1/users/avatar', options);
+    const json = await response.json();
+    inputForm.reset();
+    if (response.ok){
+      console.log('OK')
+      userData.avatar = json.avatar
+      sessionStorage.setItem('user', JSON.stringify(userData));
+    } else {
+      alert(response);
+  }} else {
+    alert('Log in required.')
+  }
+})

@@ -101,15 +101,17 @@
         </div>
         <div class="options-input">
           <div id="avatar-content" class="form-content" style="display: none">
+            <form id="avatar-form">
             <form id="avatar-form" class="form">
               <label for="avatar-upload">Upload new avatar:</label>
               <input
                 type="file"
-                id="avatar-upload"
-                name="avatar"
+                id="avatar-file"
+                name="file"
                 accept="image/*"
               />
-              <button type="submit">Upload</button>
+              <p id="avatar-submit">Submit</p>
+              <!--<button type="submit" id="avatar-submit">Upload</button>-->
             </form>
           </div>
 

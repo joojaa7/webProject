@@ -237,3 +237,38 @@ document
     registerForm.style.display = "none";
     console.log(response);
   });
+
+
+  document.getElementById('avatar-submit').addEventListener('click', async (e) => {
+    console.log(e)
+    let avatar = null;
+    const formData = new FormData();
+    if (avatarFile.files[0]) {
+      avatar = avatarFile.files[0].name;
+      formData.append('file', avatarFile.files[0])
+    } else {
+      alert('SELECT FILE')
+      return
+    }
+    const userData = JSON.parse(sessionStorage.getItem('user'))
+    formData.append('avatar', avatar);
+    formData.append('username', userData.username);
+    const options = {
+      method: 'PUT',
+      body: formData,
+    };
+    if (userData.username) {
+      const response = await fetch('http://127.0.0.1:3000/api/v1/users/avatar', options);
+      const json = await response.json();
+      inputForm.reset();
+      if (response.ok){
+        console.log('OK')
+        userData.avatar = json.avatar
+        sessionStorage.setItem('user', JSON.stringify(userData));
+        user = JSON.parse(sessionStorage.getItem('user'));
+      } else {
+        alert(response);
+    }} else {
+      alert('Log in required.')
+    }
+  })
