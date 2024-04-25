@@ -73,13 +73,41 @@ document.getElementById('login').addEventListener('click', () => {
 */
 
 // event listener for login button
-document.getElementById("login").addEventListener("click", function () {
-  var loginForm = document.getElementById("loginForm");
-  var registerForm = document.getElementById("registerForm");
+document.getElementById("login").addEventListener("click", async () => {
+  const loginForm = document.getElementById("loginForm");
+  const registerForm = document.getElementById("registerForm");
   if (loginForm.style.display === "none" || loginForm.style.display === "") {
     loginForm.style.display = "block";
     registerForm.style.display = "none"; // Hide the register form if login form is shown
   } else {
+    loginForm.style.display = "none";
+  }
+});
+
+document.getElementById("login-apply").addEventListener("click", async (e) => {
+  const loginForm = document.getElementById("loginForm");
+  const name = document.getElementById('loginUsername').value;
+  const pw = document.getElementById('loginPassword').value;
+  console.log(name, pw);
+  const loginUser = {
+    username: name,
+    password: pw
+  }
+  const options = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(loginUser),
+  };
+  const response = await fetch('http://127.0.0.1:3000/api/v1/auth/', options);
+  console.log(response);
+  const json = await response.json();
+  if (!json.user) {
+    alert(json.error.message);
+  } else {
+    sessionStorage.setItem('token', json.token);
+    sessionStorage.setItem('user', JSON.stringify(json.user));
     loginForm.style.display = "none";
   }
 });
@@ -102,12 +130,6 @@ document.getElementById("register").addEventListener("click", function () {
 // DEV only
 // event listener for submit button, directs to login page
 // to be replaced later with actual login functionality
-document
-  .getElementById("login-submit-btn")
-  .addEventListener("click", function (e) {
-    e.preventDefault();
-    window.location = "login.html";
-  });
 
 document
   .getElementById("register-submit-btn")
@@ -124,13 +146,6 @@ document
     const phoneNumber = document.getElementById("phone-number").value;
     const address = document.getElementById("address").value;
     const email = document.getElementById("email").value;
-    // const inputs = [firstName, lastName, username, password, cardNumber, phoneNumber, address, email];
-    // inputs.forEach(input => {
-    //   if (!input) {
-    //     alert('Please fill in all fields');
-    //     return;
-    //   }
-    // });
 
     if (fileInput.files[0]) {
       avatar = fileInput.files[0].name;
@@ -158,3 +173,29 @@ document
     registerForm.style.display = "none";
     console.log(response);
   });
+
+
+
+// IIFE
+
+(async () => {
+  if (sessionStorage.getItem('token') && sessionStorage.getItem('user')){
+    try {
+      const options = {
+        headers: {
+          'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
+          'Content-Type': 'application/json'
+        }
+      }
+      const response = await fetch('http://127.0.0.1:3000/restaurant/login/verify', options)
+      console.log(response)
+      if (response.ok) {
+        console.log('OK');
+      } else {
+      }
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+})();

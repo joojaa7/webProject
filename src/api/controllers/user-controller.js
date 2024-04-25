@@ -1,9 +1,9 @@
 import { getUserByName, addUser } from "../models/user-model.js";
 import bcrypt from 'bcrypt';
 
-const getUser = async (req, res) => {
-  console.log(req.params, "REQPARAMS");
-    const user = await getUserByName(req.params.name);
+const getUser = async (username) => {
+  console.log(username, 'get user');
+    const user = await getUserByName(username);
     console.log('get user', user)
     if (user){
         return res.json(user);

@@ -9,8 +9,8 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use("/", express.static("Code"));
-app.use("/", express.static("uploads"));
+app.use("/api/v1", express.static("Code"));
+app.use("/api/v1", express.static("uploads"));
 
 app.use("/api/v1", api);
 
