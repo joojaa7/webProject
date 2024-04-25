@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Restaurant Reservations</title>
+    <link rel="stylesheet" href="../styles/reservations.css" />
+    <script src="../scripts/reservations.js" type="module" defer></script>
+  </head>
+  <body>
+    <h1>Restaurant Reservations</h1>
+    <div>
+      <h1>Add new table</h1>
+      <form id="addTableForm">
+        <label for="tableCapacity">Table seats: </label>
+        <input type="number" id="tableCapacity" name="tableCapacity" required />
+        <label for="tableLocation">Describe location: </label>
+        <input type="text" id="tableLocation" name="tableLocation" required />
+        <button id="addTableButton">Submit</button>
+        <!--<button id="removeTableButton">Remove selected table</button> -->
+      </form>
+    </div>
+    <div>
+      <h1>Delete table by id</h1>
+      <form id="deleteTableForm">
+        <label for="tableId">Table id: </label>
+        <input type="number" id="tableId" name="tableId" required />
+        <button id="deleteTableButton">Delete</button>
+      </form>
+    </div>
+    <a href="/Code/views/login.html">Back to login</a>
+
+    <div id="tablesGrid">
+      <!-- Tables will be dynamically loaded here -->
+    </div>
+    <div id="dayCarousel">
+      <button id="previousDayBtn">Previous</button>
+      <div id="dateSelector">
+        <h2>Select a Date</h2>
+        <input type="date" id="reservationDate" />
+        <button id="loadReservationsForDate">Load Reservations</button>
+      </div>
+      <button id="nextDayBtn">Next</button>
+    </div>
+    <div id="currentTable">Details for table:</div>
+    <div id="detailsContainer">
+      <div id="reservationDetails">
+        <!-- Reservation details for a selected table will be displayed here -->
+      </div>
+      <div id="reservationModifications"></div>
+    </div>
+  </body>
+</html>

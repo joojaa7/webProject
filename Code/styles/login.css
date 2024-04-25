@@ -14,8 +14,6 @@ body {
   width: 100%;
 }
 
-.banner {
-}
 .banner_content {
   display: flex;
   flex-wrap: wrap;
@@ -23,7 +21,7 @@ body {
   background-color: rgb(110, 233, 192);
   background-image: linear-gradient(
     to right,
-    rgb(51, 92, 78),
+    rgb(75, 119, 104),
     rgb(110, 233, 192)
   );
   padding: 2rem;
@@ -200,4 +198,21 @@ h2 {
   border-radius: 1rem 0 0 1rem;
   border: 5px rgb(50, 90, 77) solid;
   background-color: rgb(84, 141, 122);
+}
+
+.admin-only a {
+  flex-direction: row;
+  list-style-type: none;
+  padding: 0;
+  color: #333;
+  text-decoration: none;
+}
+
+#roleSelector {
+  padding: 10px;
+  margin: 1rem;
+}
+
+.admin-only {
+  display: none;
 }

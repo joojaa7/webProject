@@ -1,0 +1,88 @@
+#tablesGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+.table {
+  padding: 15px;
+  border: 1px solid #ccc;
+  text-align: center;
+  cursor: pointer;
+  background-color: #f4f4f4;
+}
+
+#dateSelector {
+  margin-left: 20px;
+}
+
+#dayCarousel {
+  width: 80%;
+  display: flex;
+  gap: 15vw;
+  margin: 20px 0;
+  margin-left: 20px;
+}
+
+#loadReservationsForDate {
+  padding: 10px;
+  margin: 10px;
+}
+
+#dayCarousel button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100px;
+  padding: 10px 20px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+#dayCarousel button:hover {
+  background-color: #367b35;
+}
+
+#reservationDetails {
+  margin-top: 20px;
+  padding: 20px;
+  border-top: 2px solid black;
+  width: 80%;
+}
+
+#reservationDetails .reserved {
+  background-color: #f2dede;
+  color: #a94442;
+  padding: 10px;
+  margin: 5px 0;
+  border-left: 5px solid #d9534f;
+}
+
+#reservationDetails .free {
+  background-color: #dff0d8;
+  color: #3c763d;
+  padding: 10px;
+  margin: 5px 0;
+}
+
+#currentTable {
+  margin-left: 300px;
+  font-size: large;
+  font-weight: bold;
+}
+
+#detailsContainer {
+  display: flex;
+}
+
+#reservationModifications {
+  margin-top: 20px;
+  padding: 20px;
+  border-top: 2px solid black;
+}

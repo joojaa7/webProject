@@ -1,0 +1,4 @@
+GET http://127.0.0.1:3000/users/Admin
+
+###
+GET http://127.0.0.1:3000/users/Pekka
