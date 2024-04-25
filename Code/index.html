@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="main.css" />
+    <script src="main.js" defer></script>
+    <title>Main</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="banner">
+        <div class="banner_content">
+          <img src="placeholder.jpg" alt="placeholder" class="banner_image" />
+          <div class="banner_name">
+            <p>Brgr Menu</p>
+          </div>
+          <div class="login_button">
+            <button class="login_content" id="login">Login</button>
+            <button class="login_content" id="register">Register</button>
+          </div>
+
+          <div id="loginForm" style="display: none">
+            <!-- form actioniin osoite johon lähetetään tiedot -->
+            <form>
+              <label for="username">Username:</label>
+              <input type="text" id="username" name="username" /><br />
+              <label for="password">Password:</label>
+              <input type="password" id="password" name="password" /><br />
+              <button type="submit" id="login-submit-btn">Submit</button>
+            </form>
+          </div>
+          <div id="registerForm" style="display: none">
+            <form method="post" required="required">
+              <label for="firstname">Firstname:</label>
+              <input
+                type="text"
+                id="firstname"
+                name="firstname"
+                required="required"
+              /><br />
+              <label for="lastname">Lastname:</label>
+              <input type="text" id="lastname" name="lastname" required /><br />
+              <label for="username">Username:</label>
+              <input type="text" id="username" name="username" required /><br />
+              <label for="password">Password:</label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                required
+              /><br />
+              <label for="email">Email:</label>
+              <input type="email" id="email" name="email" required /><br />
+              <label for="phone-number">Phone:</label>
+              <input
+                type="tel"
+                id="phone-number"
+                name="phone-number"
+                required
+              /><br />
+              <label for="address">Home address:</label>
+              <input type="text" id="address" name="address" required /><br />
+              <label for="address">Card number:</label>
+              <input
+                type="text"
+                id="cardnumber"
+                name="cardnumber"
+                required
+              /><br />
+              <label for="file">Avatar:</label>
+              <input
+                type="file"
+                name="file"
+                id="file"
+                accept="image/*"
+                autocomplete="off"
+              />
+              <button type="submit" id="register-submit-btn">Submit</button>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="menu">
+        <div class="weekday_buttons">
+          <ul class="weekdays">
+            <li class="weekday_link">Monday</li>
+            <li class="weekday_link">Tuesday</li>
+            <li class="weekday_link">Wednesday</li>
+            <li class="weekday_link">Thursday</li>
+            <li class="weekday_link">Friday</li>
+            <li class="weekday_link">Saturday</li>
+            <li class="weekday_link">Sunday</li>
+          </ul>
+        </div>
+        <div class="menu_items">
+          <div class="menu_entry">
+            <img
+              src="hampurilaiset.jpg"
+              alt="hampurilaiset"
+              class="menu_item_image"
+            />
+            <div class="item_description">
+              <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos
+                perspiciatis consequatur ab aspernatur explicabo dolore minima,
+                ipsam nostrum nihil fugit, voluptates distinctio aperiam numquam
+                rerum tempore maiores rem soluta ducimus?
+              </p>
+            </div>
+          </div>
+          <div class="menu_entry">
+            <img
+              src="hampurilaiset.jpg"
+              alt="hampurilaiset"
+              class="menu_item_image"
+            />
+            <div class="item_description">
+              <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos
+                perspiciatis consequatur ab aspernatur explicabo dolore minima,
+                ipsam nostrum nihil fugit, voluptates distinctio aperiam numquam
+                rerum tempore maiores rem soluta ducimus?
+              </p>
+            </div>
+          </div>
+          <div class="menu_entry">
+            <img
+              src="hampurilaiset.jpg"
+              alt="hampurilaiset"
+              class="menu_item_image"
+            />
+            <div class="item_description">
+              <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos
+                perspiciatis consequatur ab aspernatur explicabo dolore minima,
+                ipsam nostrum nihil fugit, voluptates distinctio aperiam numquam
+                rerum tempore maiores rem soluta ducimus?
+              </p>
+            </div>
+          </div>
+          <div class="menu_entry">
+            <img
+              src="hampurilaiset.jpg"
+              alt="hampurilaiset"
+              class="menu_item_image"
+            />
+            <div class="item_description">
+              <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos
+                perspiciatis consequatur ab aspernatur explicabo dolore minima,
+                ipsam nostrum nihil fugit, voluptates distinctio aperiam numquam
+                rerum tempore maiores rem soluta ducimus?
+              </p>
+            </div>
+          </div>
+          <div class="menu_entry">
+            <img
+              src="hampurilaiset.jpg"
+              alt="hampurilaiset"
+              class="menu_item_image"
+            />
+            <div class="item_description">
+              <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos
+                perspiciatis consequatur ab aspernatur explicabo dolore minima,
+                ipsam nostrum nihil fugit, voluptates distinctio aperiam numquam
+                rerum tempore maiores rem soluta ducimus?
+              </p>
+            </div>
+          </div>
+          <div class="menu_entry">
+            <img
+              src="hampurilaiset.jpg"
+              alt="hampurilaiset"
+              class="menu_item_image"
+            />
+            <div class="item_description">
+              <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos
+                perspiciatis consequatur ab aspernatur explicabo dolore minima,
+                ipsam nostrum nihil fugit, voluptates distinctio aperiam numquam
+                rerum tempore maiores rem soluta ducimus?
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
