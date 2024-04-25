@@ -2,18 +2,28 @@ console.log("In use.");
 
 const fileInput = document.getElementById("file");
 
-const date = "01.01.2024";
+const date = "02.01.2024"; // Muuta tätä päivämäärää testataksesi eri päivämääriä
 
 const data = [
   {
     Nimi: "Juustohamppari",
     Pvm: "01.01.2024",
+    Kuvaus: "Juustohamppari on hyvää",
   },
   {
     Nimi: "Epäjuustohamppari",
     Pvm: "02.01.2024",
+    Kuvaus: "Epäjuustohamppari on huonoa",
+  },
+  {
+    Nimi: "Leipäjuustohamppari",
+    Pvm: "02.01.2024",
+    Kuvaus: "Leipäjuustohamppari on outoa",
   },
 ];
+
+// Kommentoi index2 kokeiluun tästä eteenpäin ->
+
 document.addEventListener("DOMContentLoaded", () => {
   setWeekDates();
 });
@@ -46,7 +56,6 @@ function formatDate(date) {
 }
 
 const weekdayButtons = document.getElementsByClassName("weekday_link");
-
 for (let button of weekdayButtons) {
   button.addEventListener("click", (e) => {
     console.log(e);
@@ -66,6 +75,59 @@ for (let button of weekdayButtons) {
             </div>`;
   });
 }
+
+// <-- tähän asti
+
+
+// Kommenteista pois tästä ->
+
+
+// const wkd = document.getElementsByClassName('weekdays')[0];
+// const wkd_divs = [];
+
+
+
+// const containerDiv = document.getElementsByClassName("menu_items")[0];
+// data.sort((a, b) => new Date(a.Pvm) - new Date(b.Pvm));
+// console.log(data);
+// let previousPvm = null;
+// let div = null;
+// let weekday = null;
+
+// data.forEach(item => {
+//   if (item.Pvm !== previousPvm) {
+//     weekday = document.createElement('li');
+//     weekday.textContent = item.Pvm;
+//     div = document.createElement('div');
+//     div.setAttribute('id', item.Pvm);
+//     containerDiv.appendChild(div);
+//     wkd.appendChild(weekday);
+//     wkd_divs.push(div);
+//   }
+  
+//   const divElement = document.createElement('div');
+//   divElement.innerHTML = `
+//     <div class="menu_entry">
+//         <img src="../hampurilaiset.jpg" alt="hampurilaiset" class="menu_item_image">
+//         <div class="item_description">
+//             <p>${item.Kuvaus}</p>
+//         </div>
+//     </div>`;
+  
+//   div.appendChild(divElement);
+  
+//   previousPvm = item.Pvm;
+// });
+
+// console.log(wkd_divs);
+// wkd_divs.forEach((div) => {
+//   div.style.display = 'none';
+//   if (div.id === date) {
+//     div.style.display = 'block';
+//   };
+// });
+
+// <-- tähän asti
 
 // event listener for login button
 document.getElementById("login").addEventListener("click", function () {
