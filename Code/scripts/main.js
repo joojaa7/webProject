@@ -112,19 +112,17 @@ async function fetchMenuByDate(date) {
       throw new Error("Failed to fetch data: " + response.statusText);
     }
     const data = await response.json();
-    console.log("Full data response:", data); // Ensure you see the structure as expected
+    console.log("Full data response:", data);
 
-    // Check if data array is not empty and has the object
     if (data.length > 0 && data[0].burger_id !== undefined) {
-      console.log("data.burger_id", data[0].burger_id); // Ensure this logs as expected
-      return data[0].burger_id; // Access burger_id from the first object in the array
+      return data[0].burger_id;
     } else {
       console.error("Burger ID is undefined or data array is empty");
-      return null; // Handle scenario where no data is found or burger_id is missing
+      return null;
     }
   } catch (error) {
     console.error("Error fetching menu by date:", error);
-    return null; // Handle errors appropriately
+    return null;
   }
 }
 
@@ -133,7 +131,7 @@ async function fetchBurgerByID(burgerId) {
 
   const response = await fetch(url);
   const burger = await response.json();
-  return burger; // Assuming the response returns burger details
+  return burger;
 }
 
 function updateMenuDisplay(burger, date) {

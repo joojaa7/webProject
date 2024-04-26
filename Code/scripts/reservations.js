@@ -346,6 +346,12 @@ function displayModifyReservationForm(userDetails, reservationId) {
   const form = document.createElement("form");
   form.onsubmit = (e) => {
     e.preventDefault();
+    console.log(
+      "calling updateReservation with: ",
+      reservationId,
+      nameInput.value,
+      contactInfoInput.value
+    );
     updateReservation(reservationId, nameInput.value, contactInfoInput.value);
   };
 
@@ -449,6 +455,10 @@ async function deleteReservation(reservationId) {
     console.error("Error deleting reservation:", error);
     alert("Error deleting reservation: " + error.message);
   }
+}
+
+async function updateReservation(reservationId, name, contactInfo) {
+  // make a PUT request to the API to update the reservation
 }
 
 function displayTableReservations(tableId, dateString) {

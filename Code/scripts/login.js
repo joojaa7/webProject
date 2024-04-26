@@ -12,6 +12,8 @@ const linksToContentMap = {
   "admin_update_users-link": "admin-update-users-content",
 };
 
+// TODO: add functionality to add burger to database
+
 const fetchBurgers = async () => {
   try {
     const response = await fetch(hamburgersUrl);
