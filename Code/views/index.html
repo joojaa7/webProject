@@ -24,6 +24,13 @@
             <button class="login_content" id="register">Register</button>
           </div>
 
+          <div id="logged">
+            <img id="avatar" src="../default.jpg" alt="avatar">
+            <div id="profile">
+              <p id="profile-button">Profile</p>
+            </div>
+          </div>
+
           <div id="loginForm" style="display: none">
             <!-- form actioniin osoite johon lähetetään tiedot -->
             <form>
@@ -81,7 +88,9 @@
                 accept="image/*"
                 autocomplete="off"
               />
-              <button type="submit" id="register-submit-btn">Submit</button>
+              <div id="submit-div">
+                <button type="submit" id="register-submit-btn">Submit</button>
+              </div>
             </form>
           </div>
         </div>

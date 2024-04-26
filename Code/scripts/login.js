@@ -1,6 +1,9 @@
 "use strict";
 import { hamburgersUrl } from "./variables.js";
 
+let user = JSON.parse(localStorage.getItem('user'));
+console.log(user);
+
 const linksToContentMap = {
   "avatar-link": "avatar-content",
   "bio-link": "bio-content",
@@ -107,7 +110,7 @@ document.getElementById('avatar-submit').addEventListener('click', async (e) => 
     alert('SELECT FILE')
     return
   }
-  const userData = JSON.parse(sessionStorage.getItem('user'))
+  const userData = JSON.parse(localStorage.getItem('user'))
   formData.append('avatar', avatar);
   formData.append('username', userData.username);
   const options = {
