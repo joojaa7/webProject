@@ -16,6 +16,7 @@ const addMenuItemController = async (req, res) => {
 
 const getMenuByDateController = async (req, res) => {
   const { date } = req.params;
+  console.log("date", date);
   try {
     const menuItems = await getMenuByDate(date);
     res.json(menuItems);

@@ -6,7 +6,7 @@ import {
 
 const menuRouter = express.Router();
 
-menuRouter.route("/").post(addMenuItemController);
-menuRouter.route("/").get(getMenuByDateController);
+//menuRouter.route("/").post(addMenuItemController);
+menuRouter.get("/:date", getMenuByDateController);
 
 export default menuRouter;

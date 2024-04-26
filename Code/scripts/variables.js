@@ -6,4 +6,4 @@ export const reservationsUrl = "http://127.0.0.1:3000/api/v1/reservations/";
 export const tablesUrlWithStatus =
   "http://127.0.0.1:3000/api/v1/tables/with-status/";
 export const hamburgersUrl = "http://127.0.0.1:3000/api/v1/hamburgers/";
-export const menusUrl = "http://localhost:3000/api/menus/";
+export const menusUrl = "http://localhost:3000/api/v1/menus/";

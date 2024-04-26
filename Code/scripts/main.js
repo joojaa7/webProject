@@ -42,9 +42,12 @@ function setWeekDates() {
 }
 
 function formatDate(date) {
-  // Format the date as "DD.MM."
-  return `${date.getDate()}.${date.getMonth() + 1}.`;
+  // Pad the month and the day with '0' if they are less than 10
+  const day = ("0" + date.getDate()).slice(-2);
+  const month = ("0" + (date.getMonth() + 1)).slice(-2); // +1 because getMonth() returns 0-11
+  return `${day}.${month}.`; // Returns 'DD.MM.'
 }
+
 /*
 const weekdayButtons = document.getElementsByClassName("weekday_link");
 
@@ -78,8 +81,10 @@ const weekdayButtons = document.getElementsByClassName("weekday_link");
 for (let button of weekdayButtons) {
   button.addEventListener("click", async (e) => {
     const selectedDate = e.target.innerText;
+    console.log("selectedDate", selectedDate);
     try {
       const burgerId = await fetchMenuByDate(selectedDate + "2024");
+      console.log("burgerId in frontend", burgerId);
       if (burgerId) {
         const burgerDetails = await fetchBurgerByID(burgerId);
         updateMenuDisplay(burgerDetails, selectedDate);
@@ -98,12 +103,29 @@ for (let button of weekdayButtons) {
 }
 
 async function fetchMenuByDate(date) {
+  console.log("fetchMenuByDate date", date);
   const url = `${menusUrl}${date}`;
 
-  const response = await fetch(url);
-  const data = await response.json();
-  console.log("data", data);
-  return data.burger_id; // Assuming the response includes burger_id directly
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error("Failed to fetch data: " + response.statusText);
+    }
+    const data = await response.json();
+    console.log("Full data response:", data); // Ensure you see the structure as expected
+
+    // Check if data array is not empty and has the object
+    if (data.length > 0 && data[0].burger_id !== undefined) {
+      console.log("data.burger_id", data[0].burger_id); // Ensure this logs as expected
+      return data[0].burger_id; // Access burger_id from the first object in the array
+    } else {
+      console.error("Burger ID is undefined or data array is empty");
+      return null; // Handle scenario where no data is found or burger_id is missing
+    }
+  } catch (error) {
+    console.error("Error fetching menu by date:", error);
+    return null; // Handle errors appropriately
+  }
 }
 
 async function fetchBurgerByID(burgerId) {
@@ -115,13 +137,14 @@ async function fetchBurgerByID(burgerId) {
 }
 
 function updateMenuDisplay(burger, date) {
+  console.log("burger in updatemnu", burger);
   const menuItems = document.getElementsByClassName("menu_items")[0];
   menuItems.innerHTML = `
     <p>Menu for: ${date}</p>
     <div class="menu_entry">
-        <img src="../path_to_burger_image/${burger.filename}" alt="${burger.Name}" class="menu_item_image">
+        <img src="../path_to_burger_image/${burger[0].filename}" alt="${burger[0].Name}" class="menu_item_image">
         <div class="item_description">
-            <p>${burger.Description}</p>
+            <p>${burger[0].Description}</p>
         </div>
     </div>`;
 }
