@@ -154,7 +154,7 @@ function updateMenuDisplay(burger, date) {
     <p>Menu for: ${date}</p>
     <h2>${burger[0].Name}</h2>
     <div class="menu_entry">
-        <img src="../../uploads/${burger[0].filename}" alt="${burger[0].Name}" class="menu_item_image">
+        <img src="http://127.0.0.1:3000/api/v1/${burger[0].filename}" alt="${burger[0].Name}" class="menu_item_image">
         <div class="item_description">
             <p>${burger[0].Description}</p>
             <p>${burger[0].Price} €</p>
