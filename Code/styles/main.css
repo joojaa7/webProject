@@ -171,3 +171,21 @@ body {
   background-color: #88ad88;
   padding: 1rem;
 }
+
+.add-to-cart-btn {
+  background-color: #4caf50; /* Green background */
+  color: rgba(255, 255, 255, 0.886);
+  border: none;
+  padding: 10px 15px;
+  margin: 5px 0;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.add-to-cart-btn i {
+  margin-right: 5px; /* Space between icon and text */
+}

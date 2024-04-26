@@ -235,6 +235,7 @@ function loadTablesAndReservations(date) {
 }
 
 // function to add a new customer and make them a reservation
+// TODO: implement a check to see if user exists before adding a new user
 function createAddReservationForm(timeSlot) {
   const modificationsDiv = document.getElementById("reservationModifications");
   modificationsDiv.innerHTML = "";

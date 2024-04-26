@@ -87,13 +87,14 @@ document.getElementById('login').addEventListener('click', () => {
 
 const weekdayButtons = document.getElementsByClassName("weekday_link");
 
+// TODO: add error handling for when a burger is not found for the date
 for (let button of weekdayButtons) {
   button.addEventListener("click", async (e) => {
     const selectedDate = e.target.innerText;
-    console.log("selectedDate", selectedDate);
+    //console.log("selectedDate", selectedDate);
     try {
       const burgerId = await fetchMenuByDate(selectedDate + "2024");
-      console.log("burgerId in frontend", burgerId);
+      //console.log("burgerId in frontend", burgerId);
       if (burgerId) {
         const burgerDetails = await fetchBurgerByID(burgerId);
         updateMenuDisplay(burgerDetails, selectedDate);
@@ -112,7 +113,7 @@ for (let button of weekdayButtons) {
 }
 
 async function fetchMenuByDate(date) {
-  console.log("fetchMenuByDate date", date);
+  //console.log("fetchMenuByDate date", date);
   const url = `${menusUrl}${date}`;
 
   try {
@@ -121,7 +122,7 @@ async function fetchMenuByDate(date) {
       throw new Error("Failed to fetch data: " + response.statusText);
     }
     const data = await response.json();
-    console.log("Full data response:", data);
+    //console.log("Full data response:", data);
 
     if (data.length > 0 && data[0].burger_id !== undefined) {
       return data[0].burger_id;
@@ -144,16 +145,30 @@ async function fetchBurgerByID(burgerId) {
 }
 
 function updateMenuDisplay(burger, date) {
-  console.log("burger in updatemnu", burger);
   const menuItems = document.getElementsByClassName("menu_items")[0];
   menuItems.innerHTML = `
     <p>Menu for: ${date}</p>
+    <h2>${burger[0].Name}</h2>
     <div class="menu_entry">
         <img src="../../uploads/${burger[0].filename}" alt="${burger[0].Name}" class="menu_item_image">
         <div class="item_description">
             <p>${burger[0].Description}</p>
+            <p>${burger[0].Price} €</p>
         </div>
+        
+        <button class="add-to-cart-btn" data-id="${burger[0].ID}">
+            <i class="fas fa-shopping-cart"></i> Add to Cart
+        </button>
     </div>`;
+  addCartEventListener();
+}
+
+function addCartEventListener() {
+  const addToCartBtn = document.getElementsByClassName("add-to-cart-btn")[0];
+  addToCartBtn.addEventListener("click", (e) => {
+    const burgerId = e.target.getAttribute("data-id");
+    console.log("Burger ID:", burgerId);
+  });
 }
 
 // event listener for login button

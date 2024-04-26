@@ -13,13 +13,13 @@ const addMenuItem = async (burger_id, date) => {
 };
 
 const getMenuByDate = async (date) => {
-  console.log("date in model", date);
+  //console.log("date in model", date);
   try {
     const [rows] = await promisePool.execute(
       "SELECT * FROM menu WHERE date = ?",
       [date]
     );
-    console.log(rows);
+    //console.log("rows in getmenubyDate", rows);
     return rows;
   } catch (error) {
     console.log("Error fetching menu:", error);
