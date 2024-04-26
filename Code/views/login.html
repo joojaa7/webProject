@@ -114,6 +114,7 @@
               <!--<button type="submit" id="avatar-submit">Upload</button>-->
             </form>
           </div>
+          
 
           <div id="bio-content" class="form-content" style="display: none">
             <form id="bio-form" class="form">
@@ -264,7 +265,7 @@
             style="display: none"
           >
             <h3>Add a burger</h3>
-            <form id="add-burger-form">
+            <form id="add-burger-form" enctype="multipart/form-data">
               <div class="form-group">
                 <label for="add-burger"></label>
                 <input
@@ -282,7 +283,7 @@
                   required
                 />
                 <input
-                  type="number"
+                  type="float"
                   name="add-burger-price"
                   id="add-burger-price-id"
                   placeholder="Price"

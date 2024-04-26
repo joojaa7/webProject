@@ -24,11 +24,19 @@ const getBurgerById = async (id) => {
 
 // TODO: finish router for uploading files
 const addBurger = async (name, description, price, image) => {
+  console.log(
+    "name, description, price, image in addburger",
+    name,
+    description,
+    price,
+    image
+  );
   try {
     const [result] = await promisePool.execute(
       "INSERT INTO burgers (Name, Description, Price, filename) VALUES (?, ?, ?, ?)",
       [name, description, price, image]
     );
+    console.log("result in addburger", result);
     return { name, description, price, image };
   } catch (error) {
     console.log("Error adding burger:", error);

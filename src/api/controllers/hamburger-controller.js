@@ -33,7 +33,26 @@ const getBurgerByIdController = async (req, res) => {
 };
 
 const addBurgerController = async (req, res) => {
-  const { name, description, price, image } = req.body;
+  console.log("req.body in addBurgerCntrl", req.body);
+  console.log("file in addBurgerCntrl", req.file);
+
+  // Correcting the property names to match those used in the form
+  const {
+    "add-burger-name": name,
+    "add-burger-description": description,
+    "add-burger-price": price,
+  } = req.body;
+
+  const image = req.file ? req.file.filename : null; // Correctly capturing the filename if uploaded
+
+  console.log("image in addBurgerCntrl", image);
+  console.log(
+    "name, description, price in addBurgerCntrl",
+    name,
+    description,
+    price
+  );
+
   try {
     const newBurger = await addBurger(name, description, price, image);
     res.status(201).json(newBurger);
