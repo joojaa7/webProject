@@ -3,18 +3,28 @@ import { menusUrl, hamburgersUrl } from "./variables.js";
 
 const fileInput = document.getElementById("file");
 
-const date = "01.01.2024";
+const date = "02.01.2024"; // Muuta tätä päivämäärää testataksesi eri päivämääriä alla olevasta datasta
 
 const data = [
   {
     Nimi: "Juustohamppari",
     Pvm: "01.01.2024",
+    Kuvaus: "Juustohamppari on hyvää",
   },
   {
     Nimi: "Epäjuustohamppari",
     Pvm: "02.01.2024",
+    Kuvaus: "Epäjuustohamppari on huonoa",
+  },
+  {
+    Nimi: "Leipäjuustohamppari",
+    Pvm: "02.01.2024",
+    Kuvaus: "Leipäjuustohamppari on outoa",
   },
 ];
+
+// Kommentoi index2 kokeiluun tästä eteenpäin ->
+
 document.addEventListener("DOMContentLoaded", () => {
   setWeekDates();
 });
@@ -50,7 +60,6 @@ function formatDate(date) {
 
 /*
 const weekdayButtons = document.getElementsByClassName("weekday_link");
-
 for (let button of weekdayButtons) {
   button.addEventListener("click", (e) => {
     console.log(e);
@@ -174,15 +183,43 @@ document.getElementById("register").addEventListener("click", function () {
   }
 });
 
-// DEV only
-// event listener for submit button, directs to login page
-// to be replaced later with actual login functionality
-document
-  .getElementById("login-submit-btn")
-  .addEventListener("click", function (e) {
-    e.preventDefault();
+// login submit
+document.getElementById("login-apply").addEventListener("click", async (e) => {
+  const loginForm = document.getElementById("loginForm");
+  const name = document.getElementById("loginUsername").value;
+  const pw = document.getElementById("loginPassword").value;
+  console.log(name, pw);
+  const loginUser = {
+    username: name,
+    password: pw,
+  };
+  const options = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(loginUser),
+  };
+  const response = await fetch("http://127.0.0.1:3000/api/v1/auth/", options);
+  console.log(response);
+  const json = await response.json();
+  if (!json.user) {
+    alert(json.error.message);
+  } else {
+    sessionStorage.setItem("token", json.token);
+    sessionStorage.setItem("user", JSON.stringify(json.user));
+    loginForm.style.display = "none";
     window.location = "login.html";
-  });
+  }
+});
+
+// TODO: luo logout nappi
+
+// logout
+// document.getElementById('logout_button').addEventListener('click', () => {
+//   sessionStorage.removeItem('user')
+//   sessionStorage.removeItem('token')
+// })
 
 document
   .getElementById("register-submit-btn")
@@ -199,13 +236,6 @@ document
     const phoneNumber = document.getElementById("phone-number").value;
     const address = document.getElementById("address").value;
     const email = document.getElementById("email").value;
-    // const inputs = [firstName, lastName, username, password, cardNumber, phoneNumber, address, email];
-    // inputs.forEach(input => {
-    //   if (!input) {
-    //     alert('Please fill in all fields');
-    //     return;
-    //   }
-    // });
 
     if (fileInput.files[0]) {
       avatar = fileInput.files[0].name;
@@ -227,9 +257,49 @@ document
     };
     console.log(options);
     const response = await fetch(
-      "http://127.0.0.1:3000/users/register",
+      "http://127.0.0.1:3000/api/v1/users/register",
       options
     );
     registerForm.style.display = "none";
     console.log(response);
+  });
+
+document
+  .getElementById("avatar-submit")
+  .addEventListener("click", async (e) => {
+    console.log(e);
+    let avatar = null;
+    const formData = new FormData();
+    if (avatarFile.files[0]) {
+      avatar = avatarFile.files[0].name;
+      formData.append("file", avatarFile.files[0]);
+    } else {
+      alert("SELECT FILE");
+      return;
+    }
+    const userData = JSON.parse(sessionStorage.getItem("user"));
+    formData.append("avatar", avatar);
+    formData.append("username", userData.username);
+    const options = {
+      method: "PUT",
+      body: formData,
+    };
+    if (userData.username) {
+      const response = await fetch(
+        "http://127.0.0.1:3000/api/v1/users/avatar",
+        options
+      );
+      const json = await response.json();
+      inputForm.reset();
+      if (response.ok) {
+        console.log("OK");
+        userData.avatar = json.avatar;
+        sessionStorage.setItem("user", JSON.stringify(userData));
+        user = JSON.parse(sessionStorage.getItem("user"));
+      } else {
+        alert(response);
+      }
+    } else {
+      alert("Log in required.");
+    }
   });

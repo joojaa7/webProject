@@ -164,3 +164,10 @@ body {
   display: block;
   width: 100%;
 }
+
+#login-apply {
+  text-align: center;
+  cursor: pointer;
+  background-color: #88ad88;
+  padding: 1rem;
+}

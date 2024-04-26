@@ -1,12 +1,12 @@
-import { getUserByName, addUser } from "../models/user-model.js";
+import { getUserByName, addUser, updateAvatarFilename } from "../models/user-model.js";
 import bcrypt from 'bcrypt';
 
-const getUser = async (req, res) => {
-  console.log(req.params, "REQPARAMS");
-    const user = await getUserByName(req.params.name);
+const getUser = async (username) => {
+  console.log(username, 'get user');
+    const user = await getUserByName(username);
     console.log('get user', user)
     if (user){
-        return res.json(user);
+        return user;
       } else {
         return
       }
@@ -30,4 +30,14 @@ const postUser = async (req, res, next) => {
   }
 };
 
-export { getUser, postUser }
+const updateAvatar = async (req, res, next) => {
+  const result = await updateAvatarFilename(req)
+  if (!result) {
+    res.sendStatus(418);
+    return
+  }
+  //res.status(200).send({message: 'Success.'});
+  res.json(result)
+}
+
+export { getUser, postUser, updateAvatar }

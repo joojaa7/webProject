@@ -1,5 +1,5 @@
 import express from 'express';
-import { getUser, postUser } from "../controllers/user-controller.js";
+import { getUser, postUser, updateAvatar } from "../controllers/user-controller.js";
 import multer from 'multer';
 
 const userRouter = express.Router();
@@ -49,5 +49,11 @@ userRouter.route('/register').post(
     upload.single('file'),
     postUser
 );
+userRouter
+  .route('/avatar')
+  .put(
+    upload.single('file'),
+    updateAvatar
+)
 
 export default userRouter;
