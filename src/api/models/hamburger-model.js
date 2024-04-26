@@ -9,6 +9,19 @@ const getAllHamburgers = async () => {
   }
 };
 
+const getBurgerById = async (id) => {
+  try {
+    const [rows] = await promisePool.execute(
+      "SELECT * FROM burgers WHERE ID = ?",
+      [id]
+    );
+    console.log(rows);
+    return rows;
+  } catch (error) {
+    console.log("Error fetching burger:", error);
+  }
+};
+
 // TODO: finish router for uploading files
 const addBurger = async (name, description, price, image) => {
   try {
@@ -22,4 +35,4 @@ const addBurger = async (name, description, price, image) => {
   }
 };
 
-export { getAllHamburgers, addBurger };
+export { getAllHamburgers, addBurger, getBurgerById };

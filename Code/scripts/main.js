@@ -1,4 +1,5 @@
 console.log("In use.");
+import { menusUrl, hamburgersUrl } from "./variables.js";
 
 const fileInput = document.getElementById("file");
 
@@ -44,7 +45,7 @@ function formatDate(date) {
   // Format the date as "DD.MM."
   return `${date.getDate()}.${date.getMonth() + 1}.`;
 }
-
+/*
 const weekdayButtons = document.getElementsByClassName("weekday_link");
 
 for (let button of weekdayButtons) {
@@ -66,11 +67,64 @@ for (let button of weekdayButtons) {
             </div>`;
   });
 }
-/*
+
 document.getElementById('login').addEventListener('click', () => {
     window.location = 'login.html';
 })
 */
+
+const weekdayButtons = document.getElementsByClassName("weekday_link");
+
+for (let button of weekdayButtons) {
+  button.addEventListener("click", async (e) => {
+    const selectedDate = e.target.innerText;
+    try {
+      const burgerId = await fetchMenuByDate(selectedDate + "2024");
+      if (burgerId) {
+        const burgerDetails = await fetchBurgerByID(burgerId);
+        updateMenuDisplay(burgerDetails, selectedDate);
+      } else {
+        console.log("No burger found for this date");
+      }
+    } catch (error) {
+      console.error("Error fetching menu:", error);
+    }
+
+    for (let button of weekdayButtons) {
+      button.classList.remove("active");
+    }
+    e.target.classList.add("active");
+  });
+}
+
+async function fetchMenuByDate(date) {
+  const url = `${menusUrl}${date}`;
+
+  const response = await fetch(url);
+  const data = await response.json();
+  console.log("data", data);
+  return data.burger_id; // Assuming the response includes burger_id directly
+}
+
+async function fetchBurgerByID(burgerId) {
+  const url = `${hamburgersUrl}/${burgerId}`;
+
+  const response = await fetch(url);
+  const burger = await response.json();
+  return burger; // Assuming the response returns burger details
+}
+
+function updateMenuDisplay(burger, date) {
+  const menuItems = document.getElementsByClassName("menu_items")[0];
+  menuItems.innerHTML = `
+    <p>Menu for: ${date}</p>
+    <div class="menu_entry">
+        <img src="../path_to_burger_image/${burger.filename}" alt="${burger.Name}" class="menu_item_image">
+        <div class="item_description">
+            <p>${burger.Description}</p>
+        </div>
+    </div>`;
+}
 
 // event listener for login button
 document.getElementById("login").addEventListener("click", function () {

@@ -1,4 +1,8 @@
-import { getAllHamburgers, addBurger } from "../models/hamburger-model.js";
+import {
+  getAllHamburgers,
+  addBurger,
+  getBurgerById,
+} from "../models/hamburger-model.js";
 
 const getAllHamburgersController = async (req, res) => {
   try {
@@ -8,6 +12,21 @@ const getAllHamburgersController = async (req, res) => {
     console.log("Error fetching hamburgers:", error);
     res.status(500).json({
       message: "Failed to retrieve hamburgers",
+      error: error.message,
+    });
+  }
+};
+
+const getBurgerByIdController = async (req, res) => {
+  const { id } = req.params;
+  console.log("ID:", id);
+  try {
+    const burger = await getBurgerById(id);
+    res.json(burger);
+  } catch (error) {
+    console.log("Error fetching burger:", error);
+    res.status(500).json({
+      message: "Failed to retrieve burger",
       error: error.message,
     });
   }
@@ -27,4 +46,8 @@ const addBurgerController = async (req, res) => {
   }
 };
 
-export { getAllHamburgersController, addBurgerController };
+export {
+  getAllHamburgersController,
+  addBurgerController,
+  getBurgerByIdController,
+};

@@ -1,4 +1,4 @@
-import { addMenuItem } from "../models/menu-model.js";
+import { addMenuItem, getMenuByDate } from "../models/menu-model.js";
 
 const addMenuItemController = async (req, res) => {
   const { burger_id, date } = req.body;
@@ -14,4 +14,17 @@ const addMenuItemController = async (req, res) => {
   }
 };
 
-export { addMenuItemController };
+const getMenuByDateController = async (req, res) => {
+  const { date } = req.params;
+  try {
+    const menuItems = await getMenuByDate(date);
+    res.json(menuItems);
+  } catch (error) {
+    console.error("Error fetching menu:", error);
+    res.status(500).json({
+      message: "Failed to retrieve menu",
+      error: error.message,
+    });
+  }
+};
+export { addMenuItemController, getMenuByDateController };

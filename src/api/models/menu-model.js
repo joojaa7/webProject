@@ -12,4 +12,18 @@ const addMenuItem = async (burger_id, date) => {
   }
 };
 
-export { addMenuItem };
+const getMenuByDate = async (date) => {
+  console.log(date);
+  try {
+    const [rows] = await promisePool.execute(
+      "SELECT * FROM menu WHERE date = ?",
+      [date]
+    );
+    console.log(rows);
+    return rows;
+  } catch (error) {
+    console.log("Error fetching menu:", error);
+  }
+};
+
+export { addMenuItem, getMenuByDate };

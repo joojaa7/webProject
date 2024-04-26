@@ -9,7 +9,6 @@ import menuRouter from "./routes/menu-router.js";
 //Placeholder code
 const router = express.Router();
 
-// bind base url for all cat routes to catRouter
 router.use("/users", userRouter);
 router.use("/tables", tableRouter);
 router.use("/customers", customerRouter);
