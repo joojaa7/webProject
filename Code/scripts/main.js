@@ -4,30 +4,11 @@ import { menusUrl, hamburgersUrl } from "./variables.js";
 const fileInput = document.getElementById("file");
 const loginElement = document.getElementsByClassName("login_button")[0];
 const loggedElement = document.getElementById("logged");
-let user;
+let user = JSON.parse(localStorage.getItem("user"));
 const avatar = document.getElementById("avatar");
 
-const date = "02.01.2024"; // Muuta tätä päivämäärää testataksesi eri päivämääriä alla olevasta datasta
 
-const data = [
-  {
-    Nimi: "Juustohamppari",
-    Pvm: "01.01.2024",
-    Kuvaus: "Juustohamppari on hyvää",
-  },
-  {
-    Nimi: "Epäjuustohamppari",
-    Pvm: "02.01.2024",
-    Kuvaus: "Epäjuustohamppari on huonoa",
-  },
-  {
-    Nimi: "Leipäjuustohamppari",
-    Pvm: "02.01.2024",
-    Kuvaus: "Leipäjuustohamppari on outoa",
-  },
-];
-
-
+// En tiedä tarvitaanko, kun script tagissa on defer. Kokeilin ilman ja toimi.
 document.addEventListener("DOMContentLoaded", () => {
   setWeekDates();
 });
@@ -53,6 +34,7 @@ function setWeekDates() {
     }
   });
 }
+
 
 function formatDate(date) {
   // Pad the month and the day with '0' if they are less than 10
@@ -148,7 +130,7 @@ function addCartEventListener() {
   });
 }
 
-// event listener for login button
+// Kirjautumisen näkymä
 document.getElementById("login").addEventListener("click", function () {
   var loginForm = document.getElementById("loginForm");
   var registerForm = document.getElementById("registerForm");
@@ -160,7 +142,7 @@ document.getElementById("login").addEventListener("click", function () {
   }
 });
 
-// event listener for register button
+// Rekisteröinti näkymä
 document.getElementById("register").addEventListener("click", function () {
   var registerForm = document.getElementById("registerForm");
   var loginForm = document.getElementById("loginForm");
@@ -175,7 +157,8 @@ document.getElementById("register").addEventListener("click", function () {
   }
 });
 
-// login submit
+// Kirjaudu sisään.
+
 document.getElementById("login-apply").addEventListener("click", async (e) => {
   const loginForm = document.getElementById("loginForm");
   const name = document.getElementById("loginUsername").value;
@@ -203,20 +186,20 @@ document.getElementById("login-apply").addEventListener("click", async (e) => {
     loginForm.style.display = "none";
     user = JSON.parse(localStorage.getItem("user"));
     avatar.src = user.avatar ? "../" + user.avatar : "../default.jpg";
-    //avatar.src = user.avatar ? '../default.jpg' : '../default.jpg';
     toggleLogin(true);
-    // window.location = 'login.html';
   }
 });
 
-// TODO: luo logout nappi
+// Kirjaudu ulos
 
-// logout
-// document.getElementById('logout_button').addEventListener('click', () => {
-//   sessionStorage.removeItem('user')
-//   sessionStorage.removeItem('token')
-// })
+document.getElementById('logout-button').addEventListener('click', () => {
+  localStorage.removeItem('user')
+  localStorage.removeItem('token')
+  toggleLogin(false);
+});
 
+
+// Rekisteröinti fetch
 document
   .getElementById("register-submit-btn")
   .addEventListener("click", async (e) => {
@@ -263,8 +246,34 @@ document
 const toggleLogin = (logged) => {
   loginElement.style.display = logged ? "none" : "block";
   loggedElement.style.display = logged ? "block" : "none";
+  avatar.src = logged ? "../" + user.avatar : "../default.jpg";
 };
+
+//  Siirtyy profiiliin
 
 document.getElementById("profile-button").addEventListener("click", () => {
   window.location = "login.html";
 });
+
+
+// IIFE suoritetaan aina ku sivusto ladataan.
+
+(async () => {
+  if (localStorage.getItem('token') && localStorage.getItem('user')){
+    try {
+      const options = {
+        headers: {
+          'Authorization': 'Bearer ' + localStorage.getItem('token'),
+          'Content-Type': 'application/json'
+        }
+      }
+      const response = await fetch('http://127.0.0.1:3000/api/v1/auth/verify', options)
+      console.log(response)
+      if (response.ok) {
+        toggleLogin(true)
+      } 
+    } catch (e) {
+      console.log(e)
+    }
+  }
+})();

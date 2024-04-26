@@ -15,7 +15,6 @@ authRouter.route('/verify')
   .get(
     authenticateToken,
     getMe
-  )
-
+  );
 
 export default authRouter;
