@@ -1,6 +1,9 @@
 "use strict";
 import { hamburgersUrl, menusUrl } from "./variables.js";
 
+let user = JSON.parse(localStorage.getItem("user"));
+console.log(user);
+
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("add-burger-form");
   const menu = document.getElementById("update-menu-form");
@@ -200,7 +203,7 @@ document
       alert("SELECT FILE");
       return;
     }
-    const userData = JSON.parse(sessionStorage.getItem("user"));
+    const userData = JSON.parse(localStorage.getItem("user"));
     formData.append("avatar", avatar);
     formData.append("username", userData.username);
     const options = {
@@ -219,9 +222,7 @@ document
         userData.avatar = json.avatar;
         sessionStorage.setItem("user", JSON.stringify(userData));
       } else {
-        alert(response);
+        alert("Log in required.");
       }
-    } else {
-      alert("Log in required.");
     }
   });

@@ -2,6 +2,10 @@ console.log("In use.");
 import { menusUrl, hamburgersUrl } from "./variables.js";
 
 const fileInput = document.getElementById("file");
+const loginElement = document.getElementsByClassName("login_button")[0];
+const loggedElement = document.getElementById("logged");
+let user;
+const avatar = document.getElementById("avatar");
 
 const date = "02.01.2024"; // Muuta tätä päivämäärää testataksesi eri päivämääriä alla olevasta datasta
 
@@ -221,10 +225,14 @@ document.getElementById("login-apply").addEventListener("click", async (e) => {
   if (!json.user) {
     alert(json.error.message);
   } else {
-    sessionStorage.setItem("token", json.token);
-    sessionStorage.setItem("user", JSON.stringify(json.user));
+    localStorage.setItem("token", json.token);
+    localStorage.setItem("user", JSON.stringify(json.user));
     loginForm.style.display = "none";
-    window.location = "login.html";
+    user = JSON.parse(localStorage.getItem("user"));
+    avatar.src = user.avatar ? "../" + user.avatar : "../default.jpg";
+    //avatar.src = user.avatar ? '../default.jpg' : '../default.jpg';
+    toggleLogin(true);
+    // window.location = 'login.html';
   }
 });
 
@@ -279,42 +287,11 @@ document
     console.log(response);
   });
 
-document
-  .getElementById("avatar-submit")
-  .addEventListener("click", async (e) => {
-    console.log(e);
-    let avatar = null;
-    const formData = new FormData();
-    if (avatarFile.files[0]) {
-      avatar = avatarFile.files[0].name;
-      formData.append("file", avatarFile.files[0]);
-    } else {
-      alert("SELECT FILE");
-      return;
-    }
-    const userData = JSON.parse(sessionStorage.getItem("user"));
-    formData.append("avatar", avatar);
-    formData.append("username", userData.username);
-    const options = {
-      method: "PUT",
-      body: formData,
-    };
-    if (userData.username) {
-      const response = await fetch(
-        "http://127.0.0.1:3000/api/v1/users/avatar",
-        options
-      );
-      const json = await response.json();
-      inputForm.reset();
-      if (response.ok) {
-        console.log("OK");
-        userData.avatar = json.avatar;
-        sessionStorage.setItem("user", JSON.stringify(userData));
-        user = JSON.parse(sessionStorage.getItem("user"));
-      } else {
-        alert(response);
-      }
-    } else {
-      alert("Log in required.");
-    }
-  });
+const toggleLogin = (logged) => {
+  loginElement.style.display = logged ? "none" : "block";
+  loggedElement.style.display = logged ? "block" : "none";
+};
+
+document.getElementById("profile-button").addEventListener("click", () => {
+  window.location = "login.html";
+});
