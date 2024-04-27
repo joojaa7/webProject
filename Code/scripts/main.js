@@ -27,7 +27,6 @@ const data = [
   },
 ];
 
-// Kommentoi index2 kokeiluun tästä eteenpäin ->
 
 document.addEventListener("DOMContentLoaded", () => {
   setWeekDates();
@@ -62,32 +61,6 @@ function formatDate(date) {
   return `${day}.${month}.`; // Returns 'DD.MM.'
 }
 
-/*
-const weekdayButtons = document.getElementsByClassName("weekday_link");
-for (let button of weekdayButtons) {
-  button.addEventListener("click", (e) => {
-    console.log(e);
-    console.log(e.target.innerText);
-    for (let button of weekdayButtons) {
-      button.classList.remove("active");
-    }
-
-    e.target.classList.add("active");
-    document.getElementsByClassName("menu_items")[0].innerHTML = `
-            <p>Menu for: ${e.target.innerText}</p>
-            <div class="menu_entry">
-                <img src="../hampurilaiset.jpg" alt="hampurilaiset" class="menu_item_image">
-                <div class="item_description">
-                    <p>testing</p>
-                </div>
-            </div>`;
-  });
-}
-
-document.getElementById('login').addEventListener('click', () => {
-    window.location = 'login.html';
-})
-*/
 
 const weekdayButtons = document.getElementsByClassName("weekday_link");
 
