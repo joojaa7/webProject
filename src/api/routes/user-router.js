@@ -1,5 +1,5 @@
 import express from 'express';
-import { getUser, postUser, updateAvatar } from "../controllers/user-controller.js";
+import { getUser, postUser, updateAvatar, updateUser } from "../controllers/user-controller.js";
 import multer from 'multer';
 
 const userRouter = express.Router();
@@ -40,7 +40,13 @@ const storage = multer.diskStorage({
     }
   });
 
-userRouter.route('/:name').get(getUser);
+userRouter.route('/:name')
+  .get(
+    getUser
+  )
+  .put(
+    updateUser
+  );
 
 // TODO: add input validaton for null values, 
 // avatar can be null.
@@ -55,5 +61,6 @@ userRouter
     upload.single('file'),
     updateAvatar
 )
+
 
 export default userRouter;
