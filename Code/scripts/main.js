@@ -14,6 +14,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   setWeekDates();
   ShoppingCart.loadCart();
   ShoppingCart.updateCartDisplay();
+  populateWeeklyMenu();
 });
 
 function setWeekDates() {
@@ -45,15 +46,116 @@ function formatDate(date) {
   return `${day}.${month}.`; // Returns 'DD.MM.'
 }
 
+async function populateWeeklyMenu() {
+  const days = [
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday",
+  ];
+  const dayIds = [
+    "menu-monday",
+    "menu-tuesday",
+    "menu-wednesday",
+    "menu-thursday",
+    "menu-friday",
+    "menu-saturday",
+    "menu-sunday",
+  ];
+
+  days.forEach(async (day, index) => {
+    const dayElement = document.getElementById(`day${index}`);
+    const formattedDate = dayElement.textContent; // Now contains the formatted date from setWeekDates
+    const year = new Date().getFullYear();
+
+    try {
+      const burgerId = await fetchMenuByDate(formattedDate + year);
+      if (burgerId) {
+        const burgerDetails = await fetchBurgerByID(burgerId);
+        updateWeeklyMenuDisplay(burgerDetails, day, burgerId, dayIds[index]);
+      } else {
+        console.log(`No burger found for ${day}`);
+        document
+          .getElementById(dayIds[index])
+          .querySelector(
+            ".item_description"
+          ).innerHTML = `<p>No menu available for ${day}.</p>`;
+      }
+    } catch (error) {
+      console.error(`Error fetching menu for ${day}:`, error);
+      document
+        .getElementById(dayIds[index])
+        .querySelector(
+          ".item_description"
+        ).innerHTML = `<p>Error loading menu for ${day}.</p>`;
+    }
+  });
+}
+
+async function updateWeeklyMenuDisplay(burger, day, burgerId, dayId) {
+  const menuEntry = document.getElementById(dayId);
+
+  try {
+    const response = await fetch(`${allergensUrl}${burgerId}`);
+    if (!response.ok) throw new Error("Failed to fetch allergens");
+    const allergens = await response.json();
+    const allergenDisplay = allergens.map((a) => a.acronym).join(", ");
+    //console.log("day:", day);
+
+    // Update image source
+    menuEntry.querySelector(
+      ".menu_item_image"
+    ).src = `http://127.0.0.1:3000/api/v1/${burger[0].filename}`;
+    menuEntry.querySelector(".menu_item_image").alt = burger[0].Name;
+
+    // Update item description
+    menuEntry.querySelector(".item_description").innerHTML = `
+      <p>Menu for: ${day}</p>
+      <h2>${burger[0].Name}</h2>
+      <p>${burger[0].Description}</p>
+      <p>${burger[0].Price} €</p>
+      <p>Allergens: ${allergenDisplay}</p>
+      <button class="add-to-cart-btn" data-id="${
+        burger[0].ID
+      }" data-burger='${JSON.stringify(burger[0])}'>
+          <i class="fas fa-shopping-cart"></i> Add to Cart
+      </button>
+  </div>`;
+  } catch (error) {
+    console.error("Error updating weekly menu display:", error);
+    menuEntry.querySelector(
+      ".item_description"
+    ).innerHTML = `<p>Error loading menu details for ${day}.</p>`;
+  }
+  menuEntry
+    .querySelector(".add-to-cart-btn")
+    .addEventListener("click", function (e) {
+      const burger = JSON.parse(e.target.dataset.burger);
+      console.log("burger data:", burger);
+      ShoppingCart.addItem({
+        id: burger.ID,
+        name: burger.Name,
+        price: burger.Price,
+        quantity: 1,
+      });
+    });
+}
+
 const weekdayButtons = document.getElementsByClassName("weekday_link");
 
 // TODO: add error handling for when a burger is not found for the date
 for (let button of weekdayButtons) {
   button.addEventListener("click", async (e) => {
     const selectedDate = e.target.innerText;
-    //console.log("selectedDate", selectedDate);
+    const year = new Date().getFullYear();
+
     try {
-      const burgerId = await fetchMenuByDate(selectedDate + "2024");
+      console.log("year", year);
+      console.log("selectedDate", selectedDate);
+      const burgerId = await fetchMenuByDate(selectedDate + year);
       if (burgerId) {
         const burgerDetails = await fetchBurgerByID(burgerId);
 
@@ -104,46 +206,6 @@ async function fetchBurgerByID(burgerId) {
   return burger;
 }
 
-/*
-async function updateMenuDisplay(burger, date, burgerId) {
-  const menuItems = document.getElementsByClassName("menu_items")[0];
-
-  try {
-    // Fetch allergen IDs associated with this burger
-    const response = await fetch(`${allergensUrl}${burgerId}`);
-    if (!response.ok) throw new Error("Failed to fetch allergens");
-    const allergens = await response.json(); // This should return an array of allergen acronyms
-    console.log("Allergens:", allergens);
-    console.log("Burger:", burger);
-    // Generate a string of allergen acronyms to display
-    const allergenDisplay = allergens.map((a) => a.acronym).join(", ");
-
-    menuItems.innerHTML = `
-      <p>Menu for: ${date}</p>
-      <h2>${burger[0].Name}</h2>
-      <div class="menu_entry">
-          <img src="http://127.0.0.1:3000/api/v1/${burger[0].filename}" alt="${
-      burger[0].Name
-    }" class="menu_item_image">
-          <div class="item_description">
-              <p>${burger[0].Description}</p>
-              <p>${burger[0].Price} €</p>
-              <p>Allergens: ${allergenDisplay}</p>
-          </div>
-          
-          <button class="add-to-cart-btn" data-burger='${JSON.stringify(
-            burger
-          )}'>
-                    <i class="fas fa-shopping-cart"></i> Add to Cart
-                </button>
-            </div>`;
-    addCartEventListener();
-  } catch (error) {
-    console.error("Error fetching allergens:", error);
-    menuItems.innerHTML = `<p>Error loading menu details.</p>`;
-  }
-}*/
-
 async function updateMenuDisplay(burger, date, burgerId) {
   const menuItems = document.getElementsByClassName("menu_items")[0];
 
@@ -187,19 +249,10 @@ async function updateMenuDisplay(burger, date, burgerId) {
         id: burger.ID,
         name: burger.Name,
         price: burger.Price,
-        quantity: 1, // Assuming one burger per addition; adjust as necessary
+        quantity: 1,
       });
     });
 }
-
-/*
-function addCartEventListener() {
-  const addToCartBtn = document.getElementsByClassName("add-to-cart-btn")[0];
-  addToCartBtn.addEventListener("click", (e) => {
-    const burgerId = e.target.getAttribute("data-id");
-    console.log("Burger ID:", burgerId);
-  });
-}*/
 
 // Kirjautumisen näkymä
 document.getElementById("login").addEventListener("click", function () {
