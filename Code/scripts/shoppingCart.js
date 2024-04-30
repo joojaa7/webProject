@@ -1,17 +1,30 @@
-// shoppingCart.js
 const ShoppingCart = {
   items: [],
 
   addItem(item) {
-    this.items.push(item);
+    const existingItem = this.items.find((cartItem) => cartItem.id === item.id);
+    if (existingItem) {
+      existingItem.quantity += 1; // Increment the quantity if the item already exists
+    } else {
+      item.quantity = 1; // Set the initial quantity for new items
+      this.items.push(item); // Add the new item to the cart
+    }
     this.saveCart();
     this.updateCartDisplay();
   },
 
   removeItem(id) {
-    this.items = this.items.filter((item) => item.id !== id);
-    this.saveCart();
-    this.updateCartDisplay();
+    const itemIndex = this.items.findIndex((item) => item.id === id);
+    if (itemIndex !== -1) {
+      // Check if the item is found
+      if (this.items[itemIndex].quantity > 1) {
+        this.items[itemIndex].quantity -= 1; // Decrement the quantity
+      } else {
+        this.items.splice(itemIndex, 1); // Remove the item if the quantity is 1
+      }
+      this.saveCart();
+      this.updateCartDisplay();
+    }
   },
 
   saveCart() {
@@ -25,29 +38,51 @@ const ShoppingCart = {
   updateCartDisplay() {
     const cartItemsElement = document.getElementById("cart-items");
     cartItemsElement.innerHTML = ""; // Clear existing items
-    this.items.forEach((item) => {
-      const itemElement = document.createElement("li");
-      itemElement.textContent = `Burger ID: ${item.id}, Name: ${
-        item.name
-      }, Quantity: ${item.quantity} - $${(item.price * item.quantity).toFixed(
-        2
-      )}`;
 
-      // Create a button for removing the item
-      const removeButton = document.createElement("button");
-      removeButton.textContent = "Remove";
-      removeButton.onclick = () => {
-        this.removeItem(item.id); // Remove the item on click
+    this.items.forEach((item) => {
+      const itemElement = document.createElement("div");
+      itemElement.className = "cart-item";
+
+      // Item display
+      const itemInfo = document.createElement("span");
+      itemInfo.textContent = `Burger ID: ${item.id}, Name: ${
+        item.name
+      }, Price: ${item.price.toFixed(2)} €`;
+
+      // Quantity management
+      const quantityControl = document.createElement("div");
+      quantityControl.className = "quantity-control";
+
+      const decrementBtn = document.createElement("button");
+      decrementBtn.textContent = "-";
+      decrementBtn.onclick = () => {
+        this.removeItem(item.id); // Decrement or remove item
       };
 
-      // Append the remove button to the item element
-      itemElement.appendChild(removeButton);
+      const quantityDisplay = document.createElement("span");
+      quantityDisplay.textContent = ` Quantity: ${item.quantity}`;
+
+      const incrementBtn = document.createElement("button");
+      incrementBtn.textContent = "+";
+      incrementBtn.onclick = () => {
+        this.addItem({ ...item, quantity: 1 }); // Add the same item (increments quantity)
+      };
+
+      // Assembling the quantity controls
+      quantityControl.appendChild(decrementBtn);
+      quantityControl.appendChild(quantityDisplay);
+      quantityControl.appendChild(incrementBtn);
+
+      // Assembling the item element
+      itemElement.appendChild(itemInfo);
+      itemElement.appendChild(quantityControl);
       cartItemsElement.appendChild(itemElement);
     });
 
-    // Update the total price display
-    document.getElementById("cart-total").textContent =
-      this.getTotalPrice().toFixed(2);
+    // Update total price display
+    document.getElementById(
+      "cart-total"
+    ).textContent = `${this.getTotalPrice().toFixed(2)} `;
   },
 
   getTotalPrice() {
