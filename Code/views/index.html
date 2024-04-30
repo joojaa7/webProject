@@ -12,7 +12,7 @@
     <title>Main</title>
   </head>
   <body>
-    <div class="container">
+    <div class="container" id="mainPage">
       <div class="banner">
         <div class="banner_content">
           <img
@@ -26,6 +26,15 @@
           <div class="login_button">
             <button class="login_content" id="login">Login</button>
             <button class="login_content" id="register">Register</button>
+            <a href="login.html" class="profile-button" id="profileButton"
+              >Profile</a
+            >
+          </div>
+          <div id="shopping-cart">
+            <h3>Shopping Cart</h3>
+            <ul id="cart-items"></ul>
+            <p>Total: <span id="cart-total"></span>€</p>
+            <button id="checkout-button">Checkout</button>
           </div>
           <div id="shopping-cart">
             <h3>Shopping Cart</h3>
@@ -177,6 +186,7 @@
           </div>
         </div>
       </div>
+      <button class="back-button" id="backButton">Back to Main</button>
     </div>
   </body>
 </html>
