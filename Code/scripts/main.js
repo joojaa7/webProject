@@ -1,6 +1,7 @@
 console.log("In use.");
 
 import { menusUrl, hamburgersUrl, allergensUrl } from "./variables.js";
+import ShoppingCart from "./shoppingCart.js";
 
 const fileInput = document.getElementById("file");
 const loginElement = document.getElementsByClassName("login_button")[0];
@@ -9,8 +10,10 @@ let user = JSON.parse(localStorage.getItem("user"));
 const avatar = document.getElementById("avatar");
 
 // En tiedä tarvitaanko, kun script tagissa on defer. Kokeilin ilman ja toimi.
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
   setWeekDates();
+  ShoppingCart.loadCart();
+  ShoppingCart.updateCartDisplay();
 });
 
 function setWeekDates() {
@@ -51,9 +54,9 @@ for (let button of weekdayButtons) {
     //console.log("selectedDate", selectedDate);
     try {
       const burgerId = await fetchMenuByDate(selectedDate + "2024");
-      //console.log("burgerId in frontend", burgerId);
       if (burgerId) {
         const burgerDetails = await fetchBurgerByID(burgerId);
+
         updateMenuDisplay(burgerDetails, selectedDate, burgerId);
       } else {
         console.log("No burger found for this date");
@@ -101,6 +104,7 @@ async function fetchBurgerByID(burgerId) {
   return burger;
 }
 
+/*
 async function updateMenuDisplay(burger, date, burgerId) {
   const menuItems = document.getElementsByClassName("menu_items")[0];
 
@@ -110,6 +114,7 @@ async function updateMenuDisplay(burger, date, burgerId) {
     if (!response.ok) throw new Error("Failed to fetch allergens");
     const allergens = await response.json(); // This should return an array of allergen acronyms
     console.log("Allergens:", allergens);
+    console.log("Burger:", burger);
     // Generate a string of allergen acronyms to display
     const allergenDisplay = allergens.map((a) => a.acronym).join(", ");
 
@@ -117,31 +122,84 @@ async function updateMenuDisplay(burger, date, burgerId) {
       <p>Menu for: ${date}</p>
       <h2>${burger[0].Name}</h2>
       <div class="menu_entry">
-          <img src="http://127.0.0.1:3000/api/v1/${burger[0].filename}" alt="${burger[0].Name}" class="menu_item_image">
+          <img src="http://127.0.0.1:3000/api/v1/${burger[0].filename}" alt="${
+      burger[0].Name
+    }" class="menu_item_image">
           <div class="item_description">
               <p>${burger[0].Description}</p>
               <p>${burger[0].Price} €</p>
               <p>Allergens: ${allergenDisplay}</p>
           </div>
           
-          <button class="add-to-cart-btn" data-id="${burger[0].ID}">
-              <i class="fas fa-shopping-cart"></i> Add to Cart
-          </button>
-      </div>`;
+          <button class="add-to-cart-btn" data-burger='${JSON.stringify(
+            burger
+          )}'>
+                    <i class="fas fa-shopping-cart"></i> Add to Cart
+                </button>
+            </div>`;
     addCartEventListener();
   } catch (error) {
     console.error("Error fetching allergens:", error);
     menuItems.innerHTML = `<p>Error loading menu details.</p>`;
   }
+}*/
+
+async function updateMenuDisplay(burger, date, burgerId) {
+  const menuItems = document.getElementsByClassName("menu_items")[0];
+
+  try {
+    const response = await fetch(`${allergensUrl}${burgerId}`);
+    if (!response.ok) throw new Error("Failed to fetch allergens");
+    const allergens = await response.json();
+    const allergenDisplay = allergens.map((a) => a.acronym).join(", ");
+
+    menuItems.innerHTML = `
+  <p>Menu for: ${date}</p>
+  <h2>${burger[0].Name}</h2>
+  <div class="menu_entry">
+      <img src="http://127.0.0.1:3000/api/v1/${burger[0].filename}" alt="${
+      burger[0].Name
+    }" class="menu_item_image">
+      <div class="item_description">
+          <p>${burger[0].Description}</p>
+          <p>${burger[0].Price} €</p>
+          <p>Allergens: ${allergenDisplay}</p>
+      </div>
+      
+      <button class="add-to-cart-btn" data-id="${
+        burger[0].ID
+      }" data-burger='${JSON.stringify(burger[0])}'>
+          <i class="fas fa-shopping-cart"></i> Add to Cart
+      </button>
+  </div>`;
+  } catch (error) {
+    console.error("Error fetching allergens:", error);
+    menuItems.innerHTML = `<p>Error loading menu details.</p>`;
+  }
+
+  menuItems
+    .querySelector(".add-to-cart-btn")
+    .addEventListener("click", function (e) {
+      // This will directly retrieve the burger object from the button's dataset
+      const burger = JSON.parse(e.target.dataset.burger);
+      console.log("burger data:", burger);
+      ShoppingCart.addItem({
+        id: burger.ID,
+        name: burger.Name,
+        price: burger.Price,
+        quantity: 1, // Assuming one burger per addition; adjust as necessary
+      });
+    });
 }
 
+/*
 function addCartEventListener() {
   const addToCartBtn = document.getElementsByClassName("add-to-cart-btn")[0];
   addToCartBtn.addEventListener("click", (e) => {
     const burgerId = e.target.getAttribute("data-id");
     console.log("Burger ID:", burgerId);
   });
-}
+}*/
 
 // Kirjautumisen näkymä
 document.getElementById("login").addEventListener("click", function () {
