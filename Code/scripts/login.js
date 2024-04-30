@@ -1,4 +1,69 @@
 "use strict";
+import { hamburgersUrl, menusUrl, allergensUrl } from "./variables.js";
+
+let user = JSON.parse(localStorage.getItem("user"));
+console.log(user);
+
+document.addEventListener("DOMContentLoaded", async () => {
+  const form = document.getElementById("add-burger-form");
+  const menu = document.getElementById("update-menu-form");
+
+  form.addEventListener("submit", async function (event) {
+    event.preventDefault();
+
+    // Collecting the form data.
+    const formData = new FormData(form);
+
+    // Extracting the ingredient text and converting it to an array.
+    const ingredientsText = formData.get("ingredients"); // Get the comma-separated string
+    const ingredients = ingredientsText
+      .split(",")
+      .map((ingredient) => ingredient.trim()); // Split by commas and trim whitespace
+    formData.set("ingredients", JSON.stringify(ingredients)); // Add ingredients array back to formData as a JSON string
+
+    // Collect selected allergens
+    const allergensSelect = document.getElementById("allergens-select");
+    const selectedAllergens = Array.from(allergensSelect.selectedOptions).map(
+      (opt) => opt.value
+    );
+    formData.set("allergens", JSON.stringify(selectedAllergens)); // Convert array to JSON string
+
+    console.log("Formatted Ingredients:", ingredients); // Log the formatted ingredients to the console
+
+    // Call addBurger to handle the POST request
+    await addBurger(formData);
+  });
+
+  // Populate allergens selector
+  await populateAllergens();
+
+  menu.addEventListener("submit", async function (event) {
+    event.preventDefault();
+    await addMenu();
+  });
+
+  // Call fetchBurgers initially to populate the menu-burger options
+  await fetchBurgers();
+});
+
+async function populateAllergens() {
+  try {
+    const response = await fetch(allergensUrl);
+    if (!response.ok) {
+      throw new Error("Failed to fetch allergens: " + response.statusText);
+    }
+    const allergens = await response.json();
+    const allergensSelect = document.getElementById("allergens-select");
+    allergens.forEach((allergen) => {
+      const option = document.createElement("option");
+      option.value = allergen.ID;
+      option.textContent = `${allergen.name} (${allergen.acronym})`; // Display name and acronym
+      allergensSelect.appendChild(option);
+    });
+  } catch (error) {
+    console.error("Error fetching allergens:", error);
+  }
+}
 
 const linksToContentMap = {
   "avatar-link": "avatar-content",
@@ -11,225 +76,30 @@ const linksToContentMap = {
   "admin_update_users-link": "admin-update-users-content",
 };
 
-const users = [
-  {
-    id: "1",
-    firstName: "Alice",
-    lastName: "Johnson",
-    address: "123 Elm St, Springfield",
-    role: "admin",
-    username: "alicej",
-    password: "pass1234",
-  },
-  {
-    id: "2",
-    firstName: "Bob",
-    lastName: "Smith",
-    address: "456 Oak St, Riverside",
-    role: "user",
-    username: "bobsmith",
-    password: "password123",
-  },
-  {
-    id: "3",
-    firstName: "Carol",
-    lastName: "Williams",
-    address: "789 Pine St, Greenfield",
-    role: "user",
-    username: "carolw",
-    password: "mypassword",
-  },
-  {
-    id: "4",
-    firstName: "Dave",
-    lastName: "Brown",
-    address: "101 Maple Ave, Westfield",
-    role: "admin",
-    username: "daveb",
-    password: "davespass",
-  },
-  {
-    id: "5",
-    firstName: "Eva",
-    lastName: "Davis",
-    address: "202 Birch Rd, Eastfield",
-    role: "user",
-    username: "evad",
-    password: "evasecret",
-  },
-];
-const hamburgers = [
-  {
-    id: 1,
-    price: 8.99,
-    description:
-      "Classic Burger: A traditional beef burger with lettuce, tomato, and our special sauce.",
-  },
-  {
-    id: 2,
-    price: 9.99,
-    description:
-      "Cheese Lover’s Burger: Beef burger loaded with cheddar, mozzarella, and gouda, topped with pickles.",
-  },
-  {
-    id: 3,
-    price: 10.99,
-    description:
-      "Bacon Bliss Burger: Juicy beef burger with crisp bacon, blue cheese, and BBQ sauce.",
-  },
-  {
-    id: 4,
-    price: 11.99,
-    description:
-      "Spicy Fiesta Burger: Spicy beef patty with jalapeños, pepper jack cheese, and chipotle mayo.",
-  },
-  {
-    id: 5,
-    price: 7.99,
-    description:
-      "Simple Veggie Burger: A delightful blend of vegetables and beans, topped with fresh greens and tzatziki sauce.",
-  },
-];
+const fetchBurgers = async () => {
+  try {
+    const response = await fetch(hamburgersUrl);
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const burgers = await response.json();
+    populateBurgers(burgers);
+  } catch (error) {
+    console.error("Error fetching burgers:", error);
+  }
+};
 
-const menus = [
-  {
-    hamburgerId: 1,
-    date: "2024-04-20",
-    name: "Classic Combo",
-    price: 8.99,
-    description: "A classic burger with cheese and special sauce.",
-  },
-  {
-    hamburgerId: 2,
-    date: "2024-04-21",
-    name: "Cheese Lovers Delight",
-    price: 9.99,
-    description: "Loaded with three types of cheese.",
-  },
-  {
-    hamburgerId: 3,
-    date: "2024-04-22",
-    name: "Bacon Bonanza",
-    price: 10.99,
-    description: "Crispy bacon and smoky barbecue sauce.",
-  },
-  {
-    hamburgerId: 4,
-    date: "2024-04-23",
-    name: "Spicy Special",
-    price: 11.99,
-    description: "Spicy jalapeños and hot chipotle mayo.",
-  },
-  {
-    hamburgerId: 5,
-    date: "2024-04-24",
-    name: "Veggie Favorite",
-    price: 7.99,
-    description: "A fresh veggie patty with green fixins.",
-  },
-];
-
-const ingredients = [
-  { id: 1, name: "Beef Patty" },
-  { id: 2, name: "Lettuce" },
-  { id: 3, name: "Tomato" },
-  { id: 4, name: "Cheddar Cheese" },
-  { id: 5, name: "Pickles" },
-  { id: 6, name: "Bacon" },
-  { id: 7, name: "Blue Cheese" },
-  { id: 8, name: "BBQ Sauce" },
-  { id: 9, name: "Jalapeños" },
-  { id: 10, name: "Chipotle Mayo" },
-];
-
-const hamburgerIngredients = [
-  { hamburgerId: 1, ingredientId: 1 },
-  { hamburgerId: 1, ingredientId: 2 },
-  { hamburgerId: 1, ingredientId: 3 },
-  { hamburgerId: 2, ingredientId: 1 },
-  { hamburgerId: 2, ingredientId: 4 },
-  { hamburgerId: 2, ingredientId: 5 },
-  { hamburgerId: 3, ingredientId: 1 },
-  { hamburgerId: 3, ingredientId: 6 },
-  { hamburgerId: 3, ingredientId: 7 },
-  { hamburgerId: 3, ingredientId: 8 },
-  { hamburgerId: 4, ingredientId: 1 },
-  { hamburgerId: 4, ingredientId: 9 },
-  { hamburgerId: 4, ingredientId: 10 },
-  { hamburgerId: 5, ingredientId: 2 },
-  { hamburgerId: 5, ingredientId: 3 },
-];
-
-const allergens = [
-  { id: 1, mark: "G" },
-  { id: 2, mark: "L" },
-  { id: 3, mark: "M" },
-];
-
-const hamburgerAllergens = [
-  { hamburgerId: 1, allergenId: 3 }, // Beef Patty may contain dairy
-  { hamburgerId: 2, allergenId: 3 }, // Cheddar Cheese contains dairy
-  { hamburgerId: 3, allergenId: 3 }, // Blue Cheese contains dairy
-  { hamburgerId: 4, allergenId: 1 }, // Some sauces might contain gluten
-  { hamburgerId: 4, allergenId: 3 }, // Adding dairy to the spicy fiesta burger for cheese
-  { hamburgerId: 5, allergenId: 1 }, // Some veggie burgers might contain gluten
-  { hamburgerId: 5, allergenId: 2 }, // Assuming veggie burgers may contain nuts
-];
-
-const orders = [
-  { orderId: 1 },
-  { orderId: 2 },
-  { orderId: 3 },
-  { orderId: 4 },
-  { orderId: 5 },
-];
-
-const orderHistory = [
-  { userId: "user_1", orderId: 1, date: "2024-04-20", status: "ordered" },
-  { userId: "user_2", orderId: 2, date: "2024-04-21", status: "delivered" },
-  { userId: "user_3", orderId: 3, date: "2024-04-22", status: "delivered" },
-  { userId: "user_4", orderId: 4, date: "2024-04-23", status: "ordered" },
-  { userId: "user_5", orderId: 5, date: "2024-04-24", status: "cancelled" },
-];
-
-const jointOrder = [
-  { hamburgerId: 1, orderId: 1 },
-  { hamburgerId: 3, orderId: 1 },
-  { hamburgerId: 2, orderId: 2 },
-  { hamburgerId: 4, orderId: 3 },
-  { hamburgerId: 5, orderId: 4 },
-  { hamburgerId: 2, orderId: 4 },
-  { hamburgerId: 1, orderId: 5 },
-  { hamburgerId: 3, orderId: 5 },
-];
-
-const populateUserSelector = () => {
-  const userSelector = document.getElementById("user");
-  users.forEach((user) => {
+function populateBurgers(burgers) {
+  const select = document.getElementById("menu-burger");
+  // Clear existing options first
+  select.innerHTML = "";
+  burgers.forEach((burger) => {
     const option = document.createElement("option");
-    option.value = user.id;
-    option.textContent = `${user.firstName} ${user.lastName}`;
-    userSelector.appendChild(option);
+    option.value = burger.ID;
+    option.textContent = burger.Name;
+    select.appendChild(option);
   });
-};
-
-const populateMenuSelector = () => {
-  const menuSelector = document.getElementById("menu");
-
-  menus.forEach((menu) => {
-    const option = document.createElement("option");
-    option.value = menu.hamburgerId;
-    option.textContent = `${menu.name}`;
-    menuSelector.appendChild(option);
-  });
-};
-
-const populateMockData = () => {
-  populateUserSelector();
-  populateMenuSelector();
-};
-
-populateMockData();
+}
 
 const optionsInput = document.querySelector(".options-input");
 let currentVisibleContent = null; // To keep track of the currently displayed content
@@ -249,11 +119,92 @@ function updateOptionsInput(contentId) {
   }
 }
 
+async function addBurger(formData) {
+  try {
+    const response = await fetch(hamburgersUrl, {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to add burger: " + response.statusText);
+    }
+
+    const result = await response.json();
+    console.log("Success:", result);
+    alert("Burger added successfully!");
+
+    // Fetch all burgers again to update the list in the dropdown
+    await fetchBurgers();
+  } catch (error) {
+    console.error("Error:", error);
+    alert("Error adding burger: " + error.message);
+  }
+}
+
+const addMenu = async () => {
+  const burger = document.getElementById("menu-burger").value;
+  console.log("burger", burger); // logs burger id (number)
+
+  const date = document.getElementById("menu-date").value; // Date format: YYYY-MM-DD
+  console.log("date", date); // logs YYYY-MM-DD
+
+  const formattedDate = convertDateFormat(date);
+  console.log("formattedDate", formattedDate); // logs DD.MM.YYYY
+
+  const data = { burger_id: burger, date: formattedDate };
+
+  try {
+    const response = await fetch(menusUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to add menu item: " + response.statusText);
+    }
+
+    const result = await response.json();
+    console.log("Success:", result);
+    alert("Menu item added successfully!");
+  } catch (error) {
+    console.error("Error:", error);
+    alert("Error adding menu item: " + error.message);
+  }
+};
+
+// Helper function to format date
+function convertDateFormat(dateStr) {
+  if (!dateStr) return null;
+
+  const parts = dateStr.split("-");
+  if (parts.length !== 3) {
+    throw new Error("Invalid date format. Expected YYYY-MM-DD.");
+  }
+
+  const [year, month, day] = parts;
+
+  // Check if the date parts are valid numbers
+  if (isNaN(new Date(year, month - 1, day))) {
+    throw new Error("Invalid date components.");
+  }
+
+  return `${day}.${month}.${year}`;
+}
+
 // Attach event listeners to each link
 Object.keys(linksToContentMap).forEach((linkId) => {
   const link = document.getElementById(linkId);
   if (link) {
     link.addEventListener("click", function (event) {
+      //console.log("link:", link);
+      //console.log("linkId:", linkId);
+      if (linkId === "admin_update_menu-link") {
+        fetchBurgers();
+      }
       event.preventDefault(); // Prevent default anchor behavior
       updateOptionsInput(linksToContentMap[linkId]);
     });
@@ -264,21 +215,90 @@ Object.keys(linksToContentMap).forEach((linkId) => {
 // Role-based display logic
 const roleSelector = document.getElementById("roleSelector");
 const adminSection = document.getElementById("adminSection");
-const adminFormUsersField = document.getElementById(
+/*const adminFormUsersField = document.getElementById(
   "admin-update-users-content"
 );
 const adminFormMenuField = document.getElementById(
   "admin-update-users-content"
-);
+);*/
 
 roleSelector.addEventListener("change", () => {
   adminSection.style.display =
     roleSelector.value === "admin" ? "block" : "none";
-  adminFormUsersField.style.display =
-    roleSelector.value === "admin" ? "block" : "none";
-  adminFormMenuField.style.display =
-    roleSelector.value === "admin" ? "block" : "none";
+  //adminFormUsersField.style.display =
+  //roleSelector.value === "admin" ? "block" : "none";
+  //adminFormMenuField.style.display =
+  //  roleSelector.value === "admin" ? "block" : "none";
 });
 
 // Initial display check based on selector's default value
 adminSection.style.display = roleSelector.value === "admin" ? "block" : "none";
+
+document
+  .getElementById("avatar-submit")
+  .addEventListener("click", async (e) => {
+    const avatarFile = document.querySelector("#avatar-file");
+    const inputForm = document.getElementById("avatar-form");
+    console.log(e);
+    let avatar = null;
+    const formData = new FormData();
+    if (avatarFile.files[0]) {
+      avatar = avatarFile.files[0].name;
+      formData.append("file", avatarFile.files[0]);
+    } else {
+      alert("SELECT FILE");
+      return;
+    }
+    const userData = JSON.parse(localStorage.getItem("user"));
+    formData.append("avatar", avatar);
+    formData.append("username", userData.username);
+    const options = {
+      method: "PUT",
+      body: formData,
+    };
+    if (userData.username) {
+      const response = await fetch(
+        "http://127.0.0.1:3000/api/v1/users/avatar",
+        options
+      );
+      const json = await response.json();
+      inputForm.reset();
+      if (response.ok) {
+        console.log("OK");
+        userData.avatar = json.avatar;
+        sessionStorage.setItem("user", JSON.stringify(userData));
+      } else {
+        alert("Log in required.");
+      }
+    }
+  });
+
+document.getElementById('submit-userinfo-update').addEventListener('click', async (e) => {
+  e.preventDefault();
+  const updatedPhone = document.getElementById('phone-number').value;
+  const updatedEmail = document.getElementById('email').value;
+  const updatedAddress = document.getElementById('address').value;
+  const updatedCard = document.getElementById('Cardnumber').value;
+  const userName = JSON.parse(localStorage.getItem('user')).username;
+
+  const updateUser = {
+    phone_number: updatedPhone ? updatedPhone : undefined,
+    email: updatedEmail ? updatedEmail : undefined,
+    Address: updatedAddress ? updatedAddress : undefined,
+    Cardnumber: updatedCard ? updatedCard : undefined,
+  };
+
+  Object.keys(updateUser).forEach(key => updateUser[key] === undefined && delete updateUser[key]);  // Poistaa tyhjät ominaisuudet
+
+  const options = {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(updateUser),
+  };
+
+  const response = await fetch(`http://127.0.0.1:3000/api/v1/users/${userName}`, options)
+  console.log(response)
+  
+});

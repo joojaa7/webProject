@@ -8,6 +8,29 @@ let currentTableId = 1;
 const initialDate = new Date();
 loadTablesAndReservations(initialDate);
 
+document.addEventListener("DOMContentLoaded", () => {
+  const addForm = document.getElementById("addTableForm");
+  const deleteForm = document.getElementById("deleteTableForm");
+
+  document
+    .getElementById("toggleAddFormButton")
+    .addEventListener("click", () => {
+      addForm.style.display =
+        addForm.style.display === "none" || addForm.style.display === ""
+          ? "block"
+          : "none";
+    });
+
+  document
+    .getElementById("toggleDeleteFormButton")
+    .addEventListener("click", () => {
+      deleteForm.style.display =
+        deleteForm.style.display === "none" || deleteForm.style.display === ""
+          ? "block"
+          : "none";
+    });
+});
+
 document
   .getElementById("loadReservationsForDate")
   .addEventListener("click", async function () {
@@ -152,8 +175,30 @@ document.getElementById("addTableForm").addEventListener("submit", (event) => {
 });
 
 const deleteTable = async () => {
-  const tableId = document.getElementById();
+  const tableId = document.getElementById("tableId").value;
+  console.log(tableId);
+  const url = `${tablesUrl}/${tableId}`;
+  try {
+    const response = await fetch(url, {
+      method: "DELETE",
+    });
+    if (!response.ok) {
+      throw new Error("Failed to delete table: " + response.statusText);
+    }
+    alert("Table deleted successfully!");
+    loadTablesAndReservations(initialDate);
+  } catch (error) {
+    console.error("Error deleting table:", error);
+    alert("Error deleting table: " + error.message);
+  }
 };
+
+document
+  .getElementById("submitDeleteTableButton")
+  .addEventListener("click", (event) => {
+    event.preventDefault();
+    deleteTable();
+  });
 
 // create table elements
 function loadTablesAndReservations(date) {
@@ -190,6 +235,7 @@ function loadTablesAndReservations(date) {
 }
 
 // function to add a new customer and make them a reservation
+// TODO: implement a check to see if user exists before adding a new user
 function createAddReservationForm(timeSlot) {
   const modificationsDiv = document.getElementById("reservationModifications");
   modificationsDiv.innerHTML = "";
@@ -301,6 +347,12 @@ function displayModifyReservationForm(userDetails, reservationId) {
   const form = document.createElement("form");
   form.onsubmit = (e) => {
     e.preventDefault();
+    console.log(
+      "calling updateReservation with: ",
+      reservationId,
+      nameInput.value,
+      contactInfoInput.value
+    );
     updateReservation(reservationId, nameInput.value, contactInfoInput.value);
   };
 
@@ -404,6 +456,10 @@ async function deleteReservation(reservationId) {
     console.error("Error deleting reservation:", error);
     alert("Error deleting reservation: " + error.message);
   }
+}
+
+async function updateReservation(reservationId, name, contactInfo) {
+  // make a PUT request to the API to update the reservation
 }
 
 function displayTableReservations(tableId, dateString) {

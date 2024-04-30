@@ -9,7 +9,7 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
     />
-    <script src="../scripts/login.js" defer></script>
+    <script src="../scripts/login.js" type="module"></script>
     <title>Login</title>
   </head>
   <body>
@@ -46,31 +46,31 @@
                     ><i class="fas fa-user-circle"></i> My Avatar</a
                   >
                 </li>
-                <li>
+                <!--<li>
                   <a href="#" id="bio-link"
                     ><i class="fas fa-user-edit"></i> Username & Bio</a
                   >
-                </li>
+                </li> -->
                 <li>
                   <a href="#" id="contact_info-link"
                     ><i class="fas fa-address-card"></i> Contact Information</a
                   >
                 </li>
-                <li>
+                <!--<li>
                   <a href="#" id="preferences-link"
                     ><i class="fas fa-cog"></i> Preferences</a
                   >
-                </li>
+                </li> -->
                 <li>
                   <a href="#" id="order_history-link"
                     ><i class="fas fa-history"></i> Order History</a
                   >
                 </li>
-                <li>
+                <!--<li>
                   <a href="#" id="bonus-link"
                     ><i class="fas fa-gift"></i> My Bonus Program</a
                   >
-                </li>
+                </li> -->
               </ul>
             </div>
           </div>
@@ -88,11 +88,13 @@
                     ><i class="fa-solid fa-burger"></i> Update menus</a
                   >
                 </li>
+                <!--
                 <li>
                   <a href="#" id="admin_update_users-link"
                     ><i class="fa-solid fa-users"></i> Manage users</a
                   >
                 </li>
+                -->
               </ul>
             </div>
           </div>
@@ -103,14 +105,14 @@
               <label for="avatar-upload">Upload new avatar:</label>
               <input
                 type="file"
-                id="avatar-upload"
-                name="avatar"
+                id="avatar-file"
+                name="file"
                 accept="image/*"
               />
-              <button type="submit">Upload</button>
+              <p id="avatar-submit">Submit</p>
+              <!--<button type="submit" id="avatar-submit">Upload</button>-->
             </form>
           </div>
-
           <div id="bio-content" class="form-content" style="display: none">
             <form id="bio-form" class="form">
               <h3>Update Your Username and Bio</h3>
@@ -145,16 +147,16 @@
             <form id="contact-info-form" class="form">
               <h3>Update Your Contact Information</h3>
               <div class="form-group">
-                <label for="first-name">First Name:</label>
+                <!--<label for="first-name">First Name:</label>
                 <input
                   type="text"
                   id="first-name"
                   name="first-name"
                   placeholder="Enter your first name"
                   required
-                />
+                /> -->
               </div>
-              <div class="form-group">
+              <!--<div class="form-group">
                 <label for="last-name">Last Name:</label>
                 <input
                   type="text"
@@ -162,7 +164,7 @@
                   name="last-name"
                   placeholder="Enter your last name"
                   required
-                />
+                /> -->
               </div>
               <div class="form-group">
                 <label for="phone-number">Phone Number:</label>
@@ -173,7 +175,6 @@
                   placeholder="Enter your phone number"
                   pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
                   title="Enter a phone number in the format: 123-456-7890"
-                  required
                 />
               </div>
               <div class="form-group">
@@ -183,7 +184,6 @@
                   id="email"
                   name="email"
                   placeholder="Enter your email address"
-                  required
                 />
               </div>
               <div class="form-group">
@@ -193,10 +193,17 @@
                   id="address"
                   name="address"
                   placeholder="Enter your address"
-                  required
                 />
+                <div class="form-group">
+                  <label for="Cardnumber">Card number:</label>
+                  <input
+                    type="text"
+                    id="Cardnumber"
+                    name="Cardnumber"
+                    placeholder="Cardnumber"
+                  />
               </div>
-              <button type="submit">Update</button>
+              <button type="submit" id="submit-userinfo-update">Update</button>
             </form>
           </div>
 
@@ -259,38 +266,67 @@
             class="admin-form-content"
             style="display: none"
           >
-            <h3>Update menus:</h3>
-            <form id="update-menu-form">
+            <h3>Add a burger</h3>
+            <form id="add-burger-form" enctype="multipart/form-data">
               <div class="form-group">
-                <label for="menu-item">Select a menu to update</label>
-                <select id="menu" name="menu-selector" required>
-                  <!-- Menus will be added dynamically-->
+                <label for="add-burger">Enter the name for a burger</label>
+                <input
+                  type="text"
+                  name="add-burger-name"
+                  id="add-burger-name-id"
+                  placeholder="Enter the name for a burger"
+                  required
+                />
+                <input
+                  type="text"
+                  name="add-burger-description"
+                  id="add-burger-description-id"
+                  placeholder="Description"
+                  required
+                />
+                <input
+                  type="float"
+                  name="add-burger-price"
+                  id="add-burger-price-id"
+                  placeholder="Price"
+                  required
+                />
+
+                <input
+                  type="file"
+                  name="add-burger-upload-name"
+                  id="add-burger-upload"
+                  accept="image/*"
+                />
+                <label for="ingredients-input">Ingredients:</label>
+                <input
+                  type="text"
+                  name="ingredients"
+                  id="ingredients-input"
+                  placeholder="Enter ingredients, separated by commas"
+                />
+                <label for="allergens-select">Allergens:</label>
+                <select name="allergens" id="allergens-select" multiple>
+                  <!-- Options will be populated here -->
                 </select>
               </div>
+              <button type="submit" id="add-burger-btn">Add Burger</button>
+            </form>
+            <h3>Add a menu:</h3>
+            <form id="update-menu-form">
               <div class="form-group">
-                <label for="menu-name">Menu Name:</label>
-                <input type="text" id="menu-name" name="menu-name" />
+                <label for="menu-burger">Select a burger: </label>
+                <select id="menu-burger" name="menu-burger" required>
+                  <!-- Burgers will be added dynamically-->
+                </select>
+                <label for="menu-date">Set menu date: </label>
+                <input type="date" id="menu-date" name="menu-date" required />
               </div>
-              <div class="form-group">
-                <label for="menu-price">Price:</label>
-                <input
-                  type="number"
-                  id="menu-price"
-                  name="menu-price"
-                  step="0.01"
-                />
-              </div>
-              <div class="form-group">
-                <label for="menu-description">Description:</label>
-                <textarea
-                  id="menu-description"
-                  name="menu-description"
-                ></textarea>
-              </div>
-              <!-- Add fields for ingredients and allergens as needed -->
-              <button type="submit">Update Menu</button>
+
+              <button type="submit" id="add-menu-btn">Add Menu</button>
             </form>
           </div>
+          <!--
           <div
             id="admin-update-users-content"
             class="admin-form-content"
@@ -301,11 +337,11 @@
               <div class="form-group">
                 <label for="user">Select a user to update</label>
                 <select id="user" name="user-selector" required>
-                  <!-- Users will be added dynamically-->
+                  Users will be added dynamically
                 </select>
               </div>
             </form>
-          </div>
+          </div>-->
         </div>
       </div>
     </div>

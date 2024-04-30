@@ -14,6 +14,50 @@
   background-color: #f4f4f4;
 }
 
+.table-management section {
+  border: 1px solid #ccc;
+  padding: 20px;
+  margin-bottom: 20px;
+  background-color: #f9f9f9;
+}
+
+.table-management label {
+  margin-right: 10px;
+}
+
+.table-management input[type="number"],
+.table-management input[type="text"] {
+  margin-bottom: 10px;
+}
+
+.table-management button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
+.table-management button:hover {
+  background-color: #45a049;
+}
+
+#addTableForm,
+#deleteTableForm {
+  display: none;
+}
+
+.toggle-button {
+  border-radius: 5px;
+  margin-left: 10px;
+  cursor: pointer;
+}
+
 #dateSelector {
   margin-left: 20px;
 }
@@ -36,6 +80,7 @@
   align-items: center;
   justify-content: center;
   width: 100px;
+  height: 60px;
   padding: 10px 20px;
   background-color: #4caf50;
   color: white;
@@ -85,4 +130,12 @@
   margin-top: 20px;
   padding: 20px;
   border-top: 2px solid black;
+}
+
+#reservationModifications input {
+  margin: 5px;
+}
+
+#reservationModifications button {
+  margin: 5px;
 }

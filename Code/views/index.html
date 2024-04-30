@@ -4,7 +4,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="../styles/main.css" />
-    <script src="../scripts/main.js" defer></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <script src="../scripts/main.js" type="module" defer></script>
     <title>Main</title>
   </head>
   <body>
@@ -25,14 +29,23 @@
             <a href="login.html" class="profile-button" id="profileButton">Profile</a>
           </div>
 
+          <div id="logged">
+            <img id="avatar" src="../default.jpg" alt="avatar">
+            <div id="profile">
+              <p id="profile-button" class="logged-buttons">Profile</p>
+              <p id="logout-button" class="logged-buttons">Logout</p>
+            </div>
+          </div>
+
           <div id="loginForm" style="display: none">
             <!-- form actioniin osoite johon lähetetään tiedot -->
             <form>
               <label for="username">Username:</label>
-              <input type="text" id="username" name="username" /><br />
+              <input type="text" id="loginUsername" name="username" /><br />
               <label for="password">Password:</label>
-              <input type="password" id="password" name="password" /><br />
-              <button type="submit" id="login-submit-btn">Submit</button>
+              <input type="password" id="loginPassword" name="password" /><br />
+              <!--<button type="submit" id="login-submit-btn">Submit</button> -->
+              <p id="login-apply">Login</p>
             </form>
           </div>
           <div id="registerForm" style="display: none">
@@ -81,7 +94,9 @@
                 accept="image/*"
                 autocomplete="off"
               />
-              <button type="submit" id="register-submit-btn">Submit</button>
+              <div id="submit-div">
+                <button type="submit" id="register-submit-btn">Submit</button>
+              </div>
             </form>
           </div>
         </div>
@@ -89,13 +104,13 @@
       <div class="menu">
         <div class="weekday_buttons">
           <ul class="weekdays">
-            <li class="weekday_link">Monday</li>
-            <li class="weekday_link">Tuesday</li>
-            <li class="weekday_link">Wednesday</li>
-            <li class="weekday_link">Thursday</li>
-            <li class="weekday_link">Friday</li>
-            <li class="weekday_link">Saturday</li>
-            <li class="weekday_link">Sunday</li>
+            <li id="day0" class="weekday_link">Monday</li>
+            <li id="day1" class="weekday_link">Tuesday</li>
+            <li id="day2" class="weekday_link">Wednesday</li>
+            <li id="day3" class="weekday_link">Thursday</li>
+            <li id="day4" class="weekday_link">Friday</li>
+            <li id="day5" class="weekday_link">Saturday</li>
+            <li id="day6" class="weekday_link">Sunday</li>
           </ul>
         </div>
         <div class="menu_items">

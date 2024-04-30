@@ -12,12 +12,17 @@ body {
   width: 100%;
 }
 
-.banner {
+.weekday_link.today {
+  background-color: #2314c3;
+  color: white;
+  border: 2px solid #2314c3;
+  border-radius: 5px;
 }
+
 .banner_content {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around;
+  justify-content: space-evenly;
   background-color: rgb(110, 233, 192);
   background-image: linear-gradient(
     to right,
@@ -37,15 +42,17 @@ body {
 
 .banner_name {
   white-space: nowrap;
-  width: 50%;
+  width: 33%;
   padding: 5rem;
   font-size: 50px;
 }
 
 .login_button {
+  display: block;
   position: absolute;
   right: 3rem;
   top: 1rem;
+  text-align: center;
   width: min-content;
   height: min-content;
   background-color: rgb(84, 141, 122);
@@ -80,12 +87,27 @@ body {
 }
 
 .weekday_link {
-  background-image: linear-gradient(
+  /*background-image: linear-gradient(
     to right,
     rgb(121, 180, 161),
     rgb(110, 233, 192)
-  );
+  );*/
+  background-color: rgb(75, 119, 104);
+  cursor: pointer;
   padding: 1rem;
+  transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.weekday_link:hover,
+.weekday_link:focus {
+  background-color: rgba(115, 164, 233, 0.5);
+  outline: none;
+}
+
+.active {
+  border: 2px solid #2314c3;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: rgba(115, 164, 233, 0.3);
 }
 
 .menu_items {
@@ -158,4 +180,66 @@ body {
 
 .profile-button:hover {
   background-color: #000000; 
+}
+
+#login-apply {
+  text-align: center;
+  cursor: pointer;
+  background-color: #88ad88;
+  padding: 1rem;
+}
+#logged {
+  /*display: flex;*/
+  display: none;
+  max-width: 33%;
+  text-align: center;
+}
+
+#avatar {
+  width: 50%;
+  margin-top: 2rem;
+  min-width: 5rem;
+  border-style: groove;
+}
+
+#profile {
+  display: flex;
+}
+
+.logged-buttons {
+  cursor: pointer;
+  background-color: rgb(50, 90, 77);
+  padding: 1rem;
+  margin: auto;
+  font-weight: bold;
+  color: rgb(209, 226, 217);
+}
+
+#submit-div {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+#register-submit-btn {
+  width: 50%;
+  padding: 1rem;
+  font-weight: bold;
+}
+
+.add-to-cart-btn {
+  background-color: #4caf50; /* Green background */
+  color: rgba(255, 255, 255, 0.886);
+  border: none;
+  padding: 10px 15px;
+  margin: 5px 0;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.add-to-cart-btn i {
+  margin-right: 5px; /* Space between icon and text */
 }

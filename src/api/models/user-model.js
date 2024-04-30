@@ -24,4 +24,35 @@ const addUser = async (user, file) => {
   return {user_id: rows[0].insertId};
 }
 
-export { getUserByName, addUser };
+const updateAvatarFilename = async (req) => {
+  const sql = `UPDATE users SET Filename = ? WHERE username = ?`
+  const data = [req.file.filename, req.body.username]
+  const rows = await promisePool.execute(sql, data)
+  if (rows[0].affectedRows === 0){
+    return false
+  }
+  console.log('PUT success')
+  if (req.file){
+    return {avatar: req.file.filename}
+  }
+}
+
+const updateUserInfo = async (req) => {
+  try {
+    for (const [key, value] of Object.entries(req.body)){
+      const sql = `UPDATE users SET ${key} = ? WHERE username = '${req.params.name}'`;
+      const data = [value];
+      const rows = await promisePool.execute(sql, data);
+      console.log(rows, 'rows')
+      if (rows[0].affectedRows === 0){
+        return false
+      }
+    }
+  } catch (e) {
+    console.log(e)
+  }  
+  return true;
+};
+
+
+export { getUserByName, addUser, updateAvatarFilename, updateUserInfo };

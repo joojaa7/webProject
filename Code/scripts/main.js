@@ -1,46 +1,149 @@
 console.log("In use.");
-console.log(document.getElementById("register-submit-btn"));
+
+import { menusUrl, hamburgersUrl, allergensUrl } from "./variables.js";
 
 const fileInput = document.getElementById("file");
+const loginElement = document.getElementsByClassName("login_button")[0];
+const loggedElement = document.getElementById("logged");
+let user = JSON.parse(localStorage.getItem("user"));
+const avatar = document.getElementById("avatar");
 
-const date = "01.01.2024";
+// En tiedä tarvitaanko, kun script tagissa on defer. Kokeilin ilman ja toimi.
+document.addEventListener("DOMContentLoaded", () => {
+  setWeekDates();
+});
 
-const data = [
-  {
-    Nimi: "Juustohamppari",
-    Pvm: "01.01.2024",
-  },
-  {
-    Nimi: "Epäjuustohamppari",
-    Pvm: "02.01.2024",
-  },
-];
+function setWeekDates() {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const dayOfWeek = today.getDay(); // Get current day of week as a number (0-6, where 0 is Sunday)
+
+  const currentWeek = Array.from({ length: 7 }).map((_, i) => {
+    const day = new Date(today);
+    day.setDate(today.getDate() - dayOfWeek + i + 1); // Adjust days to align with week start from Monday
+    return day;
+  });
+
+  currentWeek.forEach((date, index) => {
+    const dayElement = document.getElementById(`day${index}`);
+    dayElement.textContent = formatDate(date); // Update textContent with formatted date
+    if (date.getTime() === today.getTime()) {
+      dayElement.classList.add("today"); // Add 'today' class if it's the current date
+    } else {
+      dayElement.classList.remove("today"); // Remove class if it's not today
+    }
+  });
+}
+
+function formatDate(date) {
+  // Pad the month and the day with '0' if they are less than 10
+  const day = ("0" + date.getDate()).slice(-2);
+  const month = ("0" + (date.getMonth() + 1)).slice(-2); // +1 because getMonth() returns 0-11
+  return `${day}.${month}.`; // Returns 'DD.MM.'
+}
 
 const weekdayButtons = document.getElementsByClassName("weekday_link");
 
+// TODO: add error handling for when a burger is not found for the date
 for (let button of weekdayButtons) {
-  button.addEventListener("click", (e) => {
-    console.log(e);
-    console.log(e.target.innerText);
-    document.getElementsByClassName("menu_items")[0].innerHTML = `
-            <p>Menu for: ${e.target.innerText}</p>
-            <div class="menu_entry">
-                <img src="../hampurilaiset.jpg" alt="hampurilaiset" class="menu_item_image">
-                <div class="item_description">
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos perspiciatis consequatur ab aspernatur explicabo dolore minima, 
-                        ipsam nostrum nihil fugit, voluptates distinctio aperiam numquam rerum tempore maiores rem soluta ducimus?</p>
-                </div>
-            </div>`;
-    // Elementit luodaat dynaamisesti datasta.s
+  button.addEventListener("click", async (e) => {
+    const selectedDate = e.target.innerText;
+    //console.log("selectedDate", selectedDate);
+    try {
+      const burgerId = await fetchMenuByDate(selectedDate + "2024");
+      //console.log("burgerId in frontend", burgerId);
+      if (burgerId) {
+        const burgerDetails = await fetchBurgerByID(burgerId);
+        updateMenuDisplay(burgerDetails, selectedDate, burgerId);
+      } else {
+        console.log("No burger found for this date");
+      }
+    } catch (error) {
+      console.error("Error fetching menu:", error);
+    }
+
+    for (let button of weekdayButtons) {
+      button.classList.remove("active");
+    }
+    e.target.classList.add("active");
   });
 }
-/*
-document.getElementById('login').addEventListener('click', () => {
-    window.location = 'login.html';
-})
-*/
 
-// event listener for login button
+async function fetchMenuByDate(date) {
+  //console.log("fetchMenuByDate date", date);
+  const url = `${menusUrl}${date}`;
+
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error("Failed to fetch data: " + response.statusText);
+    }
+    const data = await response.json();
+    //console.log("Full data response:", data);
+
+    if (data.length > 0 && data[0].burger_id !== undefined) {
+      return data[0].burger_id;
+    } else {
+      console.error("Burger ID is undefined or data array is empty");
+      return null;
+    }
+  } catch (error) {
+    console.error("Error fetching menu by date:", error);
+    return null;
+  }
+}
+
+async function fetchBurgerByID(burgerId) {
+  const url = `${hamburgersUrl}/${burgerId}`;
+
+  const response = await fetch(url);
+  const burger = await response.json();
+  return burger;
+}
+
+async function updateMenuDisplay(burger, date, burgerId) {
+  const menuItems = document.getElementsByClassName("menu_items")[0];
+
+  try {
+    // Fetch allergen IDs associated with this burger
+    const response = await fetch(`${allergensUrl}${burgerId}`);
+    if (!response.ok) throw new Error("Failed to fetch allergens");
+    const allergens = await response.json(); // This should return an array of allergen acronyms
+    console.log("Allergens:", allergens);
+    // Generate a string of allergen acronyms to display
+    const allergenDisplay = allergens.map((a) => a.acronym).join(", ");
+
+    menuItems.innerHTML = `
+      <p>Menu for: ${date}</p>
+      <h2>${burger[0].Name}</h2>
+      <div class="menu_entry">
+          <img src="http://127.0.0.1:3000/api/v1/${burger[0].filename}" alt="${burger[0].Name}" class="menu_item_image">
+          <div class="item_description">
+              <p>${burger[0].Description}</p>
+              <p>${burger[0].Price} €</p>
+              <p>Allergens: ${allergenDisplay}</p>
+          </div>
+          
+          <button class="add-to-cart-btn" data-id="${burger[0].ID}">
+              <i class="fas fa-shopping-cart"></i> Add to Cart
+          </button>
+      </div>`;
+    addCartEventListener();
+  } catch (error) {
+    console.error("Error fetching allergens:", error);
+    menuItems.innerHTML = `<p>Error loading menu details.</p>`;
+  }
+}
+
+function addCartEventListener() {
+  const addToCartBtn = document.getElementsByClassName("add-to-cart-btn")[0];
+  addToCartBtn.addEventListener("click", (e) => {
+    const burgerId = e.target.getAttribute("data-id");
+    console.log("Burger ID:", burgerId);
+  });
+}
+
+// Kirjautumisen näkymä
 document.getElementById("login").addEventListener("click", function () {
   var loginForm = document.getElementById("loginForm");
   var registerForm = document.getElementById("registerForm");
@@ -52,7 +155,7 @@ document.getElementById("login").addEventListener("click", function () {
   }
 });
 
-// event listener for register button
+// Rekisteröinti näkymä
 document.getElementById("register").addEventListener("click", function () {
   var registerForm = document.getElementById("registerForm");
   var loginForm = document.getElementById("loginForm");
@@ -67,16 +170,48 @@ document.getElementById("register").addEventListener("click", function () {
   }
 });
 
-// DEV only
-// event listener for submit button, directs to login page
-// to be replaced later with actual login functionality
-document
-  .getElementById("login-submit-btn")
-  .addEventListener("click", function (e) {
-    e.preventDefault();
-    window.location = "login.html";
-  });
+// Kirjaudu sisään.
 
+document.getElementById("login-apply").addEventListener("click", async (e) => {
+  const loginForm = document.getElementById("loginForm");
+  const name = document.getElementById("loginUsername").value;
+  const pw = document.getElementById("loginPassword").value;
+  console.log(name, pw);
+  const loginUser = {
+    username: name,
+    password: pw,
+  };
+  const options = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(loginUser),
+  };
+  const response = await fetch("http://127.0.0.1:3000/api/v1/auth/", options);
+  console.log(response);
+  const json = await response.json();
+  if (!json.user) {
+    alert(json.error.message);
+  } else {
+    localStorage.setItem("token", json.token);
+    localStorage.setItem("user", JSON.stringify(json.user));
+    loginForm.style.display = "none";
+    user = JSON.parse(localStorage.getItem("user"));
+    avatar.src = user.avatar ? "../" + user.avatar : "../default.jpg";
+    toggleLogin(true);
+  }
+});
+
+// Kirjaudu ulos
+
+document.getElementById("logout-button").addEventListener("click", () => {
+  localStorage.removeItem("user");
+  localStorage.removeItem("token");
+  toggleLogin(false);
+});
+
+// Rekisteröinti fetch
 document
   .getElementById("register-submit-btn")
   .addEventListener("click", async (e) => {
@@ -92,13 +227,6 @@ document
     const phoneNumber = document.getElementById("phone-number").value;
     const address = document.getElementById("address").value;
     const email = document.getElementById("email").value;
-    // const inputs = [firstName, lastName, username, password, cardNumber, phoneNumber, address, email];
-    // inputs.forEach(input => {
-    //   if (!input) {
-    //     alert('Please fill in all fields');
-    //     return;
-    //   }
-    // });
 
     if (fileInput.files[0]) {
       avatar = fileInput.files[0].name;
@@ -120,9 +248,46 @@ document
     };
     console.log(options);
     const response = await fetch(
-      "http://127.0.0.1:3000/users/register",
+      "http://127.0.0.1:3000/api/v1/users/register",
       options
     );
     registerForm.style.display = "none";
     console.log(response);
   });
+
+const toggleLogin = (logged) => {
+  loginElement.style.display = logged ? "none" : "block";
+  loggedElement.style.display = logged ? "block" : "none";
+  avatar.src = logged ? "../" + user.avatar : "../default.jpg";
+};
+
+//  Siirtyy profiiliin
+
+document.getElementById("profile-button").addEventListener("click", () => {
+  window.location = "login.html";
+});
+
+// IIFE suoritetaan aina ku sivusto ladataan.
+
+(async () => {
+  if (localStorage.getItem("token") && localStorage.getItem("user")) {
+    try {
+      const options = {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"),
+          "Content-Type": "application/json",
+        },
+      };
+      const response = await fetch(
+        "http://127.0.0.1:3000/api/v1/auth/verify",
+        options
+      );
+      console.log(response);
+      if (response.ok) {
+        toggleLogin(true);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }
+})();
