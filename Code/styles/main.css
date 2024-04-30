@@ -191,7 +191,7 @@ body {
   display: flex;
 }
 
-#profile-button {
+.logged-buttons {
   cursor: pointer;
   background-color: rgb(50, 90, 77);
   padding: 1rem;

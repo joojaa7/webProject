@@ -46,31 +46,31 @@
                     ><i class="fas fa-user-circle"></i> My Avatar</a
                   >
                 </li>
-                <li>
+                <!--<li>
                   <a href="#" id="bio-link"
                     ><i class="fas fa-user-edit"></i> Username & Bio</a
                   >
-                </li>
+                </li> -->
                 <li>
                   <a href="#" id="contact_info-link"
                     ><i class="fas fa-address-card"></i> Contact Information</a
                   >
                 </li>
-                <li>
+                <!--<li>
                   <a href="#" id="preferences-link"
                     ><i class="fas fa-cog"></i> Preferences</a
                   >
-                </li>
+                </li> -->
                 <li>
                   <a href="#" id="order_history-link"
                     ><i class="fas fa-history"></i> Order History</a
                   >
                 </li>
-                <li>
+                <!--<li>
                   <a href="#" id="bonus-link"
                     ><i class="fas fa-gift"></i> My Bonus Program</a
                   >
-                </li>
+                </li> -->
               </ul>
             </div>
           </div>
@@ -147,16 +147,16 @@
             <form id="contact-info-form" class="form">
               <h3>Update Your Contact Information</h3>
               <div class="form-group">
-                <label for="first-name">First Name:</label>
+                <!--<label for="first-name">First Name:</label>
                 <input
                   type="text"
                   id="first-name"
                   name="first-name"
                   placeholder="Enter your first name"
                   required
-                />
+                /> -->
               </div>
-              <div class="form-group">
+              <!--<div class="form-group">
                 <label for="last-name">Last Name:</label>
                 <input
                   type="text"
@@ -164,7 +164,7 @@
                   name="last-name"
                   placeholder="Enter your last name"
                   required
-                />
+                /> -->
               </div>
               <div class="form-group">
                 <label for="phone-number">Phone Number:</label>
@@ -175,7 +175,6 @@
                   placeholder="Enter your phone number"
                   pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
                   title="Enter a phone number in the format: 123-456-7890"
-                  required
                 />
               </div>
               <div class="form-group">
@@ -185,7 +184,6 @@
                   id="email"
                   name="email"
                   placeholder="Enter your email address"
-                  required
                 />
               </div>
               <div class="form-group">
@@ -195,10 +193,17 @@
                   id="address"
                   name="address"
                   placeholder="Enter your address"
-                  required
                 />
+                <div class="form-group">
+                  <label for="Cardnumber">Card number:</label>
+                  <input
+                    type="text"
+                    id="Cardnumber"
+                    name="Cardnumber"
+                    placeholder="Cardnumber"
+                  />
               </div>
-              <button type="submit">Update</button>
+              <button type="submit" id="submit-userinfo-update">Update</button>
             </form>
           </div>
 

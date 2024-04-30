@@ -87,13 +87,24 @@ h2 {
 }
 
 .sidebanner {
-  width: 30%;
+  width: fit-content;
   margin-left: 3rem;
 }
 
 .options-input {
   display: flex;
+  flex-direction: column;
+  text-align: center;
   width: 60%;
+  margin: auto;
+}
+
+.form-group {
+  margin: 1rem;
+}
+
+#submit-userinfo-update {
+  width: fit-content;
   margin: auto;
 }
 
@@ -108,6 +119,8 @@ h2 {
     min-height: 60vh;
   }
 
+
+  
   .sidebanner {
     width: 90vw;
     height: 35vh;

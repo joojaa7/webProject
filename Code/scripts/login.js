@@ -272,3 +272,33 @@ document
       }
     }
   });
+
+document.getElementById('submit-userinfo-update').addEventListener('click', async (e) => {
+  e.preventDefault();
+  const updatedPhone = document.getElementById('phone-number').value;
+  const updatedEmail = document.getElementById('email').value;
+  const updatedAddress = document.getElementById('address').value;
+  const updatedCard = document.getElementById('Cardnumber').value;
+  const userName = JSON.parse(localStorage.getItem('user')).username;
+
+  const updateUser = {
+    phone_number: updatedPhone ? updatedPhone : undefined,
+    email: updatedEmail ? updatedEmail : undefined,
+    Address: updatedAddress ? updatedAddress : undefined,
+    Cardnumber: updatedCard ? updatedCard : undefined,
+  };
+
+  Object.keys(updateUser).forEach(key => updateUser[key] === undefined && delete updateUser[key]);  // Poistaa tyhjät ominaisuudet
+
+  const options = {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(updateUser),
+  };
+
+  const response = await fetch(`http://127.0.0.1:3000/api/v1/users/${userName}`, options)
+  console.log(response)
+  
+});
