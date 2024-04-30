@@ -1,5 +1,6 @@
 console.log("In use.");
-import { menusUrl, hamburgersUrl } from "./variables.js";
+
+import { menusUrl, hamburgersUrl, allergensUrl } from "./variables.js";
 
 const fileInput = document.getElementById("file");
 const loginElement = document.getElementsByClassName("login_button")[0];
@@ -26,7 +27,6 @@ const data = [
     Kuvaus: "Leipäjuustohamppari on outoa",
   },
 ];
-
 
 document.addEventListener("DOMContentLoaded", () => {
   setWeekDates();
@@ -61,7 +61,6 @@ function formatDate(date) {
   return `${day}.${month}.`; // Returns 'DD.MM.'
 }
 
-
 const weekdayButtons = document.getElementsByClassName("weekday_link");
 
 // TODO: add error handling for when a burger is not found for the date
@@ -74,7 +73,7 @@ for (let button of weekdayButtons) {
       //console.log("burgerId in frontend", burgerId);
       if (burgerId) {
         const burgerDetails = await fetchBurgerByID(burgerId);
-        updateMenuDisplay(burgerDetails, selectedDate);
+        updateMenuDisplay(burgerDetails, selectedDate, burgerId);
       } else {
         console.log("No burger found for this date");
       }
@@ -121,23 +120,38 @@ async function fetchBurgerByID(burgerId) {
   return burger;
 }
 
-function updateMenuDisplay(burger, date) {
+async function updateMenuDisplay(burger, date, burgerId) {
   const menuItems = document.getElementsByClassName("menu_items")[0];
-  menuItems.innerHTML = `
-    <p>Menu for: ${date}</p>
-    <h2>${burger[0].Name}</h2>
-    <div class="menu_entry">
-        <img src="http://127.0.0.1:3000/api/v1/${burger[0].filename}" alt="${burger[0].Name}" class="menu_item_image">
-        <div class="item_description">
-            <p>${burger[0].Description}</p>
-            <p>${burger[0].Price} €</p>
-        </div>
-        
-        <button class="add-to-cart-btn" data-id="${burger[0].ID}">
-            <i class="fas fa-shopping-cart"></i> Add to Cart
-        </button>
-    </div>`;
-  addCartEventListener();
+
+  try {
+    // Fetch allergen IDs associated with this burger
+    const response = await fetch(`${allergensUrl}${burgerId}`);
+    if (!response.ok) throw new Error("Failed to fetch allergens");
+    const allergens = await response.json(); // This should return an array of allergen acronyms
+    console.log("Allergens:", allergens);
+    // Generate a string of allergen acronyms to display
+    const allergenDisplay = allergens.map((a) => a.acronym).join(", ");
+
+    menuItems.innerHTML = `
+      <p>Menu for: ${date}</p>
+      <h2>${burger[0].Name}</h2>
+      <div class="menu_entry">
+          <img src="http://127.0.0.1:3000/api/v1/${burger[0].filename}" alt="${burger[0].Name}" class="menu_item_image">
+          <div class="item_description">
+              <p>${burger[0].Description}</p>
+              <p>${burger[0].Price} €</p>
+              <p>Allergens: ${allergenDisplay}</p>
+          </div>
+          
+          <button class="add-to-cart-btn" data-id="${burger[0].ID}">
+              <i class="fas fa-shopping-cart"></i> Add to Cart
+          </button>
+      </div>`;
+    addCartEventListener();
+  } catch (error) {
+    console.error("Error fetching allergens:", error);
+    menuItems.innerHTML = `<p>Error loading menu details.</p>`;
+  }
 }
 
 function addCartEventListener() {

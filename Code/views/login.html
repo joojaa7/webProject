@@ -101,7 +101,6 @@
         </div>
         <div class="options-input">
           <div id="avatar-content" class="form-content" style="display: none">
-            <form id="avatar-form">
             <form id="avatar-form" class="form">
               <label for="avatar-upload">Upload new avatar:</label>
               <input
@@ -114,8 +113,6 @@
               <!--<button type="submit" id="avatar-submit">Upload</button>-->
             </form>
           </div>
-          
-
           <div id="bio-content" class="form-content" style="display: none">
             <form id="bio-form" class="form">
               <h3>Update Your Username and Bio</h3>
@@ -267,7 +264,7 @@
             <h3>Add a burger</h3>
             <form id="add-burger-form" enctype="multipart/form-data">
               <div class="form-group">
-                <label for="add-burger"></label>
+                <label for="add-burger">Enter the name for a burger</label>
                 <input
                   type="text"
                   name="add-burger-name"
@@ -289,12 +286,24 @@
                   placeholder="Price"
                   required
                 />
+
                 <input
                   type="file"
                   name="add-burger-upload-name"
                   id="add-burger-upload"
                   accept="image/*"
                 />
+                <label for="ingredients-input">Ingredients:</label>
+                <input
+                  type="text"
+                  name="ingredients"
+                  id="ingredients-input"
+                  placeholder="Enter ingredients, separated by commas"
+                />
+                <label for="allergens-select">Allergens:</label>
+                <select name="allergens" id="allergens-select" multiple>
+                  <!-- Options will be populated here -->
+                </select>
               </div>
               <button type="submit" id="add-burger-btn">Add Burger</button>
             </form>

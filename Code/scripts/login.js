@@ -1,23 +1,69 @@
 "use strict";
-import { hamburgersUrl, menusUrl } from "./variables.js";
+import { hamburgersUrl, menusUrl, allergensUrl } from "./variables.js";
 
 let user = JSON.parse(localStorage.getItem("user"));
 console.log(user);
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
   const form = document.getElementById("add-burger-form");
   const menu = document.getElementById("update-menu-form");
 
   form.addEventListener("submit", async function (event) {
     event.preventDefault();
-    await addBurger(form);
+
+    // Collecting the form data.
+    const formData = new FormData(form);
+
+    // Extracting the ingredient text and converting it to an array.
+    const ingredientsText = formData.get("ingredients"); // Get the comma-separated string
+    const ingredients = ingredientsText
+      .split(",")
+      .map((ingredient) => ingredient.trim()); // Split by commas and trim whitespace
+    formData.set("ingredients", JSON.stringify(ingredients)); // Add ingredients array back to formData as a JSON string
+
+    // Collect selected allergens
+    const allergensSelect = document.getElementById("allergens-select");
+    const selectedAllergens = Array.from(allergensSelect.selectedOptions).map(
+      (opt) => opt.value
+    );
+    formData.set("allergens", JSON.stringify(selectedAllergens)); // Convert array to JSON string
+
+    console.log("Formatted Ingredients:", ingredients); // Log the formatted ingredients to the console
+
+    // Call addBurger to handle the POST request
+    await addBurger(formData);
   });
+
+  // Populate allergens selector
+  await populateAllergens();
 
   menu.addEventListener("submit", async function (event) {
     event.preventDefault();
     await addMenu();
   });
+
+  // Call fetchBurgers initially to populate the menu-burger options
+  await fetchBurgers();
 });
+
+async function populateAllergens() {
+  try {
+    const response = await fetch(allergensUrl);
+    if (!response.ok) {
+      throw new Error("Failed to fetch allergens: " + response.statusText);
+    }
+    const allergens = await response.json();
+    const allergensSelect = document.getElementById("allergens-select");
+    allergens.forEach((allergen) => {
+      const option = document.createElement("option");
+      option.value = allergen.ID;
+      option.textContent = `${allergen.name} (${allergen.acronym})`; // Display name and acronym
+      allergensSelect.appendChild(option);
+    });
+  } catch (error) {
+    console.error("Error fetching allergens:", error);
+  }
+}
 
 const linksToContentMap = {
   "avatar-link": "avatar-content",
@@ -29,8 +75,6 @@ const linksToContentMap = {
   "admin_update_menu-link": "admin-update-menu-content",
   "admin_update_users-link": "admin-update-users-content",
 };
-
-// TODO: add functionality to add burger to database
 
 const fetchBurgers = async () => {
   try {
@@ -47,6 +91,8 @@ const fetchBurgers = async () => {
 
 function populateBurgers(burgers) {
   const select = document.getElementById("menu-burger");
+  // Clear existing options first
+  select.innerHTML = "";
   burgers.forEach((burger) => {
     const option = document.createElement("option");
     option.value = burger.ID;
@@ -73,23 +119,23 @@ function updateOptionsInput(contentId) {
   }
 }
 
-async function addBurger(form) {
-  const formData = new FormData(form);
-  console.log("formData:", formData.entries());
-
+async function addBurger(formData) {
   try {
     const response = await fetch(hamburgersUrl, {
       method: "POST",
-      body: formData, // FormData object automatically sets the Content-Type to 'multipart/form-data'
+      body: formData,
     });
 
-    if (response.ok) {
-      const result = await response.json();
-      console.log("Success:", result);
-      alert("Burger added successfully!");
-    } else {
+    if (!response.ok) {
       throw new Error("Failed to add burger: " + response.statusText);
     }
+
+    const result = await response.json();
+    console.log("Success:", result);
+    alert("Burger added successfully!");
+
+    // Fetch all burgers again to update the list in the dropdown
+    await fetchBurgers();
   } catch (error) {
     console.error("Error:", error);
     alert("Error adding burger: " + error.message);
