@@ -6,6 +6,7 @@ import jwt from 'jsonwebtoken';
 const login = async (req, res) => {
   console.log('login', req.body);
   const loginUser = await getUser(req.body.username);
+  console.log(loginUser)
   console.log(bcrypt.hashSync(req.body.password, 5));
   console.log(loginUser.Password);
   if (!loginUser) {

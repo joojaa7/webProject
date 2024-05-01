@@ -36,6 +36,7 @@ const updateAvatar = async (req, res, next) => {
     res.sendStatus(418);
     return
   }
+  console.log('UPDATE AVATAR')
   //res.status(200).send({message: 'Success.'});
   res.json(result)
 }

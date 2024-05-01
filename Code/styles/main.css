@@ -243,3 +243,40 @@ body {
 .add-to-cart-btn i {
   margin-right: 5px; /* Space between icon and text */
 }
+
+#cart-items {
+  background-color: rgb(50, 90, 77);
+  padding-left: 0;
+  padding-bottom: 1rem;
+  font-weight: bold;
+  color: #88ad88;
+  border-radius: 8px;
+}
+
+.cart-item {
+  text-align: center;
+}
+
+.item-paragraph-span {
+  display: flex;
+  margin: auto;
+}
+
+.item-paragraph {
+  padding: 1rem;
+}
+
+h3 {
+  text-align: center;
+  font-weight: 900;
+  text-decoration: underline;
+}
+
+#total {
+  font-weight: bold;
+  color: rgb(5, 82, 69);
+}
+
+#shopping-cart {
+  text-align: center;
+}

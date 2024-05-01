@@ -44,10 +44,21 @@ const ShoppingCart = {
       itemElement.className = "cart-item";
 
       // Item display
+      // const itemInfo = document.createElement("span");
+      // itemInfo.textContent = `Burger ID: ${item.id}, Name: ${
+      //   item.name
+      // }, Price: ${item.price.toFixed(2)} €`;
+
       const itemInfo = document.createElement("span");
-      itemInfo.textContent = `Burger ID: ${item.id}, Name: ${
-        item.name
-      }, Price: ${item.price.toFixed(2)} €`;
+      itemInfo.setAttribute('class', 'item-paragraph-span');
+      const itemName = document.createElement('p');
+      const itemPrice = document.createElement('p');
+      itemName.setAttribute('class', 'item-paragraph');
+      itemPrice.setAttribute('class', 'item-paragraph');
+      itemName.textContent = `${item.name}`;
+      itemPrice.textContent = `${item.price.toFixed(2)} €`;
+      itemInfo.append(itemName);
+      itemInfo.append(itemPrice);
 
       // Quantity management
       const quantityControl = document.createElement("div");

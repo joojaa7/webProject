@@ -369,7 +369,7 @@ document
 const toggleLogin = (logged) => {
   loginElement.style.display = logged ? "none" : "block";
   loggedElement.style.display = logged ? "block" : "none";
-  avatar.src = logged ? "../" + user.avatar : "../default.jpg";
+  avatar.src = logged ? "../uploads/" + user.avatar : "../default.jpg";
 };
 
 //  Siirtyy profiiliin
@@ -381,6 +381,7 @@ document.getElementById("profile-button").addEventListener("click", () => {
 // IIFE suoritetaan aina ku sivusto ladataan.
 
 (async () => {
+  console.log('IIFE')
   if (localStorage.getItem("token") && localStorage.getItem("user")) {
     try {
       const options = {

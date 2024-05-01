@@ -254,6 +254,7 @@ document
     const userData = JSON.parse(localStorage.getItem("user"));
     formData.append("avatar", avatar);
     formData.append("username", userData.username);
+    console.log(formData)
     const options = {
       method: "PUT",
       body: formData,
@@ -263,6 +264,7 @@ document
         "http://127.0.0.1:3000/api/v1/users/avatar",
         options
       );
+      console.log(response)
       const json = await response.json();
       inputForm.reset();
       if (response.ok) {

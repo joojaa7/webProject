@@ -15,7 +15,7 @@ const getBurgerById = async (id) => {
       "SELECT * FROM burgers WHERE ID = ?",
       [id]
     );
-    console.log("rows in getburgerbyid", rows);
+    // console.log("rows in getburgerbyid", rows);
     return rows;
   } catch (error) {
     console.log("Error fetching burger:", error);
