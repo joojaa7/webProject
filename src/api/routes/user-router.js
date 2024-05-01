@@ -57,12 +57,8 @@ userRouter.route('/register').post(
 );
 
 userRouter
-  .route('/avatar')
+  .route('/avatar/update')
   .put(
-    (req, res , next) => {
-      console.log(req);
-      next()
-    }, 
     upload.single('file'),
     updateAvatar
 )
