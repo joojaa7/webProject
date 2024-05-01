@@ -55,6 +55,7 @@ userRouter.route('/register').post(
     upload.single('file'),
     postUser
 );
+
 userRouter
   .route('/avatar')
   .put(

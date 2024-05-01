@@ -362,8 +362,40 @@ document
       "http://127.0.0.1:3000/api/v1/users/register",
       options
     );
-    registerForm.style.display = "none";
     console.log(response);
+
+    // Login if registrartion successful
+
+    if (response.ok) {
+      console.log('response OK')
+      registerForm.style.display = "none";
+      const loginUser = {
+        username: username,
+        password: password,
+      }
+      const options = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(loginUser),
+      };
+      const response = await fetch("http://127.0.0.1:3000/api/v1/auth/", options);
+      console.log(response);
+      const json = await response.json();
+      if (!json.user) {
+        alert(json.error.message);
+      } else {
+        localStorage.setItem("token", json.token);
+        localStorage.setItem("user", JSON.stringify(json.user));
+        loginForm.style.display = "none";
+        user = JSON.parse(localStorage.getItem("user"));
+        document.getElementById("avatar").src = user.avatar ? "../" + user.avatar : "../default.jpg";
+        toggleLogin(true);
+      }
+
+    }
+    
   });
 
 const toggleLogin = (logged) => {
