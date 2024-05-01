@@ -33,7 +33,7 @@ body {
 }
 
 .banner_image {
-  max-width: 20%;
+  max-width: 30%;
   border-radius: 50%;
   border-style: solid;
   border-width: 0.5rem;
@@ -41,6 +41,7 @@ body {
 }
 
 .banner_name {
+  display: none;
   white-space: nowrap;
   width: 33%;
   padding: 5rem;
@@ -191,7 +192,7 @@ body {
 #logged {
   /*display: flex;*/
   display: none;
-  max-width: 33%;
+  max-width: 30%;
   text-align: center;
 }
 
@@ -279,4 +280,5 @@ h3 {
 
 #shopping-cart {
   text-align: center;
+  width: 30%;
 }

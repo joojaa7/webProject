@@ -369,7 +369,7 @@ document
 const toggleLogin = (logged) => {
   loginElement.style.display = logged ? "none" : "block";
   loggedElement.style.display = logged ? "block" : "none";
-  avatar.src = logged ? "../uploads/" + user.avatar : "../default.jpg";
+  avatar.src = logged ? "../" + user.avatar : "../default.jpg";
 };
 
 //  Siirtyy profiiliin
