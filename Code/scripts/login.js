@@ -2,6 +2,8 @@
 import { hamburgersUrl, menusUrl } from "./variables.js";
 
 let user = JSON.parse(localStorage.getItem("user"));
+const avatar = document.getElementById('user-avatar');
+avatar.src = user.avatar ? '../' + user.avatar : '../default.jpg'
 console.log(user);
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -224,6 +226,7 @@ document
         console.log("OK");
         userData.avatar = json.avatar;
         localStorage.setItem("user", JSON.stringify(userData));
+        document.getElementById('user-avatar').src = '../' + json.avatar;
       } else {
         alert("Log in required.");
       }
