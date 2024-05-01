@@ -16,23 +16,18 @@
     <div class="container">
       <div class="banner">
         <div class="banner_content">
-          <a href="index.html">
             <img
               src="../placeholder.jpg"
               alt="placeholder"
               class="banner_image"
             />
-          </a>
-          <div class="banner_text">
-            <h1>WELCOME TO THE WEBSITE</h1>
-            <p>Here you can modify your personal information!</p>
-          </div>
+          <p id="frontpage-button">Frontpage</p>
         </div>
       </div>
-      <select id="roleSelector">
+      <!--<select id="roleSelector">
         <option value="user">User</option>
         <option value="admin">Admin</option>
-      </select>
+      </select> -->
 
       <div class="content-wrapper">
         <div class="sidebanner">
@@ -102,7 +97,8 @@
         <div class="options-input">
           <div id="avatar-content" class="form-content" style="display: none">
             <form id="avatar-form" class="form">
-              <label for="avatar-upload">Upload new avatar:</label>
+              <img src="../default.jpg" alt="useravatar" id="user-avatar">
+              <label for="avatar-file" id="avatar-label">Upload new avatar:</label>
               <input
                 type="file"
                 id="avatar-file"
@@ -111,31 +107,6 @@
               />
               <p id="avatar-submit">Submit</p>
               <!--<button type="submit" id="avatar-submit">Upload</button>-->
-            </form>
-          </div>
-          <div id="bio-content" class="form-content" style="display: none">
-            <form id="bio-form" class="form">
-              <h3>Update Your Username and Bio</h3>
-              <div class="form-group">
-                <label for="username">Username:</label>
-                <input
-                  type="text"
-                  id="username"
-                  name="username"
-                  placeholder="Enter your new username"
-                  required
-                />
-              </div>
-              <div class="form-group">
-                <label for="bio">Bio:</label>
-                <textarea
-                  id="bio"
-                  name="bio"
-                  placeholder="Write something about yourself"
-                  required
-                ></textarea>
-              </div>
-              <button type="submit">Update</button>
             </form>
           </div>
 
@@ -147,26 +118,6 @@
             <form id="contact-info-form" class="form">
               <h3>Update Your Contact Information</h3>
               <div class="form-group">
-                <!--<label for="first-name">First Name:</label>
-                <input
-                  type="text"
-                  id="first-name"
-                  name="first-name"
-                  placeholder="Enter your first name"
-                  required
-                /> -->
-              </div>
-              <!--<div class="form-group">
-                <label for="last-name">Last Name:</label>
-                <input
-                  type="text"
-                  id="last-name"
-                  name="last-name"
-                  placeholder="Enter your last name"
-                  required
-                /> -->
-              </div>
-              <div class="form-group">
                 <label for="phone-number">Phone Number:</label>
                 <input
                   type="tel"
@@ -176,8 +127,6 @@
                   pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
                   title="Enter a phone number in the format: 123-456-7890"
                 />
-              </div>
-              <div class="form-group">
                 <label for="email">Email Address:</label>
                 <input
                   type="email"
@@ -185,8 +134,6 @@
                   name="email"
                   placeholder="Enter your email address"
                 />
-              </div>
-              <div class="form-group">
                 <label for="address">Address:</label>
                 <input
                   type="text"
@@ -194,14 +141,13 @@
                   name="address"
                   placeholder="Enter your address"
                 />
-                <div class="form-group">
-                  <label for="Cardnumber">Card number:</label>
-                  <input
-                    type="text"
-                    id="Cardnumber"
-                    name="Cardnumber"
-                    placeholder="Cardnumber"
-                  />
+                <label for="Cardnumber">Card number:</label>
+                <input
+                  type="text"
+                  id="Cardnumber"
+                  name="Cardnumber"
+                  placeholder="Cardnumber"
+                />
               </div>
               <button type="submit" id="submit-userinfo-update">Update</button>
             </form>

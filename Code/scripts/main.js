@@ -319,6 +319,9 @@ document.getElementById("login-apply").addEventListener("click", async (e) => {
 document.getElementById("logout-button").addEventListener("click", () => {
   localStorage.removeItem("user");
   localStorage.removeItem("token");
+  localStorage.removeItem('shoppingCart');
+  document.getElementById("cart-items").innerHTML = '';
+  document.getElementById('total').innerHTML = 'Total: 0,00€';
   toggleLogin(false);
 });
 

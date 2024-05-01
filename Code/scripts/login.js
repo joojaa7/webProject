@@ -176,17 +176,19 @@ const adminFormMenuField = document.getElementById(
   "admin-update-users-content"
 );*/
 
-roleSelector.addEventListener("change", () => {
-  adminSection.style.display =
-    roleSelector.value === "admin" ? "block" : "none";
-  //adminFormUsersField.style.display =
-  //roleSelector.value === "admin" ? "block" : "none";
-  //adminFormMenuField.style.display =
-  //  roleSelector.value === "admin" ? "block" : "none";
-});
+// roleSelector.addEventListener("change", () => {
+//   adminSection.style.display =
+//     roleSelector.value === "admin" ? "block" : "none";
+//   //adminFormUsersField.style.display =
+//   //roleSelector.value === "admin" ? "block" : "none";
+//   //adminFormMenuField.style.display =
+//   //  roleSelector.value === "admin" ? "block" : "none";
+// });
 
 // Initial display check based on selector's default value
-adminSection.style.display = roleSelector.value === "admin" ? "block" : "none";
+// adminSection.style.display = roleSelector.value === "admin" ? "block" : "none";
+
+adminSection.style.display = user.role === 'Admin' ? 'block' : 'none';
 
 document
   .getElementById("avatar-submit")
@@ -257,3 +259,8 @@ document.getElementById('submit-userinfo-update').addEventListener('click', asyn
   console.log(response)
   
 });
+
+
+document.getElementById('frontpage-button').addEventListener('click', () => {
+  window.location = 'index.html';
+})

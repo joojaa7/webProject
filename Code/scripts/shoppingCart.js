@@ -37,12 +37,12 @@ const ShoppingCart = {
 
   updateCartDisplay() {
     const cartItemsElement = document.getElementById("cart-items");
-    cartItemsElement.innerHTML = ""; // Clear existing items
+    //cartItemsElement.innerHTML = ""; // Clear existing items
 
     this.items.forEach((item) => {
       const itemElement = document.createElement("div");
       itemElement.className = "cart-item";
-
+      console.log(item)
       // Item display
       // const itemInfo = document.createElement("span");
       // itemInfo.textContent = `Burger ID: ${item.id}, Name: ${
