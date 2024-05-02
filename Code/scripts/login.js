@@ -2,8 +2,8 @@
 import { hamburgersUrl, menusUrl } from "./variables.js";
 
 let user = JSON.parse(localStorage.getItem("user"));
-const avatar = document.getElementById('user-avatar');
-avatar.src = user.avatar ? '../' + user.avatar : '../default.jpg'
+const avatar = document.getElementById("user-avatar");
+avatar.src = user.avatar ? "../" + user.avatar : "../default.jpg";
 console.log(user);
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -19,6 +19,8 @@ document.addEventListener("DOMContentLoaded", () => {
     event.preventDefault();
     await addMenu();
   });
+
+  initializeEventListeners();
 });
 
 const linksToContentMap = {
@@ -30,25 +32,40 @@ const linksToContentMap = {
   "bonus-link": "bonus-content",
   "admin_update_menu-link": "admin-update-menu-content",
   "admin_update_users-link": "admin-update-users-content",
+  "admin_special_offers-link": "admin-special-offers-content",
 };
 
 // TODO: add functionality to add burger to database
 
-const fetchBurgers = async () => {
+const fetchBurgersForMenu = async () => {
   try {
     const response = await fetch(hamburgersUrl);
     if (!response.ok) {
       throw new Error("Network response was not ok");
     }
     const burgers = await response.json();
-    populateBurgers(burgers);
+    populateBurgers(burgers, "menu-burger");
   } catch (error) {
     console.error("Error fetching burgers:", error);
   }
 };
 
-function populateBurgers(burgers) {
-  const select = document.getElementById("menu-burger");
+const fetchBurgersForSpecialOffers = async () => {
+  try {
+    const response = await fetch(hamburgersUrl);
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const burgers = await response.json();
+    populateBurgers(burgers, "special-offer-burger");
+  } catch (error) {
+    console.error("Error fetching burgers:", error);
+  }
+};
+
+function populateBurgers(burgers, selectId) {
+  const select = document.getElementById(selectId);
+  //select.innerHTML = "";
   burgers.forEach((burger) => {
     const option = document.createElement("option");
     option.value = burger.ID;
@@ -57,7 +74,62 @@ function populateBurgers(burgers) {
   });
 }
 
-const optionsInput = document.querySelector(".options-input");
+function updatePreview() {
+  const offerNameInput = document.getElementById("special-offer-name-id");
+  const offerDescriptionInput = document.getElementById(
+    "special-offer-description-id"
+  );
+  const offerPriceInput = document.getElementById("special-offer-price-id");
+  const startDateInput = document.getElementById("special-offer-start-date");
+  const endDateInput = document.getElementById("special-offer-end-date");
+  const burgerInput = document.getElementById("special-offer-burger");
+
+  document.getElementById("preview-name").textContent = offerNameInput.value;
+  document.getElementById("preview-description").textContent =
+    offerDescriptionInput.value;
+  document.getElementById(
+    "preview-price"
+  ).textContent = `${offerPriceInput.value}€`;
+  document.getElementById("preview-burger").textContent =
+    burgerInput.options[burgerInput.selectedIndex].text;
+
+  const formattedStartDate = convertDateFormat(startDateInput.value);
+  const formattedEndDate = convertDateFormat(endDateInput.value);
+  document.getElementById(
+    "preview-date"
+  ).textContent = `Tarjous voimassa: ${formattedStartDate} - ${formattedEndDate}`;
+}
+
+function handleFileSelect(event) {
+  const reader = new FileReader();
+  reader.onload = function (e) {
+    document.getElementById("preview-image").src = e.target.result;
+  };
+  reader.readAsDataURL(event.target.files[0]);
+}
+
+function initializeEventListeners() {
+  const inputs = [
+    document.getElementById("special-offer-name-id"),
+    document.getElementById("special-offer-description-id"),
+    document.getElementById("special-offer-price-id"),
+    document.getElementById("special-offer-upload"),
+    document.getElementById("special-offer-start-date"),
+    document.getElementById("special-offer-end-date"),
+    document.getElementById("special-offer-burger"),
+  ];
+
+  inputs.forEach((input) => {
+    const eventType = input.type === "file" ? "change" : "input";
+    input.addEventListener(eventType, updatePreview);
+  });
+
+  document
+    .getElementById("special-offer-upload")
+    .addEventListener("change", handleFileSelect);
+}
+
+// const optionsInput = document.querySelector(".options-input");
 let currentVisibleContent = null; // To keep track of the currently displayed content
 
 function updateOptionsInput(contentId) {
@@ -159,8 +231,11 @@ Object.keys(linksToContentMap).forEach((linkId) => {
       //console.log("link:", link);
       //console.log("linkId:", linkId);
       if (linkId === "admin_update_menu-link") {
-        fetchBurgers();
+        fetchBurgersForMenu();
+      } else if (linkId === "admin_special_offers-link") {
+        fetchBurgersForSpecialOffers();
       }
+
       event.preventDefault(); // Prevent default anchor behavior
       updateOptionsInput(linksToContentMap[linkId]);
     });
@@ -190,7 +265,7 @@ const adminFormMenuField = document.getElementById(
 // Initial display check based on selector's default value
 // adminSection.style.display = roleSelector.value === "admin" ? "block" : "none";
 
-adminSection.style.display = user.role === 'Admin' ? 'block' : 'none';
+adminSection.style.display = user.role === "Admin" ? "block" : "none";
 
 document
   .getElementById("avatar-submit")
@@ -222,48 +297,53 @@ document
       const json = await response.json();
       inputForm.reset();
       if (response.ok) {
-        console.log(json)
+        console.log(json);
         console.log("OK");
         userData.avatar = json.avatar;
         localStorage.setItem("user", JSON.stringify(userData));
-        document.getElementById('user-avatar').src = '../' + json.avatar;
+        document.getElementById("user-avatar").src = "../" + json.avatar;
       } else {
         alert("Log in required.");
       }
     }
   });
 
-document.getElementById('submit-userinfo-update').addEventListener('click', async (e) => {
-  e.preventDefault();
-  const updatedPhone = document.getElementById('phone-number').value;
-  const updatedEmail = document.getElementById('email').value;
-  const updatedAddress = document.getElementById('address').value;
-  const updatedCard = document.getElementById('Cardnumber').value;
-  const userName = JSON.parse(localStorage.getItem('user')).username;
+document
+  .getElementById("submit-userinfo-update")
+  .addEventListener("click", async (e) => {
+    e.preventDefault();
+    const updatedPhone = document.getElementById("phone-number").value;
+    const updatedEmail = document.getElementById("email").value;
+    const updatedAddress = document.getElementById("address").value;
+    const updatedCard = document.getElementById("Cardnumber").value;
+    const userName = JSON.parse(localStorage.getItem("user")).username;
 
-  const updateUser = {
-    phone_number: updatedPhone ? updatedPhone : undefined,
-    email: updatedEmail ? updatedEmail : undefined,
-    Address: updatedAddress ? updatedAddress : undefined,
-    Cardnumber: updatedCard ? updatedCard : undefined,
-  };
+    const updateUser = {
+      phone_number: updatedPhone ? updatedPhone : undefined,
+      email: updatedEmail ? updatedEmail : undefined,
+      Address: updatedAddress ? updatedAddress : undefined,
+      Cardnumber: updatedCard ? updatedCard : undefined,
+    };
 
-  Object.keys(updateUser).forEach(key => updateUser[key] === undefined && delete updateUser[key]);  // Poistaa tyhjät ominaisuudet
+    Object.keys(updateUser).forEach(
+      (key) => updateUser[key] === undefined && delete updateUser[key]
+    ); // Poistaa tyhjät ominaisuudet
 
-  const options = {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(updateUser),
-  };
+    const options = {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updateUser),
+    };
 
-  const response = await fetch(`http://127.0.0.1:3000/api/v1/users/${userName}`, options)
-  console.log(response)
-  
+    const response = await fetch(
+      `http://127.0.0.1:3000/api/v1/users/${userName}`,
+      options
+    );
+    console.log(response);
+  });
+
+document.getElementById("frontpage-button").addEventListener("click", () => {
+  window.location = "index.html";
 });
-
-
-document.getElementById('frontpage-button').addEventListener('click', () => {
-  window.location = 'index.html';
-})
