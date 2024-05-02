@@ -34,6 +34,7 @@ const linksToContentMap = {
   "admin_update_menu-link": "admin-update-menu-content",
   "admin_update_users-link": "admin-update-users-content",
   'admin-order': 'active-order-content',
+  'reservations-link': 'reservations-content',
 };
 
 // TODO: add functionality to add burger to database
