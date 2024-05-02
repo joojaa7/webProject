@@ -1,6 +1,9 @@
 import express from "express";
 import multer from "multer";
-import { addSpecialOfferController } from "../controllers/special-offer-controller.js";
+import {
+  addSpecialOfferController,
+  getSpecialOffersController,
+} from "../controllers/special-offer-controller.js";
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -23,5 +26,7 @@ specialOfferRouter.post(
   upload.single("special-offer-upload-name"),
   addSpecialOfferController
 );
+
+specialOfferRouter.get("/", getSpecialOffersController);
 
 export default specialOfferRouter;

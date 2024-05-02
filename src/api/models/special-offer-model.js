@@ -36,8 +36,26 @@ const addSpecialOffer = async (
     };
   } catch (error) {
     console.error("Error adding special offer:", error);
-    throw error; // It's usually a good practice to rethrow the error unless you handle it specifically.
+    throw error;
   }
 };
 
-export { addSpecialOffer };
+const getSpecialOffersByDate = async (fromDate) => {
+  try {
+    const [rows] = await promisePool.execute(
+      `
+        SELECT * FROM special_offers 
+        WHERE end_date >= ?
+        ORDER BY start_date ASC
+        LIMIT 3
+        `,
+      [fromDate]
+    );
+    return rows;
+  } catch (error) {
+    console.error("Error fetching special offers starting from date:", error);
+    throw error;
+  }
+};
+
+export { addSpecialOffer, getSpecialOffersByDate };

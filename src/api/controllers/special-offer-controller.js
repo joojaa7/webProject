@@ -1,8 +1,10 @@
-import { addSpecialOffer } from "../models/special-offer-model.js";
+import {
+  addSpecialOffer,
+  getSpecialOffersByDate,
+} from "../models/special-offer-model.js";
 
 const addSpecialOfferController = async (req, res) => {
   try {
-    // Extracting values from req.body and req.file
     const {
       "special-offer-name": offerName,
       "special-offer-description": description,
@@ -36,4 +38,18 @@ const addSpecialOfferController = async (req, res) => {
   }
 };
 
-export { addSpecialOfferController };
+const getSpecialOffersController = async (req, res) => {
+  try {
+    const { date } = req.query;
+    const specialOffers = await getSpecialOffersByDate(date);
+    res.json(specialOffers);
+  } catch (error) {
+    console.error("Error fetching special offers:", error);
+    res.status(500).json({
+      message: "Failed to retrieve special offers",
+      error: error.message,
+    });
+  }
+};
+
+export { addSpecialOfferController, getSpecialOffersController };

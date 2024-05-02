@@ -1,6 +1,11 @@
 console.log("In use.");
 
-import { menusUrl, hamburgersUrl, allergensUrl } from "./variables.js";
+import {
+  menusUrl,
+  hamburgersUrl,
+  allergensUrl,
+  specialOffersUrl,
+} from "./variables.js";
 import ShoppingCart from "./shoppingCart.js";
 
 const fileInput = document.getElementById("file");
@@ -15,7 +20,42 @@ document.addEventListener("DOMContentLoaded", async () => {
   ShoppingCart.loadCart();
   ShoppingCart.updateCartDisplay();
   populateWeeklyMenu();
+  fetchAndDisplayOffers();
 });
+
+document
+  .getElementById("checkout-button")
+  .addEventListener("click", function () {
+    populateModalCart();
+    document.getElementById("checkout-modal").style.display = "flex";
+  });
+
+document.querySelector(".close-button").addEventListener("click", function () {
+  document.getElementById("checkout-modal").style.display = "none";
+});
+
+document
+  .getElementById("confirm-order-button")
+  .addEventListener("click", function () {
+    console.log("Order confirmed!");
+    ShoppingCart.clearCart(); // Clear the cart if needed
+    document.getElementById("checkout-modal").style.display = "none";
+  });
+
+function populateModalCart() {
+  const cartItems = ShoppingCart.items;
+  const modalCartItems = document.getElementById("modal-cart-items");
+  modalCartItems.innerHTML = ""; // Clear previous items
+
+  cartItems.forEach((item) => {
+    const li = document.createElement("li");
+    li.textContent = `${item.name} - ${item.price}€ x ${item.quantity}`;
+    modalCartItems.appendChild(li);
+  });
+
+  document.getElementById("modal-cart-total").textContent =
+    ShoppingCart.getTotalPrice();
+}
 
 function setWeekDates() {
   const today = new Date();
@@ -151,6 +191,12 @@ for (let button of weekdayButtons) {
   button.addEventListener("click", async (e) => {
     const selectedDate = e.target.innerText;
     const year = new Date().getFullYear();
+    const specials = document.getElementsByClassName(
+      "special-offers-section"
+    )[0];
+    if (specials) {
+      specials.style.display = "none";
+    }
 
     try {
       console.log("year", year);
@@ -197,6 +243,45 @@ async function fetchMenuByDate(date) {
     return null;
   }
 }
+
+async function fetchAndDisplayOffers() {
+  const today = new Date().toISOString().slice(0, 10); // Format as 'YYYY-MM-DD'
+  try {
+    const response = await fetch(`${specialOffersUrl}?date=${today}`);
+    if (!response.ok) throw new Error("Failed to fetch offers");
+    let offers = await response.json();
+    offers = offers.sort(
+      (a, b) => new Date(a.start_date) - new Date(b.start_date)
+    );
+
+    offers.slice(0, 3).forEach((offer, index) => {
+      const offerDiv = document.getElementById(`offer${index + 1}`);
+      if (offerDiv) {
+        offerDiv.querySelector(
+          ".offer-image"
+        ).src = `http://127.0.0.1:3000/api/v1/${offer.filename}`;
+        offerDiv.querySelector(".offer-title").textContent = offer.name;
+        offerDiv.querySelector(".offer-description").textContent =
+          offer.description;
+        offerDiv.querySelector(".offer-price").textContent = `${offer.price} €`;
+        offerDiv.querySelector(
+          ".offer-dates"
+        ).textContent = `Voimassa: ${formatDateForOffers(
+          offer.start_date
+        )} - ${formatDateForOffers(offer.end_date)}`;
+      }
+    });
+  } catch (error) {
+    console.error("Error loading special offers:", error);
+  }
+}
+
+const formatDateForOffers = (date) => {
+  const formattedDate = new Date(date);
+  return `${formattedDate.getDate()}.${
+    formattedDate.getMonth() + 1
+  }.${formattedDate.getFullYear()}`;
+};
 
 async function fetchBurgerByID(burgerId) {
   const url = `${hamburgersUrl}/${burgerId}`;
@@ -300,13 +385,17 @@ document.getElementById("login-apply").addEventListener("click", async (e) => {
     body: JSON.stringify(loginUser),
   };
   const response = await fetch("http://127.0.0.1:3000/api/v1/auth/", options);
-  console.log(response);
+
   const json = await response.json();
+  console.log("Full JSON response:", json);
+
   if (!json.user) {
     alert(json.error.message);
   } else {
     localStorage.setItem("token", json.token);
     localStorage.setItem("user", JSON.stringify(json.user));
+    ShoppingCart.setUserId(json.user.Username);
+
     loginForm.style.display = "none";
     user = JSON.parse(localStorage.getItem("user"));
     avatar.src = user.avatar ? "../" + user.avatar : "../default.jpg";
@@ -319,9 +408,13 @@ document.getElementById("login-apply").addEventListener("click", async (e) => {
 document.getElementById("logout-button").addEventListener("click", () => {
   localStorage.removeItem("user");
   localStorage.removeItem("token");
-  localStorage.removeItem('shoppingCart');
-  document.getElementById("cart-items").innerHTML = '';
-  document.getElementById('total').innerHTML = 'Total: 0,00€';
+  ShoppingCart.clearCart();
+  ShoppingCart.userId = null;
+
+  localStorage.removeItem("shoppingCart");
+  document.getElementById("cart-items").innerHTML = "";
+  document.getElementById("total").innerHTML = "Total: 0,00€";
+
   toggleLogin(false);
 });
 
@@ -370,12 +463,12 @@ document
     // Login if registrartion successful
 
     if (response.ok) {
-      console.log('response OK')
+      console.log("response OK");
       registerForm.style.display = "none";
       const loginUser = {
         username: username,
         password: password,
-      }
+      };
       const options = {
         method: "POST",
         headers: {
@@ -383,7 +476,10 @@ document
         },
         body: JSON.stringify(loginUser),
       };
-      const response = await fetch("http://127.0.0.1:3000/api/v1/auth/", options);
+      const response = await fetch(
+        "http://127.0.0.1:3000/api/v1/auth/",
+        options
+      );
       console.log(response);
       const json = await response.json();
       if (!json.user) {
@@ -393,12 +489,12 @@ document
         localStorage.setItem("user", JSON.stringify(json.user));
         loginForm.style.display = "none";
         user = JSON.parse(localStorage.getItem("user"));
-        document.getElementById("avatar").src = user.avatar ? "../" + user.avatar : "../default.jpg";
+        document.getElementById("avatar").src = user.avatar
+          ? "../" + user.avatar
+          : "../default.jpg";
         toggleLogin(true);
       }
-
     }
-    
   });
 
 const toggleLogin = (logged) => {
@@ -416,7 +512,7 @@ document.getElementById("profile-button").addEventListener("click", () => {
 // IIFE suoritetaan aina ku sivusto ladataan.
 
 (async () => {
-  console.log('IIFE')
+  console.log("IIFE");
   if (localStorage.getItem("token") && localStorage.getItem("user")) {
     try {
       const options = {

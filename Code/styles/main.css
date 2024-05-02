@@ -12,6 +12,77 @@ body {
 .container {
   width: 100%;
 }
+.modal {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 5px;
+  width: 90%;
+  max-width: 600px;
+}
+
+.close-button {
+  float: right;
+  cursor: pointer;
+}
+
+.special-offers-section {
+  width: 100%;
+  padding: 20px;
+  background-color: #f3f4f6;
+  text-align: center;
+}
+
+.special-offers-container {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+
+.special-offer {
+  width: 30%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  background-color: #ffffff;
+  border-radius: 5px;
+}
+
+.special-offer img.offer-image {
+  width: 300px;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.offer-title {
+  font-size: 18px;
+  color: #333;
+  margin-top: 10px;
+}
+
+.offer-description {
+  font-size: 14px;
+  color: #666;
+  margin-top: 5px;
+}
+
+.offer-price {
+  font-size: 16px;
+  color: #1a943b;
+  font-weight: bold;
+  margin-top: 10px;
+}
 
 .weekday_link.today {
   background-color: #2314c3;
@@ -172,7 +243,7 @@ body {
 .profile-button {
   display: inline-block;
   padding: 10px 20px;
-  background-color: #000000; 
+  background-color: #000000;
   color: #fff;
   text-decoration: none;
   border: none;
@@ -181,7 +252,7 @@ body {
 }
 
 .profile-button:hover {
-  background-color: #000000; 
+  background-color: #000000;
 }
 
 #login-apply {

@@ -135,14 +135,14 @@ function initializeEventListeners() {
     }
     if (formData) {
       try {
-        const result = await submitOfferData(formData);
-        displayFeedback(result);
+        await submitOfferData(formData);
+        alert("Offer added successfully!");
       } catch (error) {
         console.error("Error submitting form data:", error);
-        displayFeedback({ success: false, message: error.message });
+        alert("Failed to add offer: " + error.message);
       }
     } else {
-      displayFeedback({ success: false, message: "Check your input" });
+      alert("Form data is missing, check your inputs.");
     }
   });
 }
@@ -151,17 +151,6 @@ function collectFormData(form) {
   const formData = new FormData(form);
 
   return formData;
-}
-
-function displayFeedback(result) {
-  const messageBox = document.getElementById("feedback");
-  if (result.success) {
-    messageBox.textContent = "Offer added successfully!";
-    messageBox.display = "block";
-  } else {
-    messageBox.textContent = result.message || "An error occurred.";
-    messageBox.display = "block";
-  }
 }
 
 async function submitOfferData(formData) {

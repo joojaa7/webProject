@@ -1,5 +1,15 @@
 const ShoppingCart = {
   items: [],
+  userId: null,
+
+  setUserId(userId) {
+    this.userId = userId;
+    //this.loadCart();
+  },
+
+  cartKey() {
+    return `shoppingCart-${this.userId}`;
+  },
 
   addItem(item) {
     const existingItem = this.items.find((cartItem) => cartItem.id === item.id);
@@ -28,11 +38,12 @@ const ShoppingCart = {
   },
 
   saveCart() {
-    localStorage.setItem("shoppingCart", JSON.stringify(this.items));
+    localStorage.setItem(this.cartKey(), JSON.stringify(this.items));
   },
 
   loadCart() {
-    this.items = JSON.parse(localStorage.getItem("shoppingCart")) || [];
+    this.items = JSON.parse(localStorage.getItem(this.cartKey())) || [];
+    this.updateCartDisplay();
   },
 
   updateCartDisplay() {
@@ -84,6 +95,12 @@ const ShoppingCart = {
       itemElement.appendChild(quantityControl);
       cartItemsElement.appendChild(itemElement);
     });
+    console.log("attempting to update cart display..");
+    if (!document.getElementById("cart-total")) {
+      console.log("cart-total not found..");
+    } else {
+      console.log("cart-total found..");
+    }
 
     // Update total price display
     document.getElementById(
