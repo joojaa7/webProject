@@ -1,5 +1,5 @@
 "use strict";
-import { hamburgersUrl, menusUrl } from "./variables.js";
+import { hamburgersUrl, menusUrl, specialOffersUrl } from "./variables.js";
 
 let user = JSON.parse(localStorage.getItem("user"));
 const avatar = document.getElementById("user-avatar");
@@ -34,8 +34,6 @@ const linksToContentMap = {
   "admin_update_users-link": "admin-update-users-content",
   "admin_special_offers-link": "admin-special-offers-content",
 };
-
-// TODO: add functionality to add burger to database
 
 const fetchBurgersForMenu = async () => {
   try {
@@ -113,7 +111,7 @@ function initializeEventListeners() {
     document.getElementById("special-offer-name-id"),
     document.getElementById("special-offer-description-id"),
     document.getElementById("special-offer-price-id"),
-    document.getElementById("special-offer-upload"),
+    document.getElementById("special-offer-upload-id"),
     document.getElementById("special-offer-start-date"),
     document.getElementById("special-offer-end-date"),
     document.getElementById("special-offer-burger"),
@@ -125,8 +123,57 @@ function initializeEventListeners() {
   });
 
   document
-    .getElementById("special-offer-upload")
+    .getElementById("special-offer-upload-id")
     .addEventListener("change", handleFileSelect);
+
+  const offerForm = document.getElementById("update-special_offer-form");
+  offerForm.addEventListener("submit", async function (event) {
+    event.preventDefault();
+    const formData = collectFormData(offerForm);
+    for (let [key, value] of formData.entries()) {
+      console.log(key, value);
+    }
+    if (formData) {
+      try {
+        const result = await submitOfferData(formData);
+        displayFeedback(result);
+      } catch (error) {
+        console.error("Error submitting form data:", error);
+        displayFeedback({ success: false, message: error.message });
+      }
+    } else {
+      displayFeedback({ success: false, message: "Check your input" });
+    }
+  });
+}
+
+function collectFormData(form) {
+  const formData = new FormData(form);
+
+  return formData;
+}
+
+function displayFeedback(result) {
+  const messageBox = document.getElementById("feedback");
+  if (result.success) {
+    messageBox.textContent = "Offer added successfully!";
+    messageBox.display = "block";
+  } else {
+    messageBox.textContent = result.message || "An error occurred.";
+    messageBox.display = "block";
+  }
+}
+
+async function submitOfferData(formData) {
+  const response = await fetch(specialOffersUrl, {
+    method: "POST",
+    body: formData,
+  });
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Failed to submit form data: ${errorText}`);
+  }
+  return await response.json();
 }
 
 // const optionsInput = document.querySelector(".options-input");
@@ -242,28 +289,7 @@ Object.keys(linksToContentMap).forEach((linkId) => {
   }
 });
 
-// DEV only: Simulate a user login
-// Role-based display logic
-const roleSelector = document.getElementById("roleSelector");
 const adminSection = document.getElementById("adminSection");
-/*const adminFormUsersField = document.getElementById(
-  "admin-update-users-content"
-);
-const adminFormMenuField = document.getElementById(
-  "admin-update-users-content"
-);*/
-
-// roleSelector.addEventListener("change", () => {
-//   adminSection.style.display =
-//     roleSelector.value === "admin" ? "block" : "none";
-//   //adminFormUsersField.style.display =
-//   //roleSelector.value === "admin" ? "block" : "none";
-//   //adminFormMenuField.style.display =
-//   //  roleSelector.value === "admin" ? "block" : "none";
-// });
-
-// Initial display check based on selector's default value
-// adminSection.style.display = roleSelector.value === "admin" ? "block" : "none";
 
 adminSection.style.display = user.role === "Admin" ? "block" : "none";
 

@@ -8,6 +8,7 @@ import menuRouter from "./routes/menu-router.js";
 import authRouter from "./routes/auth-router.js";
 import ingredientRouter from "./routes/ingredient-router.js";
 import allergenRouter from "./routes/allergen-router.js";
+import specialOfferRouter from "./routes/special-offer-router.js";
 
 //Placeholder code
 const router = express.Router();
@@ -21,5 +22,6 @@ router.use("/menus", menuRouter);
 router.use("/auth", authRouter);
 router.use("/ingredients", ingredientRouter);
 router.use("/allergens", allergenRouter);
+router.use("/special_offers", specialOfferRouter);
 
 export default router;
