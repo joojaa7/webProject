@@ -131,7 +131,6 @@ h2 {
 }
 
 #submit-userinfo-update {
-  width: fit-content;
   margin: auto;
 }
 
@@ -144,7 +143,7 @@ h2 {
   margin-top: 1rem;
 }
 
-#avatar-submit {
+.paragraph-button {
   padding: 1rem;
   cursor: pointer;
   font-weight: bold;
@@ -152,6 +151,9 @@ h2 {
   text-align: center;
   border-radius: 1rem;
   color: rgb(19, 46, 37);
+  width: fit-content;
+  margin: auto;
+  margin-top: 1rem;
 }
 
 #avatar-submit:hover {
@@ -175,6 +177,10 @@ th {
 td {
   padding: 5px;
   border: 1px solid;
+}
+
+#order-select {
+  margin-top: 1rem;
 }
 
 

@@ -42,8 +42,7 @@ const updateUserInfo = async (req) => {
     for (const [key, value] of Object.entries(req.body)){
       const sql = `UPDATE users SET ${key} = ? WHERE username = ?`;
       const data = [value, req.params.name];
-      const rows = await promisePool.execute(sql, data);
-      console.log(rows, 'rows')
+      const rows = await promisePool.execute(sql, data);s
       if (rows[0].affectedRows === 0){
         return false
       }
@@ -73,11 +72,25 @@ const getOrders = async () => {
               INNER JOIN join_orders ON join_orders.burger_id = burgers.ID 
               INNER JOIN order_history ON order_history.Order_id = join_orders.order_id 
               INNER JOIN users ON users.ID = order_history.User_id 
-              WHERE NOT STATUS = 'Done'`;
+              WHERE NOT order_history.Status = 'Done'`;
   const rows = await promisePool.execute(sql);
   return rows[0];
 }
 
+const updateOrderStatus = async (req) => {
+  console.log(req.body)
+  req.body.orders.forEach(async order => {
+    const sql = `UPDATE order_history SET Status = ? WHERE Order_id = ?`
+    const data = [req.body.status, order];
+    const rows = await promisePool.execute(sql, data);
+    if (rows[0].affectedRows === 0){
+      return false
+    }
+  });
+  return true;
+}
 
 
-export { getUserByName, addUser, updateAvatarFilename, updateUserInfo, getOrderHistory, getOrders };
+
+
+export { getUserByName, addUser, updateAvatarFilename, updateUserInfo, getOrderHistory, getOrders, updateOrderStatus };

@@ -1,4 +1,4 @@
-import { getUserByName, addUser, updateAvatarFilename, updateUserInfo, getOrderHistory, getOrders } from "../models/user-model.js";
+import { getUserByName, addUser, updateAvatarFilename, updateUserInfo, getOrderHistory, getOrders, updateOrderStatus } from "../models/user-model.js";
 import bcrypt from 'bcrypt';
 
 const getUser = async (username) => {
@@ -64,4 +64,12 @@ const getOrdersByStatus = async (req, res) => {
   res.json(result);
 }
 
-export { getUser, postUser, updateAvatar, updateUser, getOrdersByName, getOrdersByStatus }
+const updateOrder = async (req, res) => {
+  const result = await updateOrderStatus(req)
+  console.log(result)
+  if (result) {
+    res.sendStatus(200);
+  }
+}
+
+export { getUser, postUser, updateAvatar, updateUser, getOrdersByName, getOrdersByStatus, updateOrder }

@@ -276,7 +276,6 @@ document.getElementById('frontpage-button').addEventListener('click', () => {
 const populateOrderHistory = async (username) => {
   const response = await fetch(`http://127.0.0.1:3000/api/v1/users/orders/${username}`);
   const json = await response.json();
-  console.log(json, 'order history');
   json.sort((a, b) => a.order_id - b.order_id);
   json.forEach(order => {
     const tr = document.createElement('tr');
@@ -286,21 +285,79 @@ const populateOrderHistory = async (username) => {
   });
 };
 
+const activeOrderHandling = {
+  orders: [],
+};
 
 const populateActiveOrders = async () => {
   const response = await fetch(`http://127.0.0.1:3000/api/v1/users/admin/orders/active`);
   const json = await response.json();
-  console.log(json, 'active orders');
+  console.log(json);
   json.forEach(order => {
     const tr = document.createElement('tr');
-    tr.innerHTML = `<td>${order.name}</td><td>${order.quantity}</td>
+    tr.innerHTML = `<td>${order.order_id}</td><td>${order.name}</td><td>${order.quantity}</td>
                     <td>${order.Firstname}</td><td>${order.Lastname}</td>
                     <td>${order.Address}</td><td>${order.phone_number}</td>
                     <td>${order.Date}</td><td>${order.Status}</td>`;
+    tr.setAttribute('class', 'active')
+    tr.addEventListener('click', () => {
+      const clickedOrderId = order.order_id;
+      console.log('click')
+      if (!activeOrderHandling.orders.includes(clickedOrderId)){
+        activeOrderHandling.orders.push(order.order_id);
+      }
+
+      // Löytyykö siistimpää tapaa muuttaa taustan väriä?
+
+      document.querySelectorAll('tr.active').forEach(tr => {
+        const tdContent = tr.querySelector('td:nth-child(1)').textContent.trim()
+          if (Number(tdContent) === clickedOrderId) {
+            if (tr.style.backgroundColor === 'rgb(110, 233, 192)') {
+              tr.style.backgroundColor = '#fdf8f1';
+              const index = activeOrderHandling.orders.indexOf(Number(tdContent));
+              if (index > -1) { 
+                activeOrderHandling.orders.splice(index, 1); 
+              }
+              return
+            }
+            tr.style.backgroundColor = 'rgb(110, 233, 192)';
+          }
+      });
+    });
     activeOrders.append(tr);
     // Tilauksen kokonaishinta mukaan?
   });
 }
+
+const updateOrderStatus = async () => {
+  const updatedStatus = document.getElementById('order-select').value;
+  const orders = activeOrderHandling.orders;
+  const data = {
+    status: updatedStatus,
+    orders: orders,
+  }
+  const options = {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  };
+  const response = await fetch(`http://127.0.0.1:3000/api/v1/users/admin/orders/active`, options)
+  console.log(response);
+  if (response.ok) {
+    alert('Success.')
+    console.log('OK');
+  }
+}
+
+document.getElementById('update-order').addEventListener('click', async () => {
+  await updateOrderStatus();
+  while (activeOrders.rows.length > 1) {
+    activeOrders.deleteRow(1);
+  }
+  populateActiveOrders();
+})
 
 populateOrderHistory(user.username);
 populateActiveOrders();

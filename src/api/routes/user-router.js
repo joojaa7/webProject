@@ -1,5 +1,5 @@
 import express from 'express';
-import { getOrdersByName, getOrdersByStatus, getUser, postUser, updateAvatar, updateUser } from "../controllers/user-controller.js";
+import { getOrdersByName, getOrdersByStatus, getUser, postUser, updateAvatar, updateOrder, updateUser } from "../controllers/user-controller.js";
 import multer from 'multer';
 
 const userRouter = express.Router();
@@ -70,8 +70,11 @@ userRouter.route('/orders/:name')
 
   userRouter.route('/admin/orders/active')
   .get(
-    getOrdersByStatus
-  )
+      getOrdersByStatus
+    )
+  .put(
+      updateOrder
+    )
 
 
 export default userRouter;

@@ -109,7 +109,7 @@
                 name="file"
                 accept="image/*"
               />
-              <p id="avatar-submit">Submit</p>
+              <p id="avatar-submit" class="paragraph-button">Submit</p>
               <!--<button type="submit" id="avatar-submit">Upload</button>-->
             </form>
           </div>
@@ -201,16 +201,22 @@
           <div id="active-orders">
             <table id="active-table">
               <tr>
+                <th>ID</th>
                 <th>Name</th>
                 <th>Quantity</th>
                 <th>Firstname</th>
                 <th>Lastname</th>
                 <th>Address</th>
                 <th>Phone number</th>
-                <th>Status</th>
                 <th>Date</th>
+                <th>Status</th>
               </tr>
             </table>
+            <select id="order-select">
+              <option value="Doing">Doing</option>
+              <option value="Done">Done</option>
+            </select>
+            <p id="update-order" class="paragraph-button">Apply</p>
           </div>
         </div>
 
