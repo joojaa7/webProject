@@ -28,33 +28,36 @@ const ShoppingCart = {
   },
 
   saveCart() {
-    localStorage.setItem("shoppingCart", JSON.stringify(this.items));
+    try {
+      localStorage.setItem("shoppingCart", JSON.stringify(this.items));
+    } catch (error) {
+      console.error("Error saving cart to localStorage:", error);
+    }
   },
 
   loadCart() {
-    this.items = JSON.parse(localStorage.getItem("shoppingCart")) || [];
+    try {
+      const cartData = localStorage.getItem("shoppingCart");
+      this.items = cartData ? JSON.parse(cartData) : [];
+    } catch (error) {
+      console.error("Error loading cart from localStorage:", error);
+    }
   },
 
   updateCartDisplay() {
     const cartItemsElement = document.getElementById("cart-items");
-    //cartItemsElement.innerHTML = ""; // Clear existing items
+    cartItemsElement.innerHTML = ""; // Clear existing items
 
     this.items.forEach((item) => {
       const itemElement = document.createElement("div");
       itemElement.className = "cart-item";
-      console.log(item)
-      // Item display
-      // const itemInfo = document.createElement("span");
-      // itemInfo.textContent = `Burger ID: ${item.id}, Name: ${
-      //   item.name
-      // }, Price: ${item.price.toFixed(2)} €`;
 
+      // Item display
       const itemInfo = document.createElement("span");
-      itemInfo.setAttribute('class', 'item-paragraph-span');
-      const itemName = document.createElement('p');
-      const itemPrice = document.createElement('p');
-      itemName.setAttribute('class', 'item-paragraph');
-      itemPrice.setAttribute('class', 'item-paragraph');
+      const itemName = document.createElement("p");
+      const itemPrice = document.createElement("p");
+      itemName.setAttribute("class", "item-paragraph");
+      itemPrice.setAttribute("class", "item-paragraph");
       itemName.textContent = `${item.name}`;
       itemPrice.textContent = `${item.price.toFixed(2)} €`;
       itemInfo.append(itemName);

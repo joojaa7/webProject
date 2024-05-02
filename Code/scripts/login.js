@@ -2,8 +2,8 @@
 import { hamburgersUrl, menusUrl } from "./variables.js";
 
 let user = JSON.parse(localStorage.getItem("user"));
-const avatar = document.getElementById('user-avatar');
-avatar.src = user.avatar ? '../' + user.avatar : '../default.jpg'
+const avatar = document.getElementById("user-avatar");
+avatar.src = user.avatar ? "../" + user.avatar : "../default.jpg";
 console.log(user);
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -38,12 +38,13 @@ const fetchBurgers = async () => {
   try {
     const response = await fetch(hamburgersUrl);
     if (!response.ok) {
-      throw new Error("Network response was not ok");
+      throw new Error("Failed to fetch burgers. Please try again later.");
     }
     const burgers = await response.json();
     populateBurgers(burgers);
   } catch (error) {
     console.error("Error fetching burgers:", error);
+    alert("Error fetching burgers: " + error.message);
   }
 };
 
@@ -74,7 +75,6 @@ function updateOptionsInput(contentId) {
     currentVisibleContent = null;
   }
 }
-
 async function addBurger(form) {
   const formData = new FormData(form);
   console.log("formData:", formData.entries());
@@ -82,7 +82,7 @@ async function addBurger(form) {
   try {
     const response = await fetch(hamburgersUrl, {
       method: "POST",
-      body: formData, // FormData object automatically sets the Content-Type to 'multipart/form-data'
+      body: formData,
     });
 
     if (response.ok) {
@@ -97,17 +97,10 @@ async function addBurger(form) {
     alert("Error adding burger: " + error.message);
   }
 }
-
 const addMenu = async () => {
   const burger = document.getElementById("menu-burger").value;
-  console.log("burger", burger); // logs burger id (number)
-
-  const date = document.getElementById("menu-date").value; // Date format: YYYY-MM-DD
-  console.log("date", date); // logs YYYY-MM-DD
-
+  const date = document.getElementById("menu-date").value;
   const formattedDate = convertDateFormat(date);
-  console.log("formattedDate", formattedDate); // logs DD.MM.YYYY
-
   const data = { burger_id: burger, date: formattedDate };
 
   try {
@@ -190,7 +183,7 @@ const adminFormMenuField = document.getElementById(
 // Initial display check based on selector's default value
 // adminSection.style.display = roleSelector.value === "admin" ? "block" : "none";
 
-adminSection.style.display = user.role === 'Admin' ? 'block' : 'none';
+adminSection.style.display = user.role === "Admin" ? "block" : "none";
 
 document
   .getElementById("avatar-submit")
@@ -222,48 +215,53 @@ document
       const json = await response.json();
       inputForm.reset();
       if (response.ok) {
-        console.log(json)
+        console.log(json);
         console.log("OK");
         userData.avatar = json.avatar;
         localStorage.setItem("user", JSON.stringify(userData));
-        document.getElementById('user-avatar').src = '../' + json.avatar;
+        document.getElementById("user-avatar").src = "../" + json.avatar;
       } else {
         alert("Log in required.");
       }
     }
   });
 
-document.getElementById('submit-userinfo-update').addEventListener('click', async (e) => {
-  e.preventDefault();
-  const updatedPhone = document.getElementById('phone-number').value;
-  const updatedEmail = document.getElementById('email').value;
-  const updatedAddress = document.getElementById('address').value;
-  const updatedCard = document.getElementById('Cardnumber').value;
-  const userName = JSON.parse(localStorage.getItem('user')).username;
+document
+  .getElementById("submit-userinfo-update")
+  .addEventListener("click", async (e) => {
+    e.preventDefault();
+    const updatedPhone = document.getElementById("phone-number").value;
+    const updatedEmail = document.getElementById("email").value;
+    const updatedAddress = document.getElementById("address").value;
+    const updatedCard = document.getElementById("Cardnumber").value;
+    const userName = JSON.parse(localStorage.getItem("user")).username;
 
-  const updateUser = {
-    phone_number: updatedPhone ? updatedPhone : undefined,
-    email: updatedEmail ? updatedEmail : undefined,
-    Address: updatedAddress ? updatedAddress : undefined,
-    Cardnumber: updatedCard ? updatedCard : undefined,
-  };
+    const updateUser = {
+      phone_number: updatedPhone ? updatedPhone : undefined,
+      email: updatedEmail ? updatedEmail : undefined,
+      Address: updatedAddress ? updatedAddress : undefined,
+      Cardnumber: updatedCard ? updatedCard : undefined,
+    };
 
-  Object.keys(updateUser).forEach(key => updateUser[key] === undefined && delete updateUser[key]);  // Poistaa tyhjät ominaisuudet
+    Object.keys(updateUser).forEach(
+      (key) => updateUser[key] === undefined && delete updateUser[key]
+    ); // Poistaa tyhjät ominaisuudet
 
-  const options = {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(updateUser),
-  };
+    const options = {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updateUser),
+    };
 
-  const response = await fetch(`http://127.0.0.1:3000/api/v1/users/${userName}`, options)
-  console.log(response)
-  
+    const response = await fetch(
+      `http://127.0.0.1:3000/api/v1/users/${userName}`,
+      options
+    );
+    console.log(response);
+  });
+
+document.getElementById("frontpage-button").addEventListener("click", () => {
+  window.location = "index.html";
 });
-
-
-document.getElementById('frontpage-button').addEventListener('click', () => {
-  window.location = 'index.html';
-})

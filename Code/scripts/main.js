@@ -9,41 +9,43 @@ const loggedElement = document.getElementById("logged");
 let user = JSON.parse(localStorage.getItem("user"));
 const avatar = document.getElementById("avatar");
 
-// En tiedä tarvitaanko, kun script tagissa on defer. Kokeilin ilman ja toimi.
 document.addEventListener("DOMContentLoaded", async () => {
-  setWeekDates();
-  ShoppingCart.loadCart();
-  ShoppingCart.updateCartDisplay();
-  populateWeeklyMenu();
+  try {
+    setWeekDates();
+    ShoppingCart.loadCart();
+    ShoppingCart.updateCartDisplay();
+    populateWeeklyMenu();
+  } catch (error) {
+    console.error("Error in DOMContentLoaded event:", error);
+  }
 });
 
 function setWeekDates() {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  const dayOfWeek = today.getDay(); // Get current day of week as a number (0-6, where 0 is Sunday)
+  const dayOfWeek = today.getDay();
 
   const currentWeek = Array.from({ length: 7 }).map((_, i) => {
     const day = new Date(today);
-    day.setDate(today.getDate() - dayOfWeek + i + 1); // Adjust days to align with week start from Monday
+    day.setDate(today.getDate() - dayOfWeek + i + 1);
     return day;
   });
 
   currentWeek.forEach((date, index) => {
     const dayElement = document.getElementById(`day${index}`);
-    dayElement.textContent = formatDate(date); // Update textContent with formatted date
+    dayElement.textContent = formatDate(date);
     if (date.getTime() === today.getTime()) {
-      dayElement.classList.add("today"); // Add 'today' class if it's the current date
+      dayElement.classList.add("today");
     } else {
-      dayElement.classList.remove("today"); // Remove class if it's not today
+      dayElement.classList.remove("today");
     }
   });
 }
 
 function formatDate(date) {
-  // Pad the month and the day with '0' if they are less than 10
   const day = ("0" + date.getDate()).slice(-2);
-  const month = ("0" + (date.getMonth() + 1)).slice(-2); // +1 because getMonth() returns 0-11
-  return `${day}.${month}.`; // Returns 'DD.MM.'
+  const month = ("0" + (date.getMonth() + 1)).slice(-2);
+  return `${day}.${month}.`;
 }
 
 async function populateWeeklyMenu() {
@@ -66,20 +68,21 @@ async function populateWeeklyMenu() {
     "menu-sunday",
   ];
 
-  days.forEach(async (day, index) => {
-    const dayElement = document.getElementById(`day${index}`);
-    const formattedDate = dayElement.textContent; // Now contains the formatted date from setWeekDates
-    const year = new Date().getFullYear();
-
+  for (let i = 0; i < days.length; i++) {
     try {
+      const day = days[i];
+      const dayElement = document.getElementById(`day${i}`);
+      const formattedDate = dayElement.textContent;
+      const year = new Date().getFullYear();
+
       const burgerId = await fetchMenuByDate(formattedDate + year);
       if (burgerId) {
         const burgerDetails = await fetchBurgerByID(burgerId);
-        updateWeeklyMenuDisplay(burgerDetails, day, burgerId, dayIds[index]);
+        updateWeeklyMenuDisplay(burgerDetails, day, burgerId, dayIds[i]);
       } else {
         console.log(`No burger found for ${day}`);
         document
-          .getElementById(dayIds[index])
+          .getElementById(dayIds[i])
           .querySelector(
             ".item_description"
           ).innerHTML = `<p>No menu available for ${day}.</p>`;
@@ -87,12 +90,12 @@ async function populateWeeklyMenu() {
     } catch (error) {
       console.error(`Error fetching menu for ${day}:`, error);
       document
-        .getElementById(dayIds[index])
+        .getElementById(dayIds[i])
         .querySelector(
           ".item_description"
         ).innerHTML = `<p>Error loading menu for ${day}.</p>`;
     }
-  });
+  }
 }
 
 async function updateWeeklyMenuDisplay(burger, day, burgerId, dayId) {
@@ -103,15 +106,12 @@ async function updateWeeklyMenuDisplay(burger, day, burgerId, dayId) {
     if (!response.ok) throw new Error("Failed to fetch allergens");
     const allergens = await response.json();
     const allergenDisplay = allergens.map((a) => a.acronym).join(", ");
-    //console.log("day:", day);
 
-    // Update image source
     menuEntry.querySelector(
       ".menu_item_image"
     ).src = `http://127.0.0.1:3000/api/v1/${burger[0].filename}`;
     menuEntry.querySelector(".menu_item_image").alt = burger[0].Name;
 
-    // Update item description
     menuEntry.querySelector(".item_description").innerHTML = `
       <p>Menu for: ${day}</p>
       <h2>${burger[0].Name}</h2>
@@ -146,15 +146,12 @@ async function updateWeeklyMenuDisplay(burger, day, burgerId, dayId) {
 
 const weekdayButtons = document.getElementsByClassName("weekday_link");
 
-// TODO: add error handling for when a burger is not found for the date
 for (let button of weekdayButtons) {
   button.addEventListener("click", async (e) => {
     const selectedDate = e.target.innerText;
     const year = new Date().getFullYear();
 
     try {
-      console.log("year", year);
-      console.log("selectedDate", selectedDate);
       const burgerId = await fetchMenuByDate(selectedDate + year);
       if (burgerId) {
         const burgerDetails = await fetchBurgerByID(burgerId);
@@ -175,7 +172,6 @@ for (let button of weekdayButtons) {
 }
 
 async function fetchMenuByDate(date) {
-  //console.log("fetchMenuByDate date", date);
   const url = `${menusUrl}${date}`;
 
   try {
@@ -184,8 +180,6 @@ async function fetchMenuByDate(date) {
       throw new Error("Failed to fetch data: " + response.statusText);
     }
     const data = await response.json();
-    //console.log("Full data response:", data);
-
     if (data.length > 0 && data[0].burger_id !== undefined) {
       return data[0].burger_id;
     } else {
@@ -242,7 +236,6 @@ async function updateMenuDisplay(burger, date, burgerId) {
   menuItems
     .querySelector(".add-to-cart-btn")
     .addEventListener("click", function (e) {
-      // This will directly retrieve the burger object from the button's dataset
       const burger = JSON.parse(e.target.dataset.burger);
       console.log("burger data:", burger);
       ShoppingCart.addItem({
@@ -254,19 +247,17 @@ async function updateMenuDisplay(burger, date, burgerId) {
     });
 }
 
-// Kirjautumisen näkymä
 document.getElementById("login").addEventListener("click", function () {
   var loginForm = document.getElementById("loginForm");
   var registerForm = document.getElementById("registerForm");
   if (loginForm.style.display === "none" || loginForm.style.display === "") {
     loginForm.style.display = "block";
-    registerForm.style.display = "none"; // Hide the register form if login form is shown
+    registerForm.style.display = "none";
   } else {
     loginForm.style.display = "none";
   }
 });
 
-// Rekisteröinti näkymä
 document.getElementById("register").addEventListener("click", function () {
   var registerForm = document.getElementById("registerForm");
   var loginForm = document.getElementById("loginForm");
@@ -275,19 +266,17 @@ document.getElementById("register").addEventListener("click", function () {
     registerForm.style.display === ""
   ) {
     registerForm.style.display = "block";
-    loginForm.style.display = "none"; // Hide the login form if register form is shown
+    loginForm.style.display = "none";
   } else {
     registerForm.style.display = "none";
   }
 });
 
-// Kirjaudu sisään.
-
 document.getElementById("login-apply").addEventListener("click", async (e) => {
   const loginForm = document.getElementById("loginForm");
   const name = document.getElementById("loginUsername").value;
   const pw = document.getElementById("loginPassword").value;
-  console.log(name, pw);
+
   const loginUser = {
     username: name,
     password: pw,
@@ -299,33 +288,34 @@ document.getElementById("login-apply").addEventListener("click", async (e) => {
     },
     body: JSON.stringify(loginUser),
   };
-  const response = await fetch("http://127.0.0.1:3000/api/v1/auth/", options);
-  console.log(response);
-  const json = await response.json();
-  if (!json.user) {
-    alert(json.error.message);
-  } else {
-    localStorage.setItem("token", json.token);
-    localStorage.setItem("user", JSON.stringify(json.user));
-    loginForm.style.display = "none";
-    user = JSON.parse(localStorage.getItem("user"));
-    avatar.src = user.avatar ? "../" + user.avatar : "../default.jpg";
-    toggleLogin(true);
+  try {
+    const response = await fetch("http://127.0.0.1:3000/api/v1/auth/", options);
+    const json = await response.json();
+    if (!json.user) {
+      alert(json.error.message);
+    } else {
+      localStorage.setItem("token", json.token);
+      localStorage.setItem("user", JSON.stringify(json.user));
+      loginForm.style.display = "none";
+      user = JSON.parse(localStorage.getItem("user"));
+      avatar.src = user.avatar ? "../" + user.avatar : "../default.jpg";
+      toggleLogin(true);
+    }
+  } catch (error) {
+    console.error("Error logging in:", error);
+    alert("Error logging in: " + error.message);
   }
 });
-
-// Kirjaudu ulos
 
 document.getElementById("logout-button").addEventListener("click", () => {
   localStorage.removeItem("user");
   localStorage.removeItem("token");
-  localStorage.removeItem('shoppingCart');
-  document.getElementById("cart-items").innerHTML = '';
-  document.getElementById('total').innerHTML = 'Total: 0,00€';
+  localStorage.removeItem("shoppingCart");
+  document.getElementById("cart-items").innerHTML = "";
+  document.getElementById("total").innerHTML = "Total: 0,00€";
   toggleLogin(false);
 });
 
-// Rekisteröinti fetch
 document
   .getElementById("register-submit-btn")
   .addEventListener("click", async (e) => {
@@ -355,50 +345,52 @@ document
     formData.append("address", address);
     formData.append("email", email);
     formData.append("avatar", avatar);
-    console.log(formData);
+
     const options = {
       method: "POST",
       body: formData,
     };
-    console.log(options);
-    const response = await fetch(
-      "http://127.0.0.1:3000/api/v1/users/register",
-      options
-    );
-    console.log(response);
-
-    // Login if registrartion successful
-
-    if (response.ok) {
-      console.log('response OK')
-      registerForm.style.display = "none";
-      const loginUser = {
-        username: username,
-        password: password,
+    try {
+      const response = await fetch(
+        "http://127.0.0.1:3000/api/v1/users/register",
+        options
+      );
+      if (response.ok) {
+        console.log("response OK");
+        registerForm.style.display = "none";
+        const loginUser = {
+          username: username,
+          password: password,
+        };
+        const options = {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(loginUser),
+        };
+        const response = await fetch(
+          "http://127.0.0.1:3000/api/v1/auth/",
+          options
+        );
+        const json = await response.json();
+        if (!json.user) {
+          alert(json.error.message);
+        } else {
+          localStorage.setItem("token", json.token);
+          localStorage.setItem("user", JSON.stringify(json.user));
+          loginForm.style.display = "none";
+          user = JSON.parse(localStorage.getItem("user"));
+          document.getElementById("avatar").src = user.avatar
+            ? "../" + user.avatar
+            : "../default.jpg";
+          toggleLogin(true);
+        }
       }
-      const options = {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(loginUser),
-      };
-      const response = await fetch("http://127.0.0.1:3000/api/v1/auth/", options);
-      console.log(response);
-      const json = await response.json();
-      if (!json.user) {
-        alert(json.error.message);
-      } else {
-        localStorage.setItem("token", json.token);
-        localStorage.setItem("user", JSON.stringify(json.user));
-        loginForm.style.display = "none";
-        user = JSON.parse(localStorage.getItem("user"));
-        document.getElementById("avatar").src = user.avatar ? "../" + user.avatar : "../default.jpg";
-        toggleLogin(true);
-      }
-
+    } catch (error) {
+      console.error("Error registering user:", error);
+      alert("Error registering user: " + error.message);
     }
-    
   });
 
 const toggleLogin = (logged) => {
@@ -407,16 +399,12 @@ const toggleLogin = (logged) => {
   avatar.src = logged ? "../" + user.avatar : "../default.jpg";
 };
 
-//  Siirtyy profiiliin
-
 document.getElementById("profile-button").addEventListener("click", () => {
   window.location = "login.html";
 });
 
-// IIFE suoritetaan aina ku sivusto ladataan.
-
 (async () => {
-  console.log('IIFE')
+  console.log("IIFE");
   if (localStorage.getItem("token") && localStorage.getItem("user")) {
     try {
       const options = {
