@@ -83,6 +83,10 @@
                     ><i class="fa-solid fa-burger"></i> Update menus</a
                   >
                 </li>
+                <li>
+                  <a href="#" id="admin-order">
+                    <i class="fa-regular fa-clock"></i> Active orders</a>
+                </li>
                 <!--
                 <li>
                   <a href="#" id="admin_update_users-link"
@@ -177,20 +181,38 @@
             class="form-content"
             style="display: none"
           >
-            <h3>Order history here</h3>
-            <form id="order-history-form" class="form">
-              <div class="form-group">
-                <label for="order-id">Order ID:</label>
-                <input
-                  type="text"
-                  id="order-id"
-                  name="order-id"
-                  placeholder="Enter your order ID"
-                  required
-                />
-              </div>
-            </form>
+            <div id="order-history">
+              <table id="history-table">
+                <tr>
+                  <th>Name</th>
+                  <th>Quantity</th>
+                  <th>Date</th>
+                  <th>Status</th>
+                </tr>
+              </table>
+            </div>
           </div>
+
+          <div
+          id="active-order-content"
+          class="form-content"
+          style="display: none"
+        >
+          <div id="active-orders">
+            <table id="active-table">
+              <tr>
+                <th>Name</th>
+                <th>Quantity</th>
+                <th>Firstname</th>
+                <th>Lastname</th>
+                <th>Address</th>
+                <th>Phone number</th>
+                <th>Status</th>
+                <th>Date</th>
+              </tr>
+            </table>
+          </div>
+        </div>
 
           <div id="bonus-content" class="form-content" style="display: none">
             <h3>Details about your personal bonus system</h3>

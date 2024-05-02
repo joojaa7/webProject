@@ -1,6 +1,9 @@
 "use strict";
 import { hamburgersUrl, menusUrl } from "./variables.js";
 
+
+const orderHistory = document.getElementById('history-table');
+const activeOrders = document.getElementById('active-table');
 let user = JSON.parse(localStorage.getItem("user"));
 const avatar = document.getElementById('user-avatar');
 avatar.src = user.avatar ? '../' + user.avatar : '../default.jpg'
@@ -30,6 +33,7 @@ const linksToContentMap = {
   "bonus-link": "bonus-content",
   "admin_update_menu-link": "admin-update-menu-content",
   "admin_update_users-link": "admin-update-users-content",
+  'admin-order': 'active-order-content',
 };
 
 // TODO: add functionality to add burger to database
@@ -267,3 +271,36 @@ document.getElementById('submit-userinfo-update').addEventListener('click', asyn
 document.getElementById('frontpage-button').addEventListener('click', () => {
   window.location = 'index.html';
 })
+
+
+const populateOrderHistory = async (username) => {
+  const response = await fetch(`http://127.0.0.1:3000/api/v1/users/orders/${username}`);
+  const json = await response.json();
+  console.log(json, 'order history');
+  json.sort((a, b) => a.order_id - b.order_id);
+  json.forEach(order => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${order.name}</td><td>${order.quantity}</td><td>${order.Date}</td><td>${order.Status}</td>`
+    orderHistory.append(tr);
+    // Tilauksen kokonaishinta mukaan?
+  });
+};
+
+
+const populateActiveOrders = async () => {
+  const response = await fetch(`http://127.0.0.1:3000/api/v1/users/admin/orders/active`);
+  const json = await response.json();
+  console.log(json, 'active orders');
+  json.forEach(order => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${order.name}</td><td>${order.quantity}</td>
+                    <td>${order.Firstname}</td><td>${order.Lastname}</td>
+                    <td>${order.Address}</td><td>${order.phone_number}</td>
+                    <td>${order.Date}</td><td>${order.Status}</td>`;
+    activeOrders.append(tr);
+    // Tilauksen kokonaishinta mukaan?
+  });
+}
+
+populateOrderHistory(user.username);
+populateActiveOrders();

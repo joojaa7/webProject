@@ -157,6 +157,25 @@ h2 {
 #avatar-submit:hover {
   background-color: rgb(192, 226, 215);
 }
+table {
+  margin: auto;
+  border: 1px solid;
+}
+
+table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+th {
+  font-size: 24px;
+  padding: 5px;
+  border: 1px solid;
+}
+
+td {
+  padding: 5px;
+  border: 1px solid;
+}
 
 
 @media (max-width: 600px) {

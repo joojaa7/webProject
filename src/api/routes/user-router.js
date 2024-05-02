@@ -1,5 +1,5 @@
 import express from 'express';
-import { getUser, postUser, updateAvatar, updateUser } from "../controllers/user-controller.js";
+import { getOrdersByName, getOrdersByStatus, getUser, postUser, updateAvatar, updateUser } from "../controllers/user-controller.js";
 import multer from 'multer';
 
 const userRouter = express.Router();
@@ -62,6 +62,16 @@ userRouter
     upload.single('file'),
     updateAvatar
 )
+
+userRouter.route('/orders/:name')
+  .get(
+    getOrdersByName,
+  )
+
+  userRouter.route('/admin/orders/active')
+  .get(
+    getOrdersByStatus
+  )
 
 
 export default userRouter;
