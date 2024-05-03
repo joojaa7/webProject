@@ -336,6 +336,7 @@ async function updateMenuDisplay(burger, date, burgerId) {
         price: burger.Price,
         quantity: 1,
       });
+      console.log(ShoppingCart.cartKey());
     });
 }
 
