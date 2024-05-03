@@ -44,6 +44,7 @@ document.querySelector(".close-button").addEventListener("click", function () {
 document
   .getElementById("confirm-order-button")
   .addEventListener("click", function () {
+    // send order to backend
     console.log("Order confirmed!");
     ShoppingCart.clearCart(); // Clear the cart if needed
     document.getElementById("checkout-modal").style.display = "none";
@@ -62,9 +63,17 @@ function updateButtonVisibility() {
 }
 
 function populateModalCart() {
+  const user = JSON.parse(localStorage.getItem("user"));
   const cartItems = ShoppingCart.items;
   const modalCartItems = document.getElementById("modal-cart-items");
   modalCartItems.innerHTML = ""; // Clear previous items
+
+  document.getElementById("modal-user-name").textContent =
+    user.firstname + " " + user.lastname || "N/A";
+  document.getElementById("modal-user-address").textContent =
+    user.address || "N/A";
+  document.getElementById("modal-user-phone").textContent = user.phone || "N/A";
+  document.getElementById("modal-user-email").textContent = user.email || "N/A";
 
   cartItems.forEach((item) => {
     const li = document.createElement("li");
@@ -418,6 +427,14 @@ document.getElementById("login-apply").addEventListener("click", async (e) => {
   } else {
     localStorage.setItem("token", json.token);
     localStorage.setItem("user", JSON.stringify(json.user));
+    localStorage.setItem(
+      "userName",
+      json.user.firstname + " " + json.user.lastname
+    );
+    localStorage.setItem("userAddress", json.user.address);
+    localStorage.setItem("userPhone", json.user.phone.toString());
+    localStorage.setItem("userEmail", json.user.email);
+
     ShoppingCart.setUserId(json.user.username);
 
     loginForm.style.display = "none";
@@ -435,7 +452,6 @@ document.getElementById("logout-button").addEventListener("click", () => {
   ShoppingCart.setUserId(null);
   //ShoppingCart.logout();
 
-  localStorage.removeItem("shoppingCart");
   document.getElementById("cart-items").innerHTML = "";
   document.getElementById("cart-total").innerHTML = "Total: 0,00€";
   document.getElementById("cart-total").innerHTML = "Total: 0,00€";
