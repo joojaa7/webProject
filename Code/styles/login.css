@@ -138,7 +138,6 @@ h2 {
 }
 
 #submit-userinfo-update {
-  width: fit-content;
   margin: auto;
 }
 
@@ -146,6 +145,19 @@ h2 {
 #avatar-file,
 #avatar-submit,
 #avatar-label {
+  margin: auto;
+  margin-top: 1rem;
+}
+
+.paragraph-button {
+  padding: 1rem;
+  cursor: pointer;
+  font-weight: bold;
+  background-color: rgb(75, 119, 104);
+  text-align: center;
+  border-radius: 1rem;
+  color: rgb(19, 46, 37);
+  width: fit-content;
   margin: auto;
   margin-top: 1rem;
 }
@@ -162,6 +174,29 @@ h2 {
 
 #avatar-submit:hover {
   background-color: rgb(192, 226, 215);
+}
+table {
+  margin: auto;
+  border: 1px solid;
+}
+
+table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+th {
+  font-size: 24px;
+  padding: 5px;
+  border: 1px solid;
+}
+
+td {
+  padding: 5px;
+  border: 1px solid;
+}
+
+#order-select {
+  margin-top: 1rem;
 }
 
 @media (max-width: 600px) {

@@ -79,13 +79,14 @@
                   >
                 </li>
                 <li>
-                  <a href="#" id="admin_update_menu-link"
-                    ><i class="fa-solid fa-burger"></i> Update menus</a
+                  <a href="#" id="reservations-link"
+                    ><i class="fas fa-user-shield"></i> Table reservations
+                    embedded</a
                   >
                 </li>
                 <li>
-                  <a href="#" id="admin_special_offers-link"
-                    ><i class="fa-solid fa-clipboard-list"></i> Specials</a
+                  <a href="#" id="admin_update_menu-link"
+                    ><i class="fa-solid fa-burger"></i> Update menus</a
                   >
                 </li>
                 <!--
@@ -95,6 +96,16 @@
                   >
                 </li>
                 -->
+                <li>
+                  <a href="#" id="admin-order">
+                    <i class="fa-regular fa-clock"></i> Active orders</a
+                  >
+                </li>
+                <li>
+                  <a href="#" id="admin_special_offers-link"
+                    ><i class="fa-solid fa-clipboard-list"></i> Specials</a
+                  >
+                </li>
               </ul>
             </div>
           </div>
@@ -112,11 +123,21 @@
                 name="file"
                 accept="image/*"
               />
-              <p id="avatar-submit">Submit</p>
+              <p id="avatar-submit" class="paragraph-button">Submit</p>
               <!--<button type="submit" id="avatar-submit">Upload</button>-->
             </form>
           </div>
-
+          <div
+            id="reservations-content"
+            class="form-content"
+            style="display: none"
+          >
+            <object
+              type="text/html"
+              data="reservations.html"
+              style="margin: 0 auto; width: 100%; height: 400px"
+            ></object>
+          </div>
           <div
             id="contact_info-content"
             class="form-content"
@@ -184,19 +205,43 @@
             class="form-content"
             style="display: none"
           >
-            <h3>Order history here</h3>
-            <form id="order-history-form" class="form">
-              <div class="form-group">
-                <label for="order-id">Order ID:</label>
-                <input
-                  type="text"
-                  id="order-id"
-                  name="order-id"
-                  placeholder="Enter your order ID"
-                  required
-                />
-              </div>
-            </form>
+            <div id="order-history">
+              <table id="history-table">
+                <tr>
+                  <th>Name</th>
+                  <th>Quantity</th>
+                  <th>Date</th>
+                  <th>Status</th>
+                </tr>
+              </table>
+            </div>
+          </div>
+
+          <div
+            id="active-order-content"
+            class="form-content"
+            style="display: none"
+          >
+            <div id="active-orders">
+              <table id="active-table">
+                <tr>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Quantity</th>
+                  <th>Firstname</th>
+                  <th>Lastname</th>
+                  <th>Address</th>
+                  <th>Phone number</th>
+                  <th>Date</th>
+                  <th>Status</th>
+                </tr>
+              </table>
+              <select id="order-select">
+                <option value="Doing">Doing</option>
+                <option value="Done">Done</option>
+              </select>
+              <p id="update-order" class="paragraph-button">Apply</p>
+            </div>
           </div>
 
           <div id="bonus-content" class="form-content" style="display: none">
