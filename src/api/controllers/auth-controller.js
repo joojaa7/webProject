@@ -22,6 +22,10 @@ const login = async (req, res) => {
   const userWithNoPassword = {
     username: loginUser.Username,
     avatar: loginUser.Filename,
+    firstname: loginUser.Firstname,
+    lastname: loginUser.Lastname,
+    address: loginUser.Address,
+    user_id: loginUser.ID,
     role: loginUser.Role
   };
 

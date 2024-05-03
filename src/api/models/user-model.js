@@ -42,7 +42,7 @@ const updateUserInfo = async (req) => {
     for (const [key, value] of Object.entries(req.body)){
       const sql = `UPDATE users SET ${key} = ? WHERE username = ?`;
       const data = [value, req.params.name];
-      const rows = await promisePool.execute(sql, data);s
+      const rows = await promisePool.execute(sql, data);
       if (rows[0].affectedRows === 0){
         return false
       }
