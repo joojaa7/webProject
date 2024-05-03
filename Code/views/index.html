@@ -27,8 +27,7 @@
 
           <div id="shopping-cart">
             <h3>Shopping Cart</h3>
-            <ul id="cart-items">
-            </ul>
+            <ul id="cart-items"></ul>
             <p id="total">Total: <span id="cart-total"></span>€</p>
             <button id="checkout-button">Checkout</button>
           </div>
@@ -117,6 +116,44 @@
             <li id="day6" class="weekday_link">Sunday</li>
           </ul>
         </div>
+        <div id="checkout-modal" class="modal" style="display: none">
+          <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h3>Confirm Your Order</h3>
+            <ul id="modal-cart-items"></ul>
+            <p>Total: <span id="modal-cart-total"></span>€</p>
+            <button id="confirm-order-button">Confirm Order</button>
+          </div>
+        </div>
+
+        <!-- Special Offers Section -->
+        <div class="special-offers-section" style="display: block">
+          <h2>Active Special Offers</h2>
+          <div class="special-offers-container">
+            <div class="special-offer" id="offer1">
+              <img src="" alt="Special Offer Image" class="offer-image" />
+              <h3 class="offer-title"></h3>
+              <p class="offer-description"></p>
+              <p class="offer-price"></p>
+              <p class="offer-dates"></p>
+            </div>
+            <div class="special-offer" id="offer2">
+              <img src="" alt="Special Offer Image" class="offer-image" />
+              <h3 class="offer-title"></h3>
+              <p class="offer-description"></p>
+              <p class="offer-price"></p>
+              <p class="offer-dates"></p>
+            </div>
+            <div class="special-offer" id="offer3">
+              <img src="" alt="Special Offer Image" class="offer-image" />
+              <h3 class="offer-title"></h3>
+              <p class="offer-description"></p>
+              <p class="offer-price"></p>
+              <p class="offer-dates"></p>
+            </div>
+          </div>
+        </div>
+
         <div class="menu_items">
           <div class="menu_entry" id="menu-monday">
             <img alt="hampurilaiset" class="menu_item_image" />

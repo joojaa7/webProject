@@ -1,5 +1,15 @@
 const ShoppingCart = {
   items: [],
+  userId: null,
+
+  setUserId(userId) {
+    this.userId = userId;
+    //this.loadCart();
+  },
+
+  cartKey() {
+    return `shoppingCart-${this.userId}`;
+  },
 
   addItem(item) {
     const existingItem = this.items.find((cartItem) => cartItem.id === item.id);
@@ -28,33 +38,31 @@ const ShoppingCart = {
   },
 
   saveCart() {
-    localStorage.setItem("shoppingCart", JSON.stringify(this.items));
+    localStorage.setItem(this.cartKey(), JSON.stringify(this.items));
   },
 
   loadCart() {
-    this.items = JSON.parse(localStorage.getItem("shoppingCart")) || [];
+    this.items = JSON.parse(localStorage.getItem(this.cartKey())) || [];
+    this.updateCartDisplay();
   },
 
   updateCartDisplay() {
     const cartItemsElement = document.getElementById("cart-items");
-    //cartItemsElement.innerHTML = ""; // Clear existing items
+
+    cartItemsElement.innerHTML = "";
+    // Clear existing items
 
     this.items.forEach((item) => {
       const itemElement = document.createElement("div");
       itemElement.className = "cart-item";
-      console.log(item)
-      // Item display
-      // const itemInfo = document.createElement("span");
-      // itemInfo.textContent = `Burger ID: ${item.id}, Name: ${
-      //   item.name
-      // }, Price: ${item.price.toFixed(2)} €`;
+      //console.log(item);
 
       const itemInfo = document.createElement("span");
-      itemInfo.setAttribute('class', 'item-paragraph-span');
-      const itemName = document.createElement('p');
-      const itemPrice = document.createElement('p');
-      itemName.setAttribute('class', 'item-paragraph');
-      itemPrice.setAttribute('class', 'item-paragraph');
+      itemInfo.setAttribute("class", "item-paragraph-span");
+      const itemName = document.createElement("p");
+      const itemPrice = document.createElement("p");
+      itemName.setAttribute("class", "item-paragraph");
+      itemPrice.setAttribute("class", "item-paragraph");
       itemName.textContent = `${item.name}`;
       itemPrice.textContent = `${item.price.toFixed(2)} €`;
       itemInfo.append(itemName);
@@ -89,6 +97,12 @@ const ShoppingCart = {
       itemElement.appendChild(quantityControl);
       cartItemsElement.appendChild(itemElement);
     });
+    console.log("attempting to update cart display..");
+    if (!document.getElementById("cart-total")) {
+      console.log("cart-total not found..");
+    } else {
+      console.log("cart-total found..");
+    }
 
     // Update total price display
     document.getElementById(

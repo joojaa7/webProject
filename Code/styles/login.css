@@ -28,7 +28,14 @@ body {
   padding: 2rem;
 }
 
-.banner {
+#add-special_offer-btn {
+  margin-bottom: 5px;
+}
+#preview-special-offer {
+  width: 100%;
+  margin: auto;
+  border: 5px rgb(84, 141, 122) solid;
+  background-color: antiquewhite;
 }
 .banner_content {
   display: flex;
@@ -134,7 +141,6 @@ h2 {
   margin: auto;
 }
 
-
 #user-avatar,
 #avatar-file,
 #avatar-submit,
@@ -154,6 +160,16 @@ h2 {
   width: fit-content;
   margin: auto;
   margin-top: 1rem;
+}
+
+#avatar-submit {
+  padding: 1rem;
+  cursor: pointer;
+  font-weight: bold;
+  background-color: rgb(75, 119, 104);
+  text-align: center;
+  border-radius: 1rem;
+  color: rgb(19, 46, 37);
 }
 
 #avatar-submit:hover {
@@ -183,7 +199,6 @@ td {
   margin-top: 1rem;
 }
 
-
 @media (max-width: 600px) {
   .content-wrapper {
     flex-direction: column;
@@ -195,8 +210,6 @@ td {
     min-height: 60vh;
   }
 
-
-  
   .sidebanner {
     width: 90vw;
     height: 35vh;

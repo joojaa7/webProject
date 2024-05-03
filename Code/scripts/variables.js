@@ -9,3 +9,4 @@ export const hamburgersUrl = "http://127.0.0.1:3000/api/v1/hamburgers/";
 export const menusUrl = "http://localhost:3000/api/v1/menus/";
 export const ingredientsUrl = "http://localhost:3000/api/v1/ingredients/";
 export const allergensUrl = "http://localhost:3000/api/v1/allergens/";
+export const specialOffersUrl = "http://localhost:3000/api/v1/special_offers/";

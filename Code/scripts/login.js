@@ -1,12 +1,11 @@
 "use strict";
-import { hamburgersUrl, menusUrl } from "./variables.js";
+import { hamburgersUrl, menusUrl, specialOffersUrl } from "./variables.js";
 
-
-const orderHistory = document.getElementById('history-table');
-const activeOrders = document.getElementById('active-table');
+const orderHistory = document.getElementById("history-table");
+const activeOrders = document.getElementById("active-table");
 let user = JSON.parse(localStorage.getItem("user"));
-const avatar = document.getElementById('user-avatar');
-avatar.src = user.avatar ? '../' + user.avatar : '../default.jpg'
+const avatar = document.getElementById("user-avatar");
+avatar.src = user.avatar ? "../" + user.avatar : "../default.jpg";
 console.log(user);
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -22,6 +21,8 @@ document.addEventListener("DOMContentLoaded", () => {
     event.preventDefault();
     await addMenu();
   });
+
+  initializeEventListeners();
 });
 
 const linksToContentMap = {
@@ -33,27 +34,42 @@ const linksToContentMap = {
   "bonus-link": "bonus-content",
   "admin_update_menu-link": "admin-update-menu-content",
   "admin_update_users-link": "admin-update-users-content",
-  'admin-order': 'active-order-content',
-  'reservations-link': 'reservations-content',
+  "admin-order": "active-order-content",
+  "reservations-link": "reservations-content",
+  "admin_special_offers-link": "admin-special-offers-content",
 };
 
 // TODO: add functionality to add burger to database
 
-const fetchBurgers = async () => {
+const fetchBurgersForMenu = async () => {
   try {
     const response = await fetch(hamburgersUrl);
     if (!response.ok) {
       throw new Error("Network response was not ok");
     }
     const burgers = await response.json();
-    populateBurgers(burgers);
+    populateBurgers(burgers, "menu-burger");
   } catch (error) {
     console.error("Error fetching burgers:", error);
   }
 };
 
-function populateBurgers(burgers) {
-  const select = document.getElementById("menu-burger");
+const fetchBurgersForSpecialOffers = async () => {
+  try {
+    const response = await fetch(hamburgersUrl);
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const burgers = await response.json();
+    populateBurgers(burgers, "special-offer-burger");
+  } catch (error) {
+    console.error("Error fetching burgers:", error);
+  }
+};
+
+function populateBurgers(burgers, selectId) {
+  const select = document.getElementById(selectId);
+  //select.innerHTML = "";
   burgers.forEach((burger) => {
     const option = document.createElement("option");
     option.value = burger.ID;
@@ -62,7 +78,100 @@ function populateBurgers(burgers) {
   });
 }
 
-const optionsInput = document.querySelector(".options-input");
+function updatePreview() {
+  const offerNameInput = document.getElementById("special-offer-name-id");
+  const offerDescriptionInput = document.getElementById(
+    "special-offer-description-id"
+  );
+  const offerPriceInput = document.getElementById("special-offer-price-id");
+  const startDateInput = document.getElementById("special-offer-start-date");
+  const endDateInput = document.getElementById("special-offer-end-date");
+  const burgerInput = document.getElementById("special-offer-burger");
+
+  document.getElementById("preview-name").textContent = offerNameInput.value;
+  document.getElementById("preview-description").textContent =
+    offerDescriptionInput.value;
+  document.getElementById(
+    "preview-price"
+  ).textContent = `${offerPriceInput.value}€`;
+  document.getElementById("preview-burger").textContent =
+    burgerInput.options[burgerInput.selectedIndex].text;
+
+  const formattedStartDate = convertDateFormat(startDateInput.value);
+  const formattedEndDate = convertDateFormat(endDateInput.value);
+  document.getElementById(
+    "preview-date"
+  ).textContent = `Tarjous voimassa: ${formattedStartDate} - ${formattedEndDate}`;
+}
+
+function handleFileSelect(event) {
+  const reader = new FileReader();
+  reader.onload = function (e) {
+    document.getElementById("preview-image").src = e.target.result;
+  };
+  reader.readAsDataURL(event.target.files[0]);
+}
+
+function initializeEventListeners() {
+  const inputs = [
+    document.getElementById("special-offer-name-id"),
+    document.getElementById("special-offer-description-id"),
+    document.getElementById("special-offer-price-id"),
+    document.getElementById("special-offer-upload-id"),
+    document.getElementById("special-offer-start-date"),
+    document.getElementById("special-offer-end-date"),
+    document.getElementById("special-offer-burger"),
+  ];
+
+  inputs.forEach((input) => {
+    const eventType = input.type === "file" ? "change" : "input";
+    input.addEventListener(eventType, updatePreview);
+  });
+
+  document
+    .getElementById("special-offer-upload-id")
+    .addEventListener("change", handleFileSelect);
+
+  const offerForm = document.getElementById("update-special_offer-form");
+  offerForm.addEventListener("submit", async function (event) {
+    event.preventDefault();
+    const formData = collectFormData(offerForm);
+    for (let [key, value] of formData.entries()) {
+      console.log(key, value);
+    }
+    if (formData) {
+      try {
+        await submitOfferData(formData);
+        alert("Offer added successfully!");
+      } catch (error) {
+        console.error("Error submitting form data:", error);
+        alert("Failed to add offer: " + error.message);
+      }
+    } else {
+      alert("Form data is missing, check your inputs.");
+    }
+  });
+}
+
+function collectFormData(form) {
+  const formData = new FormData(form);
+
+  return formData;
+}
+
+async function submitOfferData(formData) {
+  const response = await fetch(specialOffersUrl, {
+    method: "POST",
+    body: formData,
+  });
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Failed to submit form data: ${errorText}`);
+  }
+  return await response.json();
+}
+
+// const optionsInput = document.querySelector(".options-input");
 let currentVisibleContent = null; // To keep track of the currently displayed content
 
 function updateOptionsInput(contentId) {
@@ -164,38 +273,20 @@ Object.keys(linksToContentMap).forEach((linkId) => {
       //console.log("link:", link);
       //console.log("linkId:", linkId);
       if (linkId === "admin_update_menu-link") {
-        fetchBurgers();
+        fetchBurgersForMenu();
+      } else if (linkId === "admin_special_offers-link") {
+        fetchBurgersForSpecialOffers();
       }
+
       event.preventDefault(); // Prevent default anchor behavior
       updateOptionsInput(linksToContentMap[linkId]);
     });
   }
 });
 
-// DEV only: Simulate a user login
-// Role-based display logic
-const roleSelector = document.getElementById("roleSelector");
 const adminSection = document.getElementById("adminSection");
-/*const adminFormUsersField = document.getElementById(
-  "admin-update-users-content"
-);
-const adminFormMenuField = document.getElementById(
-  "admin-update-users-content"
-);*/
 
-// roleSelector.addEventListener("change", () => {
-//   adminSection.style.display =
-//     roleSelector.value === "admin" ? "block" : "none";
-//   //adminFormUsersField.style.display =
-//   //roleSelector.value === "admin" ? "block" : "none";
-//   //adminFormMenuField.style.display =
-//   //  roleSelector.value === "admin" ? "block" : "none";
-// });
-
-// Initial display check based on selector's default value
-// adminSection.style.display = roleSelector.value === "admin" ? "block" : "none";
-
-adminSection.style.display = user.role === 'Admin' ? 'block' : 'none';
+adminSection.style.display = user.role === "Admin" ? "block" : "none";
 
 document
   .getElementById("avatar-submit")
@@ -227,60 +318,66 @@ document
       const json = await response.json();
       inputForm.reset();
       if (response.ok) {
-        console.log(json)
+        console.log(json);
         console.log("OK");
         userData.avatar = json.avatar;
         localStorage.setItem("user", JSON.stringify(userData));
-        document.getElementById('user-avatar').src = '../' + json.avatar;
+        document.getElementById("user-avatar").src = "../" + json.avatar;
       } else {
         alert("Log in required.");
       }
     }
   });
 
-document.getElementById('submit-userinfo-update').addEventListener('click', async (e) => {
-  e.preventDefault();
-  const updatedPhone = document.getElementById('phone-number').value;
-  const updatedEmail = document.getElementById('email').value;
-  const updatedAddress = document.getElementById('address').value;
-  const updatedCard = document.getElementById('Cardnumber').value;
-  const userName = JSON.parse(localStorage.getItem('user')).username;
+document
+  .getElementById("submit-userinfo-update")
+  .addEventListener("click", async (e) => {
+    e.preventDefault();
+    const updatedPhone = document.getElementById("phone-number").value;
+    const updatedEmail = document.getElementById("email").value;
+    const updatedAddress = document.getElementById("address").value;
+    const updatedCard = document.getElementById("Cardnumber").value;
+    const userName = JSON.parse(localStorage.getItem("user")).username;
 
-  const updateUser = {
-    phone_number: updatedPhone ? updatedPhone : undefined,
-    email: updatedEmail ? updatedEmail : undefined,
-    Address: updatedAddress ? updatedAddress : undefined,
-    Cardnumber: updatedCard ? updatedCard : undefined,
-  };
+    const updateUser = {
+      phone_number: updatedPhone ? updatedPhone : undefined,
+      email: updatedEmail ? updatedEmail : undefined,
+      Address: updatedAddress ? updatedAddress : undefined,
+      Cardnumber: updatedCard ? updatedCard : undefined,
+    };
 
-  Object.keys(updateUser).forEach(key => updateUser[key] === undefined && delete updateUser[key]);  // Poistaa tyhjät ominaisuudet
+    Object.keys(updateUser).forEach(
+      (key) => updateUser[key] === undefined && delete updateUser[key]
+    ); // Poistaa tyhjät ominaisuudet
 
-  const options = {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(updateUser),
-  };
+    const options = {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updateUser),
+    };
 
-  const response = await fetch(`http://127.0.0.1:3000/api/v1/users/${userName}`, options)
-  console.log(response)
-  
+    const response = await fetch(
+      `http://127.0.0.1:3000/api/v1/users/${userName}`,
+      options
+    );
+    console.log(response);
+  });
+
+document.getElementById("frontpage-button").addEventListener("click", () => {
+  window.location = "index.html";
 });
 
-
-document.getElementById('frontpage-button').addEventListener('click', () => {
-  window.location = 'index.html';
-})
-
-
 const populateOrderHistory = async (username) => {
-  const response = await fetch(`http://127.0.0.1:3000/api/v1/users/orders/${username}`);
+  const response = await fetch(
+    `http://127.0.0.1:3000/api/v1/users/orders/${username}`
+  );
   const json = await response.json();
   json.sort((a, b) => a.order_id - b.order_id);
-  json.forEach(order => {
-    const tr = document.createElement('tr');
-    tr.innerHTML = `<td>${order.name}</td><td>${order.quantity}</td><td>${order.Date}</td><td>${order.Status}</td>`
+  json.forEach((order) => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td>${order.name}</td><td>${order.quantity}</td><td>${order.Date}</td><td>${order.Status}</td>`;
     orderHistory.append(tr);
     // Tilauksen kokonaishinta mukaan?
   });
@@ -291,52 +388,56 @@ const activeOrderHandling = {
 };
 
 const populateActiveOrders = async () => {
-  const response = await fetch(`http://127.0.0.1:3000/api/v1/users/admin/orders/active`);
+  const response = await fetch(
+    `http://127.0.0.1:3000/api/v1/users/admin/orders/active`
+  );
   const json = await response.json();
   console.log(json);
-  json.forEach(order => {
-    const tr = document.createElement('tr');
+  json.forEach((order) => {
+    const tr = document.createElement("tr");
     tr.innerHTML = `<td>${order.order_id}</td><td>${order.name}</td><td>${order.quantity}</td>
                     <td>${order.Firstname}</td><td>${order.Lastname}</td>
                     <td>${order.Address}</td><td>${order.phone_number}</td>
                     <td>${order.Date}</td><td>${order.Status}</td>`;
-    tr.setAttribute('class', 'active')
-    tr.addEventListener('click', () => {
+    tr.setAttribute("class", "active");
+    tr.addEventListener("click", () => {
       const clickedOrderId = order.order_id;
-      console.log('click')
-      if (!activeOrderHandling.orders.includes(clickedOrderId)){
+      console.log("click");
+      if (!activeOrderHandling.orders.includes(clickedOrderId)) {
         activeOrderHandling.orders.push(order.order_id);
       }
 
       // Löytyykö siistimpää tapaa muuttaa taustan väriä?
 
-      document.querySelectorAll('tr.active').forEach(tr => {
-        const tdContent = tr.querySelector('td:nth-child(1)').textContent.trim()
-          if (Number(tdContent) === clickedOrderId) {
-            if (tr.style.backgroundColor === 'rgb(110, 233, 192)') {
-              tr.style.backgroundColor = '#fdf8f1';
-              const index = activeOrderHandling.orders.indexOf(Number(tdContent));
-              if (index > -1) { 
-                activeOrderHandling.orders.splice(index, 1); 
-              }
-              return
+      document.querySelectorAll("tr.active").forEach((tr) => {
+        const tdContent = tr
+          .querySelector("td:nth-child(1)")
+          .textContent.trim();
+        if (Number(tdContent) === clickedOrderId) {
+          if (tr.style.backgroundColor === "rgb(110, 233, 192)") {
+            tr.style.backgroundColor = "#fdf8f1";
+            const index = activeOrderHandling.orders.indexOf(Number(tdContent));
+            if (index > -1) {
+              activeOrderHandling.orders.splice(index, 1);
             }
-            tr.style.backgroundColor = 'rgb(110, 233, 192)';
+            return;
           }
+          tr.style.backgroundColor = "rgb(110, 233, 192)";
+        }
       });
     });
     activeOrders.append(tr);
     // Tilauksen kokonaishinta mukaan?
   });
-}
+};
 
 const updateOrderStatus = async () => {
-  const updatedStatus = document.getElementById('order-select').value;
+  const updatedStatus = document.getElementById("order-select").value;
   const orders = activeOrderHandling.orders;
   const data = {
     status: updatedStatus,
     orders: orders,
-  }
+  };
   const options = {
     method: "PUT",
     headers: {
@@ -344,21 +445,24 @@ const updateOrderStatus = async () => {
     },
     body: JSON.stringify(data),
   };
-  const response = await fetch(`http://127.0.0.1:3000/api/v1/users/admin/orders/active`, options)
+  const response = await fetch(
+    `http://127.0.0.1:3000/api/v1/users/admin/orders/active`,
+    options
+  );
   console.log(response);
   if (response.ok) {
-    alert('Success.')
-    console.log('OK');
+    alert("Success.");
+    console.log("OK");
   }
-}
+};
 
-document.getElementById('update-order').addEventListener('click', async () => {
+document.getElementById("update-order").addEventListener("click", async () => {
   await updateOrderStatus();
   while (activeOrders.rows.length > 1) {
     activeOrders.deleteRow(1);
   }
   populateActiveOrders();
-})
+});
 
 populateOrderHistory(user.username);
 populateActiveOrders();
