@@ -18,7 +18,7 @@ const avatar = document.getElementById("avatar");
 document.addEventListener("DOMContentLoaded", async () => {
   setWeekDates();
   ShoppingCart.loadCart();
-  ShoppingCart.updateCartDisplay();
+  //ShoppingCart.updateCartDisplay();
   populateWeeklyMenu();
   fetchAndDisplayOffers();
 });
@@ -336,7 +336,7 @@ async function updateMenuDisplay(burger, date, burgerId) {
         price: burger.Price,
         quantity: 1,
       });
-      console.log(ShoppingCart.cartKey());
+      //console.log(ShoppingCart.cartKey());
     });
 }
 
@@ -390,12 +390,20 @@ document.getElementById("login-apply").addEventListener("click", async (e) => {
   const json = await response.json();
   console.log("Full JSON response:", json);
 
+  //console.log("shoppingcart", json.user.username);
+
   if (!json.user) {
     alert(json.error.message);
   } else {
     localStorage.setItem("token", json.token);
     localStorage.setItem("user", JSON.stringify(json.user));
-    ShoppingCart.setUserId(json.user.Username);
+    const cartUserTag = localStorage.setItem(
+      "shoppingCart user",
+      json.user.username
+    );
+
+    //console.log("ShoppingCart.userId", ShoppingCart.userId);
+    //console.log("shoppingcart", json.user.Username);
 
     loginForm.style.display = "none";
     user = JSON.parse(localStorage.getItem("user"));
@@ -414,7 +422,7 @@ document.getElementById("logout-button").addEventListener("click", () => {
 
   localStorage.removeItem("shoppingCart");
   document.getElementById("cart-items").innerHTML = "";
-  document.getElementById("total").innerHTML = "Total: 0,00€";
+  document.getElementById("cart-total").innerHTML = "Total: 0,00€";
 
   toggleLogin(false);
 });

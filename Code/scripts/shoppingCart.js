@@ -48,12 +48,14 @@ const ShoppingCart = {
 
   updateCartDisplay() {
     const cartItemsElement = document.getElementById("cart-items");
-    cartItemsElement.innerHTML = ""; // Clear existing items
+
+    cartItemsElement.innerHTML = "";
+    // Clear existing items
 
     this.items.forEach((item) => {
       const itemElement = document.createElement("div");
       itemElement.className = "cart-item";
-      console.log(item);
+      //console.log(item);
 
       const itemInfo = document.createElement("span");
       itemInfo.setAttribute("class", "item-paragraph-span");
