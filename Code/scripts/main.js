@@ -16,11 +16,18 @@ const avatar = document.getElementById("avatar");
 
 // En tiedä tarvitaanko, kun script tagissa on defer. Kokeilin ilman ja toimi.
 document.addEventListener("DOMContentLoaded", async () => {
+  const storedUser = JSON.parse(localStorage.getItem("user"));
+  if (storedUser) {
+    ShoppingCart.setUserId(storedUser.username);
+  } else {
+    ShoppingCart.setUserId(null);
+  }
   setWeekDates();
   ShoppingCart.loadCart();
   ShoppingCart.updateCartDisplay();
   populateWeeklyMenu();
   fetchAndDisplayOffers();
+  updateButtonVisibility();
 });
 
 document
@@ -41,6 +48,18 @@ document
     ShoppingCart.clearCart(); // Clear the cart if needed
     document.getElementById("checkout-modal").style.display = "none";
   });
+
+function updateButtonVisibility() {
+  const isLoggedIn = Boolean(
+    localStorage.getItem("user") && localStorage.getItem("token")
+  );
+  console.log("Updating button visibility, logged in:", isLoggedIn);
+  Array.from(document.getElementsByClassName("add-to-cart-btn")).forEach(
+    (btn) => {
+      btn.style.display = isLoggedIn ? "block" : "none";
+    }
+  );
+}
 
 function populateModalCart() {
   const cartItems = ShoppingCart.items;
@@ -164,6 +183,7 @@ async function updateWeeklyMenuDisplay(burger, day, burgerId, dayId) {
           <i class="fas fa-shopping-cart"></i> Add to Cart
       </button>
   </div>`;
+    updateButtonVisibility();
   } catch (error) {
     console.error("Error updating weekly menu display:", error);
     menuEntry.querySelector(
@@ -319,6 +339,7 @@ async function updateMenuDisplay(burger, date, burgerId) {
           <i class="fas fa-shopping-cart"></i> Add to Cart
       </button>
   </div>`;
+    updateButtonVisibility();
   } catch (error) {
     console.error("Error fetching allergens:", error);
     menuItems.innerHTML = `<p>Error loading menu details.</p>`;
@@ -336,7 +357,7 @@ async function updateMenuDisplay(burger, date, burgerId) {
         price: burger.Price,
         quantity: 1,
       });
-      console.log(ShoppingCart.cartKey());
+      //console.log(ShoppingCart.cartKey());
     });
 }
 
@@ -395,7 +416,7 @@ document.getElementById("login-apply").addEventListener("click", async (e) => {
   } else {
     localStorage.setItem("token", json.token);
     localStorage.setItem("user", JSON.stringify(json.user));
-    ShoppingCart.setUserId(json.user.Username);
+    ShoppingCart.setUserId(json.user.username);
 
     loginForm.style.display = "none";
     user = JSON.parse(localStorage.getItem("user"));
@@ -409,12 +430,12 @@ document.getElementById("login-apply").addEventListener("click", async (e) => {
 document.getElementById("logout-button").addEventListener("click", () => {
   localStorage.removeItem("user");
   localStorage.removeItem("token");
-  ShoppingCart.clearCart();
-  ShoppingCart.userId = null;
+  ShoppingCart.setUserId(null);
+  //ShoppingCart.logout();
 
   localStorage.removeItem("shoppingCart");
   document.getElementById("cart-items").innerHTML = "";
-  document.getElementById("total").innerHTML = "Total: 0,00€";
+  document.getElementById("cart-total").innerHTML = "Total: 0,00€";
 
   toggleLogin(false);
 });
@@ -499,6 +520,9 @@ document
   });
 
 const toggleLogin = (logged) => {
+  console.log("toggleLogin called with:", logged);
+  updateButtonVisibility();
+
   loginElement.style.display = logged ? "none" : "block";
   loggedElement.style.display = logged ? "block" : "none";
   avatar.src = logged ? "../" + user.avatar : "../default.jpg";

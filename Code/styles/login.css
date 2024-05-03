@@ -161,7 +161,10 @@ h2 {
   margin: auto;
   margin-top: 1rem;
 }
-
+.form-content,
+.admin-form-content {
+  border: #367b35 2px solid;
+}
 #avatar-submit {
   padding: 1rem;
   cursor: pointer;

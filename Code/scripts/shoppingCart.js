@@ -4,10 +4,10 @@ const ShoppingCart = {
 
   setUserId(userId) {
     this.userId = userId;
-    //this.loadCart();
+    this.loadCart();
   },
 
-  cartKey() {
+  getCartKey() {
     return `shoppingCart-${this.userId}`;
   },
 
@@ -38,11 +38,16 @@ const ShoppingCart = {
   },
 
   saveCart() {
-    localStorage.setItem(this.cartKey(), JSON.stringify(this.items));
+    localStorage.setItem(this.getCartKey(), JSON.stringify(this.items));
   },
 
   loadCart() {
-    this.items = JSON.parse(localStorage.getItem(this.cartKey())) || [];
+    if (this.userId) {
+      this.items = JSON.parse(localStorage.getItem(this.getCartKey())) || [];
+    } else {
+      this.items = [];
+    }
+
     this.updateCartDisplay();
   },
 
@@ -117,6 +122,7 @@ const ShoppingCart = {
 
   clearCart() {
     this.items = [];
+    localStorage.removeItem(this.getCartKey());
     this.saveCart();
     this.updateCartDisplay();
   },
