@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
   setWeekDates();
   ShoppingCart.loadCart();
-  ShoppingCart.updateCartDisplay();
+  //ShoppingCart.updateCartDisplay();
   populateWeeklyMenu();
   fetchAndDisplayOffers();
   updateButtonVisibility();
@@ -411,6 +411,8 @@ document.getElementById("login-apply").addEventListener("click", async (e) => {
   const json = await response.json();
   console.log("Full JSON response:", json);
 
+  //console.log("shoppingcart", json.user.username);
+
   if (!json.user) {
     alert(json.error.message);
   } else {
@@ -435,6 +437,7 @@ document.getElementById("logout-button").addEventListener("click", () => {
 
   localStorage.removeItem("shoppingCart");
   document.getElementById("cart-items").innerHTML = "";
+  document.getElementById("cart-total").innerHTML = "Total: 0,00€";
   document.getElementById("cart-total").innerHTML = "Total: 0,00€";
 
   toggleLogin(false);
