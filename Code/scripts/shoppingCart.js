@@ -1,7 +1,7 @@
 const ShoppingCart = {
   items: [],
   userId: null,
-
+  // modify shoppingcart to include item id
   setUserId(userId) {
     this.userId = userId;
     this.loadCart();
@@ -102,17 +102,11 @@ const ShoppingCart = {
       itemElement.appendChild(quantityControl);
       cartItemsElement.appendChild(itemElement);
     });
-    console.log("attempting to update cart display..");
-    if (!document.getElementById("cart-total")) {
-      console.log("cart-total not found..");
-    } else {
-      console.log("cart-total found..");
-    }
 
     // Update total price display
     document.getElementById(
       "cart-total"
-    ).textContent = `${this.getTotalPrice().toFixed(2)} `;
+    ).textContent = `${this.getTotalPrice().toFixed(2)} €`;
   },
 
   getTotalPrice() {

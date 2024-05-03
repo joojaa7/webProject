@@ -1,75 +1,107 @@
-import { getUserByName, addUser, updateAvatarFilename, updateUserInfo, getOrderHistory, getOrders, updateOrderStatus } from "../models/user-model.js";
-import bcrypt from 'bcrypt';
+import {
+  getUserByName,
+  addUser,
+  updateAvatarFilename,
+  updateUserInfo,
+  getOrderHistory,
+  getOrders,
+  updateOrderStatus,
+  addNewOrder,
+} from "../models/user-model.js";
+import bcrypt from "bcrypt";
+
+const postOrderController = async (req, res) => {
+  //console.log("received body:", req.body);
+  try {
+    const { user_id } = req.body;
+    //console.log("userId", user_id);
+    const newOrder = await addNewOrder(user_id);
+    res.status(201).json(newOrder);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Failed to create order.", error: error.message });
+  }
+};
 
 const getUser = async (username) => {
-  console.log(username, 'get user');
-    const user = await getUserByName(username);
-    console.log('get user', user)
-    if (user){
-        return user;
-      } else {
-        return
-      }
-}
+  console.log(username, "get user");
+  const user = await getUserByName(username);
+  console.log("get user", user);
+  if (user) {
+    return user;
+  } else {
+    return;
+  }
+};
 
 const postUser = async (req, res, next) => {
   req.body.password = bcrypt.hashSync(req.body.password, 5);
   try {
     const result = await addUser(req.body, req.file);
     if (!result) {
-      const error = new Error("Invalid or missing fields")
-      error.status = 400
+      const error = new Error("Invalid or missing fields");
+      error.status = 400;
       next(error);
       return;
     }
-    res.status(200).send({message: 'Success.'});
+    res.status(200).send({ message: "Success." });
     next();
   } catch (error) {
-    console.log('Post user error.')
-    next(error)
+    console.log("Post user error.");
+    next(error);
   }
 };
 
 const updateAvatar = async (req, res, next) => {
-  const result = await updateAvatarFilename(req)
+  const result = await updateAvatarFilename(req);
   if (!result) {
     res.sendStatus(418);
-    return
+    return;
   }
-  console.log('UPDATE AVATAR')
+  console.log("UPDATE AVATAR");
   //res.status(200).send({message: 'Success.'});
-  res.json(result)
-}
+  res.json(result);
+};
 
 const updateUser = async (req, res, next) => {
   const result = await updateUserInfo(req);
   if (!result) {
     res.sendStatus(418);
-    return
+    return;
   }
-  res.status(200).send({message: 'Success.'});
-}
+  res.status(200).send({ message: "Success." });
+};
 
 const getOrdersByName = async (req, res) => {
   const result = await getOrderHistory(req);
   if (!result) {
     res.sendStatus(418);
-    return
+    return;
   }
-  res.json(result)
-}
+  res.json(result);
+};
 
 const getOrdersByStatus = async (req, res) => {
   const result = await getOrders();
   res.json(result);
-}
+};
 
 const updateOrder = async (req, res) => {
-  const result = await updateOrderStatus(req)
-  console.log(result)
+  const result = await updateOrderStatus(req);
+  console.log(result);
   if (result) {
     res.sendStatus(200);
   }
-}
+};
 
-export { getUser, postUser, updateAvatar, updateUser, getOrdersByName, getOrdersByStatus, updateOrder }
+export {
+  getUser,
+  postUser,
+  updateAvatar,
+  updateUser,
+  getOrdersByName,
+  getOrdersByStatus,
+  updateOrder,
+  postOrderController,
+};

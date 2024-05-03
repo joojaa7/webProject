@@ -5,6 +5,7 @@ import {
   hamburgersUrl,
   allergensUrl,
   specialOffersUrl,
+  ordersUrl,
 } from "./variables.js";
 import ShoppingCart from "./shoppingCart.js";
 
@@ -43,12 +44,47 @@ document.querySelector(".close-button").addEventListener("click", function () {
 
 document
   .getElementById("confirm-order-button")
-  .addEventListener("click", function () {
-    // send order to backend
-    console.log("Order confirmed!");
-    ShoppingCart.clearCart(); // Clear the cart if needed
-    document.getElementById("checkout-modal").style.display = "none";
+  .addEventListener("click", async () => {
+    try {
+      const user = JSON.parse(localStorage.getItem("user")); // Retrieve user info from local storage
+      if (!user) throw new Error("No user logged in");
+
+      const orderResponse = await sendOrder(user.user_id);
+      ShoppingCart.clearCart();
+      document.getElementById("checkout-modal").style.display = "none";
+      alert("Order placed successfully!");
+      console.log("Order Response:", orderResponse);
+    } catch (error) {
+      alert("Failed to place order: " + error.message);
+      console.error("Order error:", error);
+    }
   });
+
+async function sendOrder(user_id) {
+  const orderDetails = { user_id };
+
+  try {
+    const response = await fetch(ordersUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      body: JSON.stringify(orderDetails),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(`Failed to send order: ${errorData.message}`);
+    }
+
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error("Error sending order:", error.message);
+    throw error;
+  }
+}
 
 function updateButtonVisibility() {
   const isLoggedIn = Boolean(
@@ -434,6 +470,7 @@ document.getElementById("login-apply").addEventListener("click", async (e) => {
     localStorage.setItem("userAddress", json.user.address);
     localStorage.setItem("userPhone", json.user.phone.toString());
     localStorage.setItem("userEmail", json.user.email);
+    localStorage.setItem("userId", json.user.user_id);
 
     ShoppingCart.setUserId(json.user.username);
 
@@ -453,7 +490,6 @@ document.getElementById("logout-button").addEventListener("click", () => {
   //ShoppingCart.logout();
 
   document.getElementById("cart-items").innerHTML = "";
-  document.getElementById("cart-total").innerHTML = "Total: 0,00€";
   document.getElementById("cart-total").innerHTML = "Total: 0,00€";
 
   toggleLogin(false);
