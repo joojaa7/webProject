@@ -38,8 +38,12 @@ const addBurgerController = async (req, res) => {
     const name = req.body["add-burger-name"];
     const description = req.body["add-burger-description"];
     const price = req.body["add-burger-price"];
-    const ingredients = JSON.parse(req.body.ingredients);
-    const allergens = JSON.parse(req.body.allergens);
+    console.log("req.body:", req.body);
+    const ingredients = req.body.ingredients
+      .split(",")
+      .map((ingredient) => ingredient.trim());
+    const allergens = req.body.allergens;
+
     const image = req.file ? req.file.filename : null;
 
     const [result] = await conn.execute(

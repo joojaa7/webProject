@@ -1,5 +1,10 @@
 "use strict";
-import { hamburgersUrl, menusUrl, specialOffersUrl } from "./variables.js";
+import {
+  hamburgersUrl,
+  menusUrl,
+  specialOffersUrl,
+  allergensUrl,
+} from "./variables.js";
 
 const orderHistory = document.getElementById("history-table");
 const activeOrders = document.getElementById("active-table");
@@ -8,7 +13,7 @@ const avatar = document.getElementById("user-avatar");
 avatar.src = user.avatar ? "../" + user.avatar : "../default.jpg";
 console.log(user);
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
   const form = document.getElementById("add-burger-form");
   const menu = document.getElementById("update-menu-form");
 
@@ -17,6 +22,14 @@ document.addEventListener("DOMContentLoaded", () => {
     await addBurger(form);
   });
 
+  try {
+    const allergens = await fetchAllergens();
+    populateAllergensSelect(allergens);
+  } catch (error) {
+    console.error("Failed to load allergens:", error);
+    alert("Failed to load allergens");
+  }
+
   menu.addEventListener("submit", async function (event) {
     event.preventDefault();
     await addMenu();
@@ -24,6 +37,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
   initializeEventListeners();
 });
+
+async function fetchAllergens() {
+  const response = await fetch(allergensUrl);
+  if (!response.ok) {
+    throw new Error("Failed to fetch allergens");
+  }
+  const allergens = await response.json();
+  return allergens;
+}
+
+function populateAllergensSelect(allergens) {
+  const select = document.getElementById("allergens-select");
+  allergens.forEach((allergen) => {
+    const option = document.createElement("option");
+    option.value = allergen.ID; // Assuming your allergen objects have an ID property
+    option.textContent = allergen.name; // Assuming your allergen objects have a name property
+    select.appendChild(option);
+  });
+}
 
 const linksToContentMap = {
   "avatar-link": "avatar-content",
@@ -38,8 +70,6 @@ const linksToContentMap = {
   "reservations-link": "reservations-content",
   "admin_special_offers-link": "admin-special-offers-content",
 };
-
-// TODO: add functionality to add burger to database
 
 const fetchBurgersForMenu = async () => {
   try {
