@@ -11,3 +11,4 @@ export const ingredientsUrl = "http://localhost:3000/api/v1/ingredients/";
 export const allergensUrl = "http://localhost:3000/api/v1/allergens/";
 export const specialOffersUrl = "http://localhost:3000/api/v1/special_offers/";
 export const ordersUrl = "http://localhost:3000/api/v1/users/orders/";
+export const joinOrderUrl = "http://localhost:3000/api/v1/users/orders/items";

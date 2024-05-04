@@ -8,6 +8,7 @@ import {
   updateAvatar,
   updateOrder,
   updateUser,
+  addOrderItemsController,
 } from "../controllers/user-controller.js";
 import multer from "multer";
 
@@ -56,6 +57,7 @@ userRouter.route("/orders").post(postOrderController);
 // avatar can be null.
 
 userRouter.route("/register").post(upload.single("file"), postUser);
+userRouter.post("/orders/items", addOrderItemsController);
 
 userRouter.route("/avatar/update").put(upload.single("file"), updateAvatar);
 

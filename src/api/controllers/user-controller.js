@@ -7,6 +7,7 @@ import {
   getOrders,
   updateOrderStatus,
   addNewOrder,
+  addOrderItems,
 } from "../models/user-model.js";
 import bcrypt from "bcrypt";
 
@@ -16,7 +17,7 @@ const postOrderController = async (req, res) => {
     const { user_id } = req.body;
     //console.log("userId", user_id);
     const newOrder = await addNewOrder(user_id);
-    res.status(201).json(newOrder);
+    res.status(201).json({ order_id: newOrder.orderId });
   } catch (error) {
     res
       .status(500)
@@ -95,6 +96,18 @@ const updateOrder = async (req, res) => {
   }
 };
 
+const addOrderItemsController = async (req, res) => {
+  const { orderId, items } = req.body;
+  try {
+    await addOrderItems(orderId, items);
+    res.status(201).json({ message: "Order items successfully added" });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Failed to add order items", error: error.message });
+  }
+};
+
 export {
   getUser,
   postUser,
@@ -104,4 +117,5 @@ export {
   getOrdersByStatus,
   updateOrder,
   postOrderController,
+  addOrderItemsController,
 };

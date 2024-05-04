@@ -6,6 +6,7 @@ import {
   allergensUrl,
   specialOffersUrl,
   ordersUrl,
+  joinOrderUrl,
 } from "./variables.js";
 import ShoppingCart from "./shoppingCart.js";
 
@@ -50,7 +51,11 @@ document
       if (!user) throw new Error("No user logged in");
 
       const orderResponse = await sendOrder(user.user_id);
+      const items = ShoppingCart.items;
+
+      await sendJoinOrder(orderResponse, items);
       ShoppingCart.clearCart();
+
       document.getElementById("checkout-modal").style.display = "none";
       alert("Order placed successfully!");
       console.log("Order Response:", orderResponse);
@@ -79,9 +84,38 @@ async function sendOrder(user_id) {
     }
 
     const result = await response.json();
-    return result;
+    return result.order_id;
   } catch (error) {
     console.error("Error sending order:", error.message);
+    throw error;
+  }
+}
+
+async function sendJoinOrder(orderId, items) {
+  const orderItemsDetails = {
+    orderId,
+    items, // Assuming items is an array of { id: burgerId, quantity }
+  };
+
+  try {
+    const response = await fetch(joinOrderUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      body: JSON.stringify(orderItemsDetails),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(`Failed to link order items: ${errorData.message}`);
+    }
+
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error("Error linking order items:", error.message);
     throw error;
   }
 }
@@ -239,7 +273,8 @@ async function updateWeeklyMenuDisplay(burger, day, burgerId, dayId) {
     .querySelector(".add-to-cart-btn")
     .addEventListener("click", function (e) {
       const burger = JSON.parse(e.target.dataset.burger);
-      console.log("burger data:", burger);
+      alert("Burger added to cart!");
+      //console.log("burger data:", burger);
       ShoppingCart.addItem({
         id: burger.ID,
         name: burger.Name,
@@ -264,8 +299,8 @@ for (let button of weekdayButtons) {
     }
 
     try {
-      console.log("year", year);
-      console.log("selectedDate", selectedDate);
+      //console.log("year", year);
+      //console.log("selectedDate", selectedDate);
       const burgerId = await fetchMenuByDate(selectedDate + year);
       if (burgerId) {
         const burgerDetails = await fetchBurgerByID(burgerId);
@@ -393,9 +428,9 @@ async function updateMenuDisplay(burger, date, burgerId) {
   menuItems
     .querySelector(".add-to-cart-btn")
     .addEventListener("click", function (e) {
-      // This will directly retrieve the burger object from the button's dataset
       const burger = JSON.parse(e.target.dataset.burger);
-      console.log("burger data:", burger);
+      //console.log("burger data:", burger);
+      alert("Burger added to cart!");
       ShoppingCart.addItem({
         id: burger.ID,
         name: burger.Name,

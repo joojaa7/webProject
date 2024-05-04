@@ -27,7 +27,20 @@ const addNewOrder = async (userId) => {
   }
 };
 
-export default addNewOrder;
+const addOrderItems = async (orderId, items) => {
+  try {
+    items.forEach(async (item) => {
+      const [result] = await promisePool.execute(
+        "INSERT INTO join_orders (order_id, burger_id, quantity) VALUES (?, ?, ?)",
+        [orderId, item.id, item.quantity]
+      );
+      console.log(`Added item ${item.id} to order ${orderId}`);
+    });
+  } catch (error) {
+    console.error("Error adding order items:", error);
+    throw error;
+  }
+};
 
 const getUserByName = async (user) => {
   console.log("USERHERE", user);
@@ -149,4 +162,5 @@ export {
   getOrders,
   updateOrderStatus,
   addNewOrder,
+  addOrderItems,
 };
