@@ -360,7 +360,7 @@ async function fetchAndDisplayOffers() {
       if (offerDiv) {
         offerDiv.querySelector(
           ".offer-image"
-        ).src = `http://127.0.0.1:3000/api/v1/${offer.filename}`;
+        ).src = `http://127.0.0.1:3000/api/v1/specials/${offer.filename}`;
         offerDiv.querySelector(".offer-title").textContent = offer.name;
         offerDiv.querySelector(".offer-description").textContent =
           offer.description;
