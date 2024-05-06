@@ -14,15 +14,37 @@
 }
 
 button {
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: none;
   cursor: pointer;
   padding: 10px 20px;
   background-color: #4caf50;
   color: white;
   border: none;
   border-radius: 5px;
+  display: inline-block;
+  transition: background-color 0.3s;
 }
 
-.admin-form-content {
+input[type="text"]:hover,
+input[type="float"]:hover,
+input[type="date"]:hover,
+select:hover {
+  background-color: #e8f0fe;
+}
+
+input[type="text"]:focus,
+input[type="float"]:focus,
+input[type="date"]:focus,
+select:focus {
+  border-color: #4caf50;
+  outline: none;
+}
+
+.admin-form-content,
+#reservations-content {
   padding: 20px;
   margin: 20px;
   background-color: #f9f9f9;
@@ -122,8 +144,13 @@ input[type="date"] {
 }
 
 #add-burger-btn,
-#add-menu-btn,
+#add-menu-btn {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
 #delete-burger-btn {
   margin-top: 5px;
   margin-bottom: 5px;
+  background-color: #b50b0b;
 }

@@ -63,7 +63,6 @@
 }
 
 #dayCarousel {
-  width: 80%;
   display: flex;
   gap: 15vw;
   margin: 20px 0;
@@ -117,7 +116,6 @@
 }
 
 #currentTable {
-  margin-left: 300px;
   font-size: large;
   font-weight: bold;
 }

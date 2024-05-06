@@ -19,7 +19,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   form.addEventListener("submit", async function (event) {
     event.preventDefault();
+
     await addBurger(form);
+    form.reset();
   });
 
   try {
@@ -33,6 +35,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   menu.addEventListener("submit", async function (event) {
     event.preventDefault();
     await addMenu();
+    menu.reset();
   });
 
   initializeEventListeners();
@@ -461,7 +464,7 @@ const populateActiveOrders = async () => {
     `http://127.0.0.1:3000/api/v1/users/admin/orders/active`
   );
   const json = await response.json();
-  console.log(json);
+  //console.log(json);
   json.forEach((order) => {
     const tr = document.createElement("tr");
     tr.innerHTML = `<td>${order.order_id}</td><td>${order.name}</td><td>${order.quantity}</td>
