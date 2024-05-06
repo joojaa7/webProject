@@ -22,49 +22,108 @@ button {
   border-radius: 5px;
 }
 
+.admin-form-content {
+  padding: 20px;
+  margin: 20px;
+  background-color: #f9f9f9;
+  border: #367b35 2px solid;
+  border-radius: 5px;
+}
+
 button:hover {
   background-color: #45a049;
 }
 
 .form-content {
-    padding: 20px;
+  padding: 20px;
 }
 
 .form {
-    display: flex;
-    flex-direction: column;
-    align-items: start;
+  display: flex;
+  flex-direction: column;
 }
 
 .form .form-group {
-    margin-bottom: 15px;
+  margin-bottom: 15px;
 }
 
-.form label {
-    margin-bottom: 5px;
-    font-weight: bold;
+#delete-burger-form,
+#update-menu-form {
+  border-top: #333 1px solid;
+}
+
+label {
+  display: block;
+  margin-top: 12px;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #333;
 }
 
 .form input[type="text"],
 .form input[type="email"],
 .form input[type="tel"],
 .form textarea {
-    width: 100%;
-    padding: 8px;
-    box-sizing: border-box;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+input[type="text"],
+input[type="float"],
+input[type="date"] {
+  width: 100%;
+  padding: 8px 10px;
+  margin: 4px 0 8px;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+#allergens-select {
+  width: 50%;
+  height: 100px;
+  padding: 8px 10px;
+  margin: 4px 0 8px;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+#delete-burger {
+  width: 50%;
+  padding: 8px 10px;
+  margin: 4px 0 8px;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+#add-burger-upload {
+  margin-top: 3px;
+  margin-bottom: 3px;
 }
 
 .form button {
-    padding: 10px 20px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+  padding: 10px 20px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
 .form button:hover {
-    background-color: #45A049;
+  background-color: #45a049;
+}
+
+#add-burger-btn,
+#add-menu-btn,
+#delete-burger-btn {
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
