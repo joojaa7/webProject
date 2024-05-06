@@ -38,6 +38,31 @@ document.addEventListener("DOMContentLoaded", async () => {
   initializeEventListeners();
 });
 
+document
+  .getElementById("delete-burger-btn")
+  .addEventListener("click", async () => {
+    const select = document.getElementById("delete-burger");
+    const burgerId = select.value;
+
+    if (!burgerId) {
+      alert("Select a burger to delete");
+      return;
+    }
+    try {
+      const response = await fetch(`${hamburgersUrl}/${burgerId}`, {
+        method: "DELETE",
+      });
+      if (!response.ok) {
+        throw new Error("Failed to delete burger");
+      }
+      alert("Burger deleted successfully");
+      select.removeChild(select.querySelector(`option[value="${burgerId}"]`));
+    } catch (error) {
+      console.error("Error deleting burger:", error);
+      alert("Failed to delete burger");
+    }
+  });
+
 async function fetchAllergens() {
   const response = await fetch(allergensUrl);
   if (!response.ok) {
@@ -79,6 +104,19 @@ const fetchBurgersForMenu = async () => {
     }
     const burgers = await response.json();
     populateBurgers(burgers, "menu-burger");
+  } catch (error) {
+    console.error("Error fetching burgers:", error);
+  }
+};
+
+const fetchBurgersForDelete = async () => {
+  try {
+    const response = await fetch(hamburgersUrl);
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const burgers = await response.json();
+    populateBurgers(burgers, "delete-burger");
   } catch (error) {
     console.error("Error fetching burgers:", error);
   }

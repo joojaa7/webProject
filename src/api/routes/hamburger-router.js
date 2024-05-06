@@ -4,6 +4,7 @@ import {
   getAllHamburgersController,
   addBurgerController,
   getBurgerByIdController,
+  deleteBurgerController,
 } from "../controllers/hamburger-controller.js";
 
 const storage = multer.diskStorage({
@@ -23,6 +24,7 @@ const upload = multer({ storage: storage });
 
 const hamburgerRouter = express.Router();
 
+hamburgerRouter.delete("/:id", deleteBurgerController);
 hamburgerRouter.get("/:id", getBurgerByIdController);
 hamburgerRouter
   .route("/")
@@ -30,22 +32,3 @@ hamburgerRouter
   .post(upload.single("add-burger-upload-name"), addBurgerController);
 
 export default hamburgerRouter;
-
-/*
-import express from "express";
-import {
-  getAllHamburgersController,
-  addBurgerController,
-  getBurgerByIdController,
-} from "../controllers/hamburger-controller.js";
-
-const hamburgerRouter = express.Router();
-
-hamburgerRouter.get("/:id", getBurgerByIdController);
-hamburgerRouter
-  .route("/")
-  .get(getAllHamburgersController)
-  .post(addBurgerController);
-
-export default hamburgerRouter;
-*/

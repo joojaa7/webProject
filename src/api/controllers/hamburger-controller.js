@@ -1,4 +1,8 @@
-import { getAllHamburgers, getBurgerById } from "../models/hamburger-model.js";
+import {
+  getAllHamburgers,
+  getBurgerById,
+  deleteBurgerById,
+} from "../models/hamburger-model.js";
 
 import promisePool from "../../utils/database.js";
 
@@ -54,7 +58,7 @@ const addBurgerController = async (req, res) => {
 
     const ingredientIds = await handleIngredients(ingredients, conn);
     await linkIngredientsToBurger(ingredientIds, burgerId, conn); // Link ingredients to the burger
-    const allergenIds = allergens; // Assuming allergen IDs are passed directly from the frontend
+    const allergenIds = allergens;
     await linkAllergensToBurger(allergenIds, burgerId, conn);
 
     await conn.commit();
@@ -108,8 +112,24 @@ const linkIngredientsToBurger = async (ingredientIds, burgerId, conn) => {
   }
 };
 
+const deleteBurgerController = async (req, res) => {
+  const burgerId = req.params.id;
+
+  try {
+    const result = await deleteBurgerById(burgerId);
+    res.status(200).json(result);
+  } catch (error) {
+    console.error("Error in deleteBurgerController:", error);
+    res.status(500).json({
+      message: "Failed to delete burger",
+      error: error.message,
+    });
+  }
+};
+
 export {
   getAllHamburgersController,
   addBurgerController,
   getBurgerByIdController,
+  deleteBurgerController,
 };
