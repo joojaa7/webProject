@@ -267,7 +267,7 @@
             <h3>Add a burger</h3>
             <form id="add-burger-form" enctype="multipart/form-data">
               <div class="form-group">
-                <label for="add-burger">Enter the name for a burger</label>
+                <label for="add-burger">Enter burger details</label>
                 <input
                   type="text"
                   name="add-burger-name"
@@ -289,6 +289,7 @@
                   placeholder="Price"
                   required
                 />
+                <label for="add-burger-upload">Add an image</label>
 
                 <input
                   type="file"
@@ -296,22 +297,23 @@
                   id="add-burger-upload"
                   accept="image/*"
                 />
-                <label for="ingredients-input">Ingredients:</label>
+                <label for="ingredients-input">Add ingredients:</label>
                 <input
                   type="text"
                   name="ingredients"
                   id="ingredients-input"
                   placeholder="Enter ingredients, separated by commas"
                 />
-                <label for="allergens-select">Allergens:</label>
+                <label for="allergens-select">Select allergens:</label>
                 <select name="allergens" id="allergens-select" multiple>
                   <!-- Options will be populated here -->
                 </select>
               </div>
               <button type="submit" id="add-burger-btn">Add Burger</button>
             </form>
-            <h3>Delete a burger:</h3>
+
             <form id="delete-burger-form">
+              <h3>Delete a burger:</h3>
               <div class="form-group">
                 <label for="delete-burger">Select a burger to delete:</label>
                 <select id="delete-burger" name="delete-burger" required>
@@ -323,8 +325,8 @@
               </button>
             </form>
 
-            <h3>Add a menu:</h3>
             <form id="update-menu-form">
+              <h3>Add a menu:</h3>
               <div class="form-group">
                 <label for="menu-burger">Select a burger: </label>
                 <select id="menu-burger" name="menu-burger" required>

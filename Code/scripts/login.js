@@ -342,6 +342,7 @@ Object.keys(linksToContentMap).forEach((linkId) => {
       //console.log("linkId:", linkId);
       if (linkId === "admin_update_menu-link") {
         fetchBurgersForMenu();
+        fetchBurgersForDelete();
       } else if (linkId === "admin_special_offers-link") {
         fetchBurgersForSpecialOffers();
       }
