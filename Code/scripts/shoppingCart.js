@@ -85,6 +85,7 @@ const ShoppingCart = {
 
       const quantityDisplay = document.createElement("span");
       quantityDisplay.textContent = ` Quantity: ${item.quantity}`;
+      quantityDisplay.style.padding = '1rem';
 
       const incrementBtn = document.createElement("button");
       incrementBtn.textContent = "+";
