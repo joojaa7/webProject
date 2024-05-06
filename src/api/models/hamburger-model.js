@@ -22,4 +22,20 @@ const getBurgerById = async (id) => {
   }
 };
 
-export { getAllHamburgers, getBurgerById };
+const deleteBurgerById = async (burgerId) => {
+  try {
+    const [result] = await promisePool.execute(
+      "DELETE FROM burgers WHERE ID = ?",
+      [burgerId]
+    );
+    if (result.affectedRows === 0) {
+      throw new Error("No burger found with the given ID.");
+    }
+    return { success: true, message: "Burger deleted successfully." };
+  } catch (error) {
+    console.error("Error deleting burger:", error);
+    throw error;
+  }
+};
+
+export { getAllHamburgers, getBurgerById, deleteBurgerById };
