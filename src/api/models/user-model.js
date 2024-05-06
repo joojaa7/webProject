@@ -64,9 +64,10 @@ const addUser = async (user, file) => {
     password,
     cardnumber,
     phonenumber,
+    email
   } = user;
-  const sql = `INSERT INTO users (Firstname, Lastname, Address, Role, Username, Password, Cardnumber, Filename, phone_number)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+  const sql = `INSERT INTO users (Firstname, Lastname, Address, Role, Username, Password, Cardnumber, Filename, phone_number, email)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
   const avatar = file?.filename || null;
   const data = [
     firstname,
@@ -78,6 +79,7 @@ const addUser = async (user, file) => {
     cardnumber,
     avatar,
     phonenumber,
+    email
   ];
   const rows = await promisePool.execute(sql, data);
   if (rows[0].affectedRows === 0) {
