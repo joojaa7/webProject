@@ -6,16 +6,16 @@ import {
   allergensUrl,
 } from "./variables.js";
 
+//const baseUrl = 'http://127.0.0.1:3001/';
+const baseUrl = 'http://10.120.32.51/web/'
 const orderHistory = document.getElementById("history-table");
 const activeOrders = document.getElementById("active-table");
 let user = JSON.parse(localStorage.getItem("user"));
 const avatar = document.getElementById("user-avatar");
-avatar.src = "../" + user.avatar;
+avatar.src = baseUrl + "api/v1/" + user.avatar;
 if (user.avatar === null) {
-  avatar.src = "../default.jpg";
+  avatar.src = baseUrl + "api/v1/default.jpg";
 }
-//const baseUrl = 'http://127.0.0.1:3000/';
-const baseUrl = 'https://10.120.32.51:3001/web/'
 
 document.addEventListener("DOMContentLoaded", async () => {
   const form = document.getElementById("add-burger-form");
