@@ -16,7 +16,7 @@ const getBurgerById = async (id) => {
       [id]
     );
     // console.log("rows in getburgerbyid", rows);
-    return rows;
+    return rows[0] || null;
   } catch (error) {
     console.log("Error fetching burger:", error);
   }
