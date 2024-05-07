@@ -538,25 +538,27 @@ document.getElementById("update-order").addEventListener("click", async () => {
 });
 
 document.getElementById('delete-account').addEventListener('click', async () => {
-  if (user.username === 'root'){
-    alert('ÄLÄ POISTA ROOTTIA');
-    return;
+  confirm('Are you sure you want to delete your account?')
+  if (window.confirm){
+    if (user.username === 'root'){
+      alert('ÄLÄ POISTA ROOTTIA');
+      return;
+    }
+    const options = {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+    const response = await fetch(`http://127.0.0.1:3000/api/v1/users/${user.username}`, options)
+    console.log(response);
+    if (response.ok) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      localStorage.removeItem('shoppingCart');
+      window.location = 'index.html';
+    }
   }
-  const options = {
-    method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  }
-  const response = await fetch(`http://127.0.0.1:3000/api/v1/users/${user.username}`, options)
-  console.log(response);
-  if (response.ok) {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    localStorage.removeItem('shoppingCart');
-    window.location = 'index.html';
-  }
-
 })
 
 
