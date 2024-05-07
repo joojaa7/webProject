@@ -121,7 +121,6 @@ body {
   text-align: center;
 }
 
-
 .item-paragraph-span {
   display: flex;
   margin: auto;
@@ -337,7 +336,7 @@ h3 {
 
 .add-to-cart-btn {
   display: none;
-  background-color: #4caf50; 
+  background-color: #4caf50;
   color: rgba(255, 255, 255, 0.886);
   border: none;
   padding: 10px 15px;
@@ -391,11 +390,14 @@ MEDIA QUERIES
   .add-to-cart-btn {
     margin: auto;
   }
-
 }
 
 @media (max-width: 900px) {
-  
+  #profile {
+    display: block;
+    margin-top: 1rem;
+  }
+
   .logged-buttons {
     margin: 0.5rem;
   }
@@ -409,7 +411,7 @@ MEDIA QUERIES
     display: inline-block;
     width: 80%;
   }
-  
+
   .item-paragraph {
     overflow-wrap: break-word;
     padding: 0;
@@ -421,7 +423,7 @@ MEDIA QUERIES
   .menu_items {
     width: 100%;
   }
-  
+
   .menu_item_image {
     width: 50%;
     height: auto;
