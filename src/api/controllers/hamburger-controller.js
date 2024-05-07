@@ -46,7 +46,7 @@ const addBurgerController = async (req, res) => {
     const ingredients = req.body.ingredients
       .split(",")
       .map((ingredient) => ingredient.trim());
-    const allergens = req.body.allergens;
+    const allergens = [].concat(req.body.allergens || []);
 
     const image = req.file ? req.file.filename : null;
 
@@ -58,8 +58,7 @@ const addBurgerController = async (req, res) => {
 
     const ingredientIds = await handleIngredients(ingredients, conn);
     await linkIngredientsToBurger(ingredientIds, burgerId, conn); // Link ingredients to the burger
-    const allergenIds = allergens;
-    await linkAllergensToBurger(allergenIds, burgerId, conn);
+    await linkAllergensToBurger(allergens, burgerId, conn);
 
     await conn.commit();
     res.status(201).json({ id: burgerId, name, description, price, image });

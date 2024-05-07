@@ -19,14 +19,14 @@ const allergenRouter = express.Router();
  *     HTTP/1.1 200 OK
  *     [
  *       {
- *         "id": 1,
- *         "name": "Peanuts",
- *         "acronym": "PN"
+ *         "ID": 23,
+ *         "name": "Laktoosi",
+ *         "acronym": "L"
  *       },
  *       {
- *         "id": 2,
- *         "name": "Shellfish",
- *         "acronym": "SH"
+ *         "ID": 24,
+ *         "name": "Gluteeni",
+ *         "acronym": "G"
  *       }
  *     ]
  *
@@ -53,11 +53,11 @@ allergenRouter.get("/", listAllAllergensController);
  *     HTTP/1.1 200 OK
  *     [
  *       {
- *         "id": 23,
+ *         "ID": 23,
  *         "acronym": "L"
  *       },
  *       {
- *         "id": 24,
+ *         "ID": 24,
  *         "acronym": "G"
  *       }
  *     ]
