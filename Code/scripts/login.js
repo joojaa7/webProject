@@ -10,7 +10,10 @@ const orderHistory = document.getElementById("history-table");
 const activeOrders = document.getElementById("active-table");
 let user = JSON.parse(localStorage.getItem("user"));
 const avatar = document.getElementById("user-avatar");
-avatar.src = user.avatar ? "../" + user.avatar : "../default.jpg";
+avatar.src = "../" + user.avatar;
+if (user.avatar === null) {
+  avatar.src = "../default.jpg";
+}
 console.log(user);
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -540,26 +543,28 @@ document.getElementById("update-order").addEventListener("click", async () => {
 document
   .getElementById("delete-account")
   .addEventListener("click", async () => {
-    if (user.username === "root") {
-      alert("ÄLÄ POISTA ROOTTIA");
-      return;
-    }
-    const options = {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-    const response = await fetch(
-      `http://127.0.0.1:3000/api/v1/users/${user.username}`,
-      options
-    );
-    console.log(response);
-    if (response.ok) {
-      localStorage.removeItem("token");
-      localStorage.removeItem("user");
-      localStorage.removeItem("shoppingCart");
-      window.location = "index.html";
+    if (window.confirm("Are you sure you want to delete your account?")) {
+      if (user.username === "root") {
+        alert("ÄLÄ POISTA ROOTTIA");
+        return;
+      }
+      const options = {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+      const response = await fetch(
+        `http://127.0.0.1:3000/api/v1/users/${user.username}`,
+        options
+      );
+      console.log(response);
+      if (response.ok) {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        localStorage.removeItem("shoppingCart");
+        window.location = "index.html";
+      }
     }
   });
 
