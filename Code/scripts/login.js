@@ -14,7 +14,8 @@ avatar.src = "../" + user.avatar;
 if (user.avatar === null) {
   avatar.src = "../default.jpg";
 }
-console.log(user);
+//const baseUrl = 'http://127.0.0.1:3000/';
+const baseUrl = 'https://10.120.32.51:3001/web/'
 
 document.addEventListener("DOMContentLoaded", async () => {
   const form = document.getElementById("add-burger-form");
@@ -388,7 +389,7 @@ document
     };
     if (userData.username) {
       const response = await fetch(
-        "http://127.0.0.1:3000/api/v1/users/avatar/update",
+        baseUrl + "api/v1/users/avatar/update",
         options
       );
       const json = await response.json();
@@ -435,7 +436,7 @@ document
     };
 
     const response = await fetch(
-      `http://127.0.0.1:3000/api/v1/users/${userName}`,
+      baseUrl + `api/v1/users/${userName}`,
       options
     );
     console.log(response);
@@ -447,7 +448,7 @@ document.getElementById("frontpage-button").addEventListener("click", () => {
 
 const populateOrderHistory = async (username) => {
   const response = await fetch(
-    `http://127.0.0.1:3000/api/v1/users/orders/${username}`
+    baseUrl + `api/v1/users/orders/${username}`
   );
   const json = await response.json();
   json.sort((a, b) => a.order_id - b.order_id);
@@ -465,7 +466,7 @@ const activeOrderHandling = {
 
 const populateActiveOrders = async () => {
   const response = await fetch(
-    `http://127.0.0.1:3000/api/v1/users/admin/orders/active`
+    baseUrl + `api/v1/users/admin/orders/active`
   );
   const json = await response.json();
   //console.log(json);
@@ -522,7 +523,7 @@ const updateOrderStatus = async () => {
     body: JSON.stringify(data),
   };
   const response = await fetch(
-    `http://127.0.0.1:3000/api/v1/users/admin/orders/active`,
+    baseUrl + `api/v1/users/admin/orders/active`,
     options
   );
   console.log(response);
@@ -555,7 +556,7 @@ document
         },
       };
       const response = await fetch(
-        `http://127.0.0.1:3000/api/v1/users/${user.username}`,
+        baseUrl + `api/v1/users/${user.username}`,
         options
       );
       console.log(response);

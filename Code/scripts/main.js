@@ -15,6 +15,8 @@ const loginElement = document.getElementsByClassName("login_button")[0];
 const loggedElement = document.getElementById("logged");
 let user = JSON.parse(localStorage.getItem("user"));
 const avatar = document.getElementById("avatar");
+//const baseUrl = 'http://127.0.0.1:3000/';
+const baseUrl = 'https://10.120.32.51:3001/web/'
 
 // En tiedä tarvitaanko, kun script tagissa on defer. Kokeilin ilman ja toimi.
 document.addEventListener("DOMContentLoaded", async () => {
@@ -487,7 +489,7 @@ document.getElementById("login-apply").addEventListener("click", async (e) => {
     },
     body: JSON.stringify(loginUser),
   };
-  const response = await fetch("http://127.0.0.1:3000/api/v1/auth/", options);
+  const response = await fetch(baseUrl + "api/v1/auth/", options);
 
   const json = await response.json();
   console.log("Full JSON response:", json);
@@ -569,7 +571,7 @@ document
     };
     console.log(options);
     const response = await fetch(
-      "http://127.0.0.1:3000/api/v1/users/register",
+      baseUrl + "api/v1/users/register",
       options
     );
     console.log(response);
@@ -591,7 +593,7 @@ document
         body: JSON.stringify(loginUser),
       };
       const response = await fetch(
-        "http://127.0.0.1:3000/api/v1/auth/",
+        baseUrl + "api/v1/auth/",
         options
       );
       console.log(response);
@@ -642,7 +644,7 @@ document.getElementById("profile-button").addEventListener("click", () => {
         },
       };
       const response = await fetch(
-        "http://127.0.0.1:3000/api/v1/auth/verify",
+        baseUrl + "api/v1/auth/verify",
         options
       );
       console.log(response);
