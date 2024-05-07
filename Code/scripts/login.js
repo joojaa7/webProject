@@ -285,13 +285,13 @@ async function addBurger(form) {
 
 const addMenu = async () => {
   const burger = document.getElementById("menu-burger").value;
-  console.log("burger", burger); // logs burger id (number)
+  //console.log("burger", burger); // logs burger id (number)
 
   const date = document.getElementById("menu-date").value; // Date format: YYYY-MM-DD
-  console.log("date", date); // logs YYYY-MM-DD
+  //console.log("date", date); // logs YYYY-MM-DD
 
   const formattedDate = convertDateFormat(date);
-  console.log("formattedDate", formattedDate); // logs DD.MM.YYYY
+  //console.log("formattedDate", formattedDate); // logs DD.MM.YYYY
 
   const data = { burger_id: burger, date: formattedDate };
 
@@ -309,7 +309,7 @@ const addMenu = async () => {
     }
 
     const result = await response.json();
-    console.log("Success:", result);
+    //console.log("Success:", result);
     alert("Menu item added successfully!");
   } catch (error) {
     console.error("Error:", error);
