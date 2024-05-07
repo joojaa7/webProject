@@ -112,11 +112,11 @@ const addOrderItemsController = async (req, res) => {
 const deleteUser = async (req, res) => {
   try {
     await deleteUserByUsername(req);
-    res.status(200).json({ message: "Order items successfully added" });
+    res.status(200).json({ message: "User succesfully deleted" });
   } catch (e) {
     res.status(418);
   }
-}
+};
 
 export {
   getUser,
