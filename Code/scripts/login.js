@@ -10,7 +10,10 @@ const orderHistory = document.getElementById("history-table");
 const activeOrders = document.getElementById("active-table");
 let user = JSON.parse(localStorage.getItem("user"));
 const avatar = document.getElementById("user-avatar");
-avatar.src = user.avatar ? "../" + user.avatar : "../default.jpg";
+avatar.src = "../" + user.avatar;
+if (user.avatar === null) {
+  avatar.src = '../default.jpg'
+}
 console.log(user);
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -538,8 +541,7 @@ document.getElementById("update-order").addEventListener("click", async () => {
 });
 
 document.getElementById('delete-account').addEventListener('click', async () => {
-  confirm('Are you sure you want to delete your account?')
-  if (window.confirm){
+  if (window.confirm('Are you sure you want to delete your account?')){
     if (user.username === 'root'){
       alert('ÄLÄ POISTA ROOTTIA');
       return;

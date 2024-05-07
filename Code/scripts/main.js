@@ -513,6 +513,7 @@ document.getElementById("login-apply").addEventListener("click", async (e) => {
     loginForm.style.display = "none";
     user = JSON.parse(localStorage.getItem("user"));
     avatar.src = user.avatar ? "../" + user.avatar : "../default.jpg";
+    console.log(user.avatar)
     toggleLogin(true);
   }
 });
@@ -616,7 +617,10 @@ const toggleLogin = (logged) => {
 
   loginElement.style.display = logged ? "none" : "block";
   loggedElement.style.display = logged ? "block" : "none";
-  avatar.src = logged ? "../" + user.avatar : "../default.jpg";
+  avatar.src = "../" + user.avatar;
+  if (user.avatar === null) {
+    avatar.src = '../default.jpg'
+  }
 };
 
 //  Siirtyy profiiliin
