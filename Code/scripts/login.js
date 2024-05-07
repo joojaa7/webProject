@@ -97,6 +97,7 @@ const linksToContentMap = {
   "admin-order": "active-order-content",
   "reservations-link": "reservations-content",
   "admin_special_offers-link": "admin-special-offers-content",
+  'delete-account-link': 'delete-account-content',
 };
 
 const fetchBurgersForMenu = async () => {
@@ -535,6 +536,29 @@ document.getElementById("update-order").addEventListener("click", async () => {
   }
   populateActiveOrders();
 });
+
+document.getElementById('delete-account').addEventListener('click', async () => {
+  if (user.username === 'root'){
+    alert('ÄLÄ POISTA ROOTTIA');
+    return;
+  }
+  const options = {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  }
+  const response = await fetch(`http://127.0.0.1:3000/api/v1/users/${user.username}`, options)
+  console.log(response);
+  if (response.ok) {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    localStorage.removeItem('shoppingCart');
+    window.location = 'index.html';
+  }
+
+})
+
 
 populateOrderHistory(user.username);
 populateActiveOrders();

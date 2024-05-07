@@ -8,6 +8,7 @@ import {
   updateOrderStatus,
   addNewOrder,
   addOrderItems,
+  deleteUserByUsername,
 } from "../models/user-model.js";
 import bcrypt from "bcrypt";
 
@@ -108,6 +109,15 @@ const addOrderItemsController = async (req, res) => {
   }
 };
 
+const deleteUser = async (req, res) => {
+  try {
+    await deleteUserByUsername(req);
+    res.status(200).json({ message: "Order items successfully added" });
+  } catch (e) {
+    res.status(418);
+  }
+}
+
 export {
   getUser,
   postUser,
@@ -118,4 +128,5 @@ export {
   updateOrder,
   postOrderController,
   addOrderItemsController,
+  deleteUser,
 };

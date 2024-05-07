@@ -9,6 +9,7 @@ import {
   updateOrder,
   updateUser,
   addOrderItemsController,
+  deleteUser,
 } from "../controllers/user-controller.js";
 import multer from "multer";
 
@@ -50,7 +51,10 @@ const upload = multer({
   },
 });
 
-userRouter.route("/:name").get(getUser).put(updateUser);
+userRouter.route("/:name")
+  .get(getUser)
+  .put(updateUser)
+  .delete(deleteUser);
 
 userRouter.route("/orders").post(postOrderController);
 // TODO: add input validaton for null values,

@@ -150,10 +150,22 @@ const updateOrderStatus = async (req) => {
     const rows = await promisePool.execute(sql, data);
     if (rows[0].affectedRows === 0) {
       return false;
-    }
+    };
   });
   return true;
 };
+
+const deleteUserByUsername = async (req) => {
+  console.log(req.body);
+  const sql = `DELETE FROM users WHERE Username  = ?`;
+  const data = [req.params.name]
+  const rows = await promisePool.execute(sql, data)
+  if (rows[0].affectedRows === 0) {
+    return false;
+  };
+  return true;
+};
+
 
 export {
   getUserByName,
@@ -165,4 +177,5 @@ export {
   updateOrderStatus,
   addNewOrder,
   addOrderItems,
+  deleteUserByUsername,
 };

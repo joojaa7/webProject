@@ -199,6 +199,24 @@ td {
   margin-top: 1rem;
 }
 
+#delete-account {
+  background-color: red;
+  color: white;
+  font-size: 50px;
+  animation: rotate360 1.2s linear infinite;  /* Poista */
+  animation-play-state: paused;      /* Poista */         
+}
+
+#delete-account:hover {
+  background-color: rgb(95, 19, 19);
+  animation-play-state: running;  /* Poista */
+}
+
+/* Poista */
+@keyframes rotate360 {
+  to { transform: rotate(360deg); }           
+}
+
 @media (max-width: 600px) {
   .content-wrapper {
     flex-direction: column;
