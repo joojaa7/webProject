@@ -15,6 +15,8 @@ const loginElement = document.getElementsByClassName("login_button")[0];
 const loggedElement = document.getElementById("logged");
 let user = JSON.parse(localStorage.getItem("user"));
 const avatar = document.getElementById("avatar");
+//const baseUrl = 'http://127.0.0.1:3001/';
+const baseUrl = 'http://10.120.32.51/web/'
 
 // En tiedä tarvitaanko, kun script tagissa on defer. Kokeilin ilman ja toimi.
 document.addEventListener("DOMContentLoaded", async () => {
@@ -360,7 +362,7 @@ async function fetchAndDisplayOffers() {
       if (offerDiv) {
         offerDiv.querySelector(
           ".offer-image"
-        ).src = `http://127.0.0.1:3000/api/v1/specials/${offer.filename}`;
+        ).src =  baseUrl + `api/v1/specials/${offer.filename}`;
         offerDiv.querySelector(".offer-title").textContent = offer.name;
         offerDiv.querySelector(".offer-description").textContent =
           offer.description;
@@ -487,7 +489,7 @@ document.getElementById("login-apply").addEventListener("click", async (e) => {
     },
     body: JSON.stringify(loginUser),
   };
-  const response = await fetch("http://127.0.0.1:3000/api/v1/auth/", options);
+  const response = await fetch(baseUrl + "api/v1/auth/", options);
 
   const json = await response.json();
   console.log("Full JSON response:", json);
@@ -512,7 +514,10 @@ document.getElementById("login-apply").addEventListener("click", async (e) => {
 
     loginForm.style.display = "none";
     user = JSON.parse(localStorage.getItem("user"));
-    avatar.src = user.avatar ? "../" + user.avatar : "../default.jpg";
+    avatar.src = baseUrl + "api/v1/" + user.avatar;
+    if (user.avatar === null) {
+      avatar.src = baseUrl + "api/v1/default.jpg";
+    }
     console.log(user.avatar)
     toggleLogin(true);
   }
@@ -569,7 +574,7 @@ document
     };
     console.log(options);
     const response = await fetch(
-      "http://127.0.0.1:3000/api/v1/users/register",
+      baseUrl + "api/v1/users/register",
       options
     );
     console.log(response);
@@ -591,7 +596,7 @@ document
         body: JSON.stringify(loginUser),
       };
       const response = await fetch(
-        "http://127.0.0.1:3000/api/v1/auth/",
+        baseUrl + "api/v1/auth/",
         options
       );
       console.log(response);
@@ -603,9 +608,11 @@ document
         localStorage.setItem("user", JSON.stringify(json.user));
         loginForm.style.display = "none";
         user = JSON.parse(localStorage.getItem("user"));
-        document.getElementById("avatar").src = user.avatar
-          ? "../" + user.avatar
-          : "../default.jpg";
+        document.getElementById("avatar").src = 
+          baseUrl + "api/v1/" + user.avatar;
+          if (user.avatar === null) {
+            avatar.src = baseUrl + "api/v1/default.jpg";
+          };
         toggleLogin(true);
       }
     }
@@ -617,9 +624,9 @@ const toggleLogin = (logged) => {
 
   loginElement.style.display = logged ? "none" : "block";
   loggedElement.style.display = logged ? "block" : "none";
-  avatar.src = "../" + user.avatar;
+  avatar.src = baseUrl + "api/v1/" + user.avatar;
   if (user.avatar === null) {
-    avatar.src = '../default.jpg'
+    avatar.src = baseUrl + "api/v1/default.jpg";
   }
 };
 
@@ -642,7 +649,7 @@ document.getElementById("profile-button").addEventListener("click", () => {
         },
       };
       const response = await fetch(
-        "http://127.0.0.1:3000/api/v1/auth/verify",
+        baseUrl + "api/v1/auth/verify",
         options
       );
       console.log(response);
