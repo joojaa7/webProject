@@ -237,6 +237,7 @@ async function populateWeeklyMenu() {
 
 async function updateWeeklyMenuDisplay(burger, day, burgerId, dayId) {
   const menuEntry = document.getElementById(dayId);
+  console.log(menuEntry,'menuEnetry')
 
   try {
     const response = await fetch(`${allergensUrl}${burgerId}`);
@@ -396,7 +397,6 @@ async function fetchBurgerByID(burgerId) {
 
 async function updateMenuDisplay(burger, date, burgerId) {
   const menuItems = document.getElementsByClassName("menu_items")[0];
-
   try {
     const response = await fetch(`${allergensUrl}${burgerId}`);
     if (!response.ok) throw new Error("Failed to fetch allergens");
