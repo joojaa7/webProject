@@ -13,6 +13,12 @@ body {
   width: 100%;
 }
 
+#shopping-cart {
+  display: none;
+  text-align: center;
+  width: 30%;
+}
+
 /* ---------------MODALS CSS-------------- */
 
 .modal {
@@ -141,11 +147,6 @@ h3 {
   text-decoration: underline;
 }
 
-#shopping-cart {
-  text-align: center;
-  width: 30%;
-}
-
 #cart-total {
   font-size: large;
   font-weight: 500;
@@ -174,6 +175,7 @@ h3 {
 }
 
 .logged-buttons {
+  border-radius: 5px;
   cursor: pointer;
   background-color: rgb(50, 90, 77);
   padding: 1rem;
@@ -239,6 +241,7 @@ h3 {
 }
 
 .offer-title {
+  text-decoration: none;
   font-size: 18px;
   color: #333;
   margin-top: 10px;
@@ -255,6 +258,12 @@ h3 {
   color: #1a943b;
   font-weight: bold;
   margin-top: 10px;
+}
+
+.offer-dates {
+  font-size: 14px;
+  color: #4e4d4d;
+  margin-top: 5px;
 }
 
 .weekday_buttons {
@@ -278,6 +287,7 @@ h3 {
 }
 
 .weekday_link {
+  border-radius: 5px;
   background-color: rgb(75, 119, 104);
   cursor: pointer;
   padding: 1rem;
