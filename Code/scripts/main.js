@@ -348,8 +348,6 @@ for (let button of weekdayButtons) {
         });
       } else {
         console.log("No burgers found for this date");
-        // Optionally update the display to indicate no burgers are available
-        //displayNoBurgersMessage(selectedDate);
       }
     } catch (error) {
       console.error("Error processing menus:", error);
@@ -514,12 +512,13 @@ async function updateMenuDisplay(burger, date, burgerId) {
     const burgerDiv = document.createElement("div");
     burgerDiv.className = "menu_entry";
     burgerDiv.innerHTML = `
-      <p>Menu for: ${date}</p>
-      <h2>${burger.Name}</h2>
+      
       <img src="${baseUrl}/api/v1/burgers/${burger.filename}" alt="${
       burger.Name
     }" class="menu_item_image">
       <div class="item_description">
+          <p>Menu for: ${date}</p>
+          <h2>${burger.Name}</h2>
           <p>${burger.Description}</p>
           <p>${burger.Price} €</p>
           <p>Allergens: ${allergenDisplay}</p>
@@ -529,6 +528,7 @@ async function updateMenuDisplay(burger, date, burgerId) {
               <i class="fas fa-shopping-cart"></i> Add to Cart
           </button>
       </div>`;
+
     menuContainer.appendChild(burgerDiv); // Append the new burger div to the container
 
     // Adding event listener to newly created button in burgerDiv
@@ -544,6 +544,7 @@ async function updateMenuDisplay(burger, date, burgerId) {
           quantity: 1,
         });
       });
+    updateButtonVisibility();
   } catch (error) {
     console.error("Error fetching allergens:", error);
     const errorDiv = document.createElement("div");
