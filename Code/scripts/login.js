@@ -7,7 +7,7 @@ import {
 } from "./variables.js";
 
 //const baseUrl = 'http://127.0.0.1:3001/';
-const baseUrl = 'http://10.120.32.51/web/'
+const baseUrl = "http://10.120.32.51/web/";
 const orderHistory = document.getElementById("history-table");
 const activeOrders = document.getElementById("active-table");
 let user = JSON.parse(localStorage.getItem("user"));
@@ -63,6 +63,7 @@ document
         throw new Error("Failed to delete burger");
       }
       alert("Burger deleted successfully");
+      fetchBurgersForMenu();
       select.removeChild(select.querySelector(`option[value="${burgerId}"]`));
     } catch (error) {
       console.error("Error deleting burger:", error);
@@ -219,6 +220,7 @@ function initializeEventListeners() {
       try {
         await submitOfferData(formData);
         alert("Offer added successfully!");
+        offerForm.reset();
       } catch (error) {
         console.error("Error submitting form data:", error);
         alert("Failed to add offer: " + error.message);
@@ -279,6 +281,8 @@ async function addBurger(form) {
       const result = await response.json();
       console.log("Success:", result);
       alert("Burger added successfully!");
+      fetchBurgersForMenu();
+      fetchBurgersForDelete();
     } else {
       throw new Error("Failed to add burger: " + response.statusText);
     }
@@ -399,7 +403,8 @@ document
         console.log("OK");
         userData.avatar = json.avatar;
         localStorage.setItem("user", JSON.stringify(userData));
-        document.getElementById("user-avatar").src = baseUrl + "api/v1/" + json.avatar;
+        document.getElementById("user-avatar").src =
+          baseUrl + "api/v1/" + json.avatar;
       } else {
         alert("Log in required.");
       }
@@ -435,10 +440,7 @@ document
       body: JSON.stringify(updateUser),
     };
 
-    const response = await fetch(
-      baseUrl + `api/v1/users/${userName}`,
-      options
-    );
+    const response = await fetch(baseUrl + `api/v1/users/${userName}`, options);
     console.log(response);
   });
 
@@ -447,9 +449,7 @@ document.getElementById("frontpage-button").addEventListener("click", () => {
 });
 
 const populateOrderHistory = async (username) => {
-  const response = await fetch(
-    baseUrl + `api/v1/users/orders/${username}`
-  );
+  const response = await fetch(baseUrl + `api/v1/users/orders/${username}`);
   const json = await response.json();
   json.sort((a, b) => a.order_id - b.order_id);
   json.forEach((order) => {
@@ -465,9 +465,7 @@ const activeOrderHandling = {
 };
 
 const populateActiveOrders = async () => {
-  const response = await fetch(
-    baseUrl + `api/v1/users/admin/orders/active`
-  );
+  const response = await fetch(baseUrl + `api/v1/users/admin/orders/active`);
   const json = await response.json();
   //console.log(json);
   json.forEach((order) => {

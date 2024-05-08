@@ -208,11 +208,11 @@ async function populateWeeklyMenu() {
 
   days.forEach(async (day, index) => {
     const dayElement = document.getElementById(`day${index}`);
-    const formattedDate = dayElement.textContent; // Now contains the formatted date from setWeekDates
+    const formattedDate = dayElement.textContent;
     const year = new Date().getFullYear();
 
     try {
-      const burgerId = await fetchMenuByDate(formattedDate + year);
+      const burgerId = await fetchMenuByDates(formattedDate + year);
       if (burgerId) {
         const burgerDetails = await fetchBurgerByID(burgerId);
         updateWeeklyMenuDisplay(burgerDetails, day, burgerId, dayIds[index]);
@@ -289,6 +289,7 @@ async function updateWeeklyMenuDisplay(burger, day, burgerId, dayId) {
 const weekdayButtons = document.getElementsByClassName("weekday_link");
 
 // TODO: add error handling for when a burger is not found for the date
+/*
 for (let button of weekdayButtons) {
   button.addEventListener("click", async (e) => {
     const selectedDate = e.target.innerText;
@@ -301,9 +302,9 @@ for (let button of weekdayButtons) {
     }
 
     try {
-      //console.log("year", year);
-      //console.log("selectedDate", selectedDate);
-      const burgerId = await fetchMenuByDate(selectedDate + year);
+      const burgersForDate = await fetchMenuByDate(selectedDate + year);
+      console.log("burgersForDate", burgersForDate);
+      console.log("burgerID", burgerId);
       if (burgerId) {
         const burgerDetails = await fetchBurgerByID(burgerId);
 
@@ -321,8 +322,64 @@ for (let button of weekdayButtons) {
     e.target.classList.add("active");
   });
 }
+*/
+
+for (let button of weekdayButtons) {
+  button.addEventListener("click", async (e) => {
+    const selectedDate = e.target.innerText;
+    const year = new Date().getFullYear();
+    const specials = document.getElementsByClassName(
+      "special-offers-section"
+    )[0];
+    if (specials) {
+      specials.style.display = "none";
+    }
+
+    try {
+      const menus = await fetchMenuByDate(selectedDate + year);
+      if (menus.length > 0) {
+        // Clear previous details if any
+        //clearMenuDisplay();
+        // Process each menu item
+        menus.forEach(async (menu) => {
+          const burgerDetails = await fetchBurgerByID(menu.burger_id);
+          updateMenuDisplay(burgerDetails, selectedDate, menu.burger_id);
+          clearMenuDisplay();
+        });
+      } else {
+        console.log("No burgers found for this date");
+        // Optionally update the display to indicate no burgers are available
+        //displayNoBurgersMessage(selectedDate);
+      }
+    } catch (error) {
+      console.error("Error processing menus:", error);
+    }
+
+    // Manage active class on buttons
+    for (let button of weekdayButtons) {
+      button.classList.remove("active");
+    }
+    e.target.classList.add("active");
+  });
+}
 
 async function fetchMenuByDate(date) {
+  const url = `${menusUrl}${date}`;
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error("Failed to fetch data: " + response.statusText);
+    }
+    const menus = await response.json();
+    console.log("Fetched menus:", menus);
+    return menus; // return the entire array
+  } catch (error) {
+    console.error("Error fetching menu by date:", error);
+    return [];
+  }
+}
+
+async function fetchMenuByDates(date) {
   //console.log("fetchMenuByDate date", date);
   const url = `${menusUrl}${date}`;
 
@@ -393,6 +450,7 @@ async function fetchBurgerByID(burgerId) {
   return burger;
 }
 
+/*
 async function updateMenuDisplay(burger, date, burgerId) {
   const menuItems = document.getElementsByClassName("menu_items")[0];
   try {
@@ -440,6 +498,64 @@ async function updateMenuDisplay(burger, date, burgerId) {
       });
       //console.log(ShoppingCart.cartKey());
     });
+}
+*/
+
+async function updateMenuDisplay(burger, date, burgerId) {
+  const menuContainer = document.getElementsByClassName("menu_items")[0]; // This should be a container that will hold all menu entries
+
+  try {
+    const response = await fetch(`${allergensUrl}${burgerId}`);
+    if (!response.ok) throw new Error("Failed to fetch allergens");
+    const allergens = await response.json();
+    const allergenDisplay = allergens.map((a) => a.acronym).join(", ");
+
+    // Create a new div element for each burger
+    const burgerDiv = document.createElement("div");
+    burgerDiv.className = "menu_entry";
+    burgerDiv.innerHTML = `
+      <p>Menu for: ${date}</p>
+      <h2>${burger.Name}</h2>
+      <img src="${baseUrl}/api/v1/burgers/${burger.filename}" alt="${
+      burger.Name
+    }" class="menu_item_image">
+      <div class="item_description">
+          <p>${burger.Description}</p>
+          <p>${burger.Price} €</p>
+          <p>Allergens: ${allergenDisplay}</p>
+          <button class="add-to-cart-btn" data-id="${
+            burger.ID
+          }" data-burger='${JSON.stringify(burger)}'>
+              <i class="fas fa-shopping-cart"></i> Add to Cart
+          </button>
+      </div>`;
+    menuContainer.appendChild(burgerDiv); // Append the new burger div to the container
+
+    // Adding event listener to newly created button in burgerDiv
+    burgerDiv
+      .querySelector(".add-to-cart-btn")
+      .addEventListener("click", function (e) {
+        const burger = JSON.parse(e.target.dataset.burger);
+        alert("Burger added to cart!");
+        ShoppingCart.addItem({
+          id: burger.ID,
+          name: burger.Name,
+          price: burger.Price,
+          quantity: 1,
+        });
+      });
+  } catch (error) {
+    console.error("Error fetching allergens:", error);
+    const errorDiv = document.createElement("div");
+    errorDiv.innerHTML = `<p>Error loading menu details for ${burger.Name}.</p>`;
+    menuContainer.appendChild(errorDiv);
+  }
+}
+
+// Make sure this container is empty before populating it each time to avoid duplication
+function clearMenuDisplay() {
+  const menuContainer = document.getElementsByClassName("menu_items")[0];
+  menuContainer.innerHTML = ""; // Clear previous contents
 }
 
 // Kirjautumisen näkymä

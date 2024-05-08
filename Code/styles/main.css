@@ -310,7 +310,7 @@ h3 {
 
 .menu_entry {
   display: flex;
-  flex-wrap: wrap;
+  /*flex-wrap: wrap;*/
   width: 100%;
   margin: auto;
 }
