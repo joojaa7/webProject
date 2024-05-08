@@ -510,13 +510,11 @@ document.getElementById("register").addEventListener("click", function () {
   }
 });
 
-// Kirjaudu sisään.
-
-document.getElementById("login-apply").addEventListener("click", async (e) => {
+const loginSubmit = async () => {
   const loginForm = document.getElementById("loginForm");
   const name = document.getElementById("loginUsername").value;
   const pw = document.getElementById("loginPassword").value;
-  console.log(name, pw);
+
   const loginUser = {
     username: name,
     password: pw,
@@ -531,9 +529,7 @@ document.getElementById("login-apply").addEventListener("click", async (e) => {
   const response = await fetch(baseUrl + "api/v1/auth/", options);
 
   const json = await response.json();
-  console.log("Full JSON response:", json);
 
-  //console.log("shoppingcart", json.user.username);
 
   if (!json.user) {
     alert(json.error.message);
@@ -560,6 +556,22 @@ document.getElementById("login-apply").addEventListener("click", async (e) => {
     console.log(user.avatar);
     toggleLogin(true);
   }
+}
+
+// Kirjaudu sisään.
+
+document.getElementById('loginForm').addEventListener('keydown', async (e) => { 
+  if (e.key === 'Enter'){
+    loginSubmit();
+    e.preventDefault();
+    console.log('enter');
+  }
+  console.log('not enter')
+})
+
+
+document.getElementById("login-apply").addEventListener("click", async (e) => {
+  loginSubmit();
 });
 
 // Kirjaudu ulos
