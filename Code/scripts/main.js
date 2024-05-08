@@ -237,6 +237,7 @@ async function populateWeeklyMenu() {
 
 async function updateWeeklyMenuDisplay(burger, day, burgerId, dayId) {
   const menuEntry = document.getElementById(dayId);
+  console.log(menuEntry, "menuEnetry");
 
   try {
     const response = await fetch(`${allergensUrl}${burgerId}`);
@@ -246,10 +247,9 @@ async function updateWeeklyMenuDisplay(burger, day, burgerId, dayId) {
     //console.log("day:", day);
 
     // Update image source
-    menuEntry.querySelector(
-      ".menu_item_image"
-    ).src = `http://127.0.0.1:3001/api/v1/burgers/${burger.filename}`;
-    menuEntry.querySelector(".menu_item_image").alt = burger.Name;
+    menuEntry.querySelector(".menu_item_image").src =
+      baseUrl + `/api/v1/burgers/${burger[0].filename}`;
+    menuEntry.querySelector(".menu_item_image").alt = burger[0].Name;
 
     // Update item description
     menuEntry.querySelector(".item_description").innerHTML = `
@@ -395,7 +395,6 @@ async function fetchBurgerByID(burgerId) {
 
 async function updateMenuDisplay(burger, date, burgerId) {
   const menuItems = document.getElementsByClassName("menu_items")[0];
-
   try {
     const response = await fetch(`${allergensUrl}${burgerId}`);
     if (!response.ok) throw new Error("Failed to fetch allergens");
@@ -406,8 +405,8 @@ async function updateMenuDisplay(burger, date, burgerId) {
   <p>Menu for: ${date}</p>
   <h2>${burger.Name}</h2>
   <div class="menu_entry">
-      <img src="http://127.0.0.1:3001/api/v1/burgers/${burger.filename}" alt="${
-      burger.Name
+      <img src="${baseUrl}/api/v1/burgers/${burger[0].filename}" alt="${
+      burger[0].Name
     }" class="menu_item_image">
       <div class="item_description">
           <p>${burger.Description}</p>
