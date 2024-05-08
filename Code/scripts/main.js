@@ -389,25 +389,18 @@ async function fetchAndDisplayOffers() {
           throw new Error("Failed to fetch burger details");
         const burger = await burgerDetailsResponse.json();
 
-        const allergensResponse = await fetch(
-          `${allergensUrl}${offer.burger_id}`
-        );
-        if (!allergensResponse.ok) throw new Error("Failed to fetch allergens");
-        const allergens = await allergensResponse.json();
-        const allergenDisplay = allergens.map((a) => a.acronym).join(", ");
-
         offerDiv.querySelector(
           ".offer-image"
         ).src = `${baseUrl}/api/v1/burgers/${burger.filename}`;
-        offerDiv.querySelector(".offer-title").textContent = burger.name;
+        offerDiv.querySelector(".offer-title").textContent = offer.offer_name;
         offerDiv.querySelector(".offer-description").textContent =
-          burger.description;
+          offer.description;
         offerDiv.querySelector(".offer-price").textContent = `${offer.price} €`;
         offerDiv.querySelector(
           ".offer-dates"
-        ).textContent = `Voimassa: ${formatDateForOffers(
+        ).textContent = `Valid: ${formatDateForOffers(
           offer.start_date
-        )} - ${formatDateForOffers(offer.end_date)}`;
+        )} to ${formatDateForOffers(offer.end_date)}`;
       }
     });
   } catch (error) {
