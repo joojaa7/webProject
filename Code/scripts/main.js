@@ -127,6 +127,8 @@ function updateButtonVisibility() {
     localStorage.getItem("user") && localStorage.getItem("token")
   );
   console.log("Updating button visibility, logged in:", isLoggedIn);
+  const cart = document.getElementById("shopping-cart");
+  cart.style.display = isLoggedIn ? "block" : "none";
   Array.from(document.getElementsByClassName("add-to-cart-btn")).forEach(
     (btn) => {
       btn.style.display = isLoggedIn ? "block" : "none";
@@ -253,7 +255,7 @@ async function updateWeeklyMenuDisplay(burger, day, burgerId, dayId) {
 
     // Update item description
     menuEntry.querySelector(".item_description").innerHTML = `
-      <p>Menu for: ${day}</p>
+      <p>${day}</p>
       <h2>${burger.Name}</h2>
       <p>${burger.Description}</p>
       <p>${burger.Price} €</p>
@@ -298,9 +300,9 @@ for (let button of weekdayButtons) {
     const specials = document.getElementsByClassName(
       "special-offers-section"
     )[0];
-    if (specials) {
-      specials.style.display = "none";
-    }
+    //if (specials) {
+    //  specials.style.display = "none";
+    //}
 
     try {
       const menus = await fetchMenuByDate(selectedDate + year);
@@ -453,9 +455,8 @@ async function updateMenuDisplay(burger, date, burgerId) {
           </button>
       </div>`;
 
-    menuContainer.appendChild(burgerDiv); // Append the new burger div to the container
+    menuContainer.appendChild(burgerDiv);
 
-    // Adding event listener to newly created button in burgerDiv
     burgerDiv
       .querySelector(".add-to-cart-btn")
       .addEventListener("click", function (e) {
@@ -477,7 +478,6 @@ async function updateMenuDisplay(burger, date, burgerId) {
   }
 }
 
-// Make sure this container is empty before populating it each time to avoid duplication
 function clearMenuDisplay() {
   const menuContainer = document.getElementsByClassName("menu_items")[0];
   menuContainer.innerHTML = ""; // Clear previous contents
@@ -568,7 +568,7 @@ document.getElementById("logout-button").addEventListener("click", () => {
   localStorage.removeItem("user");
   localStorage.removeItem("token");
   ShoppingCart.setUserId(null);
-  //ShoppingCart.logout();
+  localStorage.clear();
 
   document.getElementById("cart-items").innerHTML = "";
   document.getElementById("cart-total").innerHTML = "Total: 0,00€";

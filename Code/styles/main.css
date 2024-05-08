@@ -239,6 +239,7 @@ h3 {
 }
 
 .offer-title {
+  text-decoration: none;
   font-size: 18px;
   color: #333;
   margin-top: 10px;
@@ -255,6 +256,12 @@ h3 {
   color: #1a943b;
   font-weight: bold;
   margin-top: 10px;
+}
+
+.offer-dates {
+  font-size: 14px;
+  color: #4e4d4d;
+  margin-top: 5px;
 }
 
 .weekday_buttons {
