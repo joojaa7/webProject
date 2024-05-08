@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
   setWeekDates();
   ShoppingCart.loadCart();
-  //ShoppingCart.updateCartDisplay();
+  ShoppingCart.updateCartDisplay();
   populateWeeklyMenu();
   fetchAndDisplayOffers();
   updateButtonVisibility();
@@ -128,7 +128,7 @@ function updateButtonVisibility() {
   );
   console.log("Updating button visibility, logged in:", isLoggedIn);
   const cart = document.getElementById("shopping-cart");
-  cart.style.display = isLoggedIn ? "block" : "none";
+  //cart.style.display = isLoggedIn ? "block" : "none";
   Array.from(document.getElementsByClassName("add-to-cart-btn")).forEach(
     (btn) => {
       btn.style.display = isLoggedIn ? "block" : "none";
@@ -530,7 +530,6 @@ const loginSubmit = async () => {
 
   const json = await response.json();
 
-
   if (!json.user) {
     alert(json.error.message);
   } else {
@@ -556,19 +555,18 @@ const loginSubmit = async () => {
     console.log(user.avatar);
     toggleLogin(true);
   }
-}
+};
 
 // Kirjaudu sisään.
 
-document.getElementById('loginForm').addEventListener('keydown', async (e) => { 
-  if (e.key === 'Enter'){
+document.getElementById("loginForm").addEventListener("keydown", async (e) => {
+  if (e.key === "Enter") {
     loginSubmit();
     e.preventDefault();
-    console.log('enter');
+    console.log("enter");
   }
-  console.log('not enter')
-})
-
+  console.log("not enter");
+});
 
 document.getElementById("login-apply").addEventListener("click", async (e) => {
   loginSubmit();
@@ -579,7 +577,7 @@ document.getElementById("login-apply").addEventListener("click", async (e) => {
 document.getElementById("logout-button").addEventListener("click", () => {
   localStorage.removeItem("user");
   localStorage.removeItem("token");
-  ShoppingCart.setUserId(null);
+  //ShoppingCart.setUserId(null);
   localStorage.clear();
 
   document.getElementById("cart-items").innerHTML = "";

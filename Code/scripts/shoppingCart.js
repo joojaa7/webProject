@@ -1,7 +1,7 @@
 const ShoppingCart = {
   items: [],
   userId: null,
-  // modify shoppingcart to include item id
+
   setUserId(userId) {
     this.userId = userId;
     this.loadCart();
@@ -42,67 +42,75 @@ const ShoppingCart = {
   },
 
   loadCart() {
-    if (this.userId) {
-      this.items = JSON.parse(localStorage.getItem(this.getCartKey())) || [];
-    } else {
-      this.items = [];
-    }
-
+    this.items = JSON.parse(localStorage.getItem(this.getCartKey())) || [];
+    console.log("Cart loaded. Items:", this.items);
     this.updateCartDisplay();
   },
 
   updateCartDisplay() {
+    console.log(
+      "Updating cart display. Current items count:",
+      this.items.length
+    );
     const cartItemsElement = document.getElementById("cart-items");
+    const shoppingCartElement = document.getElementById("shopping-cart");
 
-    cartItemsElement.innerHTML = "";
-    // Clear existing items
+    cartItemsElement.innerHTML = ""; // Clear existing items
 
-    this.items.forEach((item) => {
-      const itemElement = document.createElement("div");
-      itemElement.className = "cart-item";
-      //console.log(item);
+    if (this.items.length > 0) {
+      // Hide the shopping cart if it is empty
+      console.log("Cart is not empty. Showing cart.");
+      shoppingCartElement.style.display = "block";
 
-      const itemInfo = document.createElement("span");
-      itemInfo.setAttribute("class", "item-paragraph-span");
-      const itemName = document.createElement("p");
-      const itemPrice = document.createElement("p");
-      itemName.setAttribute("class", "item-paragraph");
-      itemPrice.setAttribute("class", "item-paragraph");
-      itemName.textContent = `${item.name}`;
-      itemPrice.textContent = `${item.price.toFixed(2)} €`;
-      itemInfo.append(itemName);
-      itemInfo.append(itemPrice);
+      this.items.forEach((item) => {
+        const itemElement = document.createElement("div");
+        itemElement.className = "cart-item";
 
-      // Quantity management
-      const quantityControl = document.createElement("div");
-      quantityControl.className = "quantity-control";
+        const itemInfo = document.createElement("span");
+        itemInfo.setAttribute("class", "item-paragraph-span");
+        const itemName = document.createElement("p");
+        const itemPrice = document.createElement("p");
+        itemName.setAttribute("class", "item-paragraph");
+        itemPrice.setAttribute("class", "item-paragraph");
+        itemName.textContent = `${item.name}`;
+        itemPrice.textContent = `${item.price.toFixed(2)} €`;
+        itemInfo.append(itemName);
+        itemInfo.append(itemPrice);
 
-      const decrementBtn = document.createElement("button");
-      decrementBtn.textContent = "-";
-      decrementBtn.onclick = () => {
-        this.removeItem(item.id); // Decrement or remove item
-      };
+        // Quantity management
+        const quantityControl = document.createElement("div");
+        quantityControl.className = "quantity-control";
 
-      const quantityDisplay = document.createElement("span");
-      quantityDisplay.textContent = ` Quantity: ${item.quantity}`;
-      quantityDisplay.style.padding = "1rem";
+        const decrementBtn = document.createElement("button");
+        decrementBtn.textContent = "-";
+        decrementBtn.onclick = () => {
+          this.removeItem(item.id); // Decrement or remove item
+        };
 
-      const incrementBtn = document.createElement("button");
-      incrementBtn.textContent = "+";
-      incrementBtn.onclick = () => {
-        this.addItem({ ...item, quantity: 1 }); // Add the same item (increments quantity)
-      };
+        const quantityDisplay = document.createElement("span");
+        quantityDisplay.textContent = ` Quantity: ${item.quantity}`;
+        quantityDisplay.style.padding = "1rem";
 
-      // Assembling the quantity controls
-      quantityControl.appendChild(decrementBtn);
-      quantityControl.appendChild(quantityDisplay);
-      quantityControl.appendChild(incrementBtn);
+        const incrementBtn = document.createElement("button");
+        incrementBtn.textContent = "+";
+        incrementBtn.onclick = () => {
+          this.addItem({ ...item, quantity: 1 }); // Add the same item (increments quantity)
+        };
 
-      // Assembling the item element
-      itemElement.appendChild(itemInfo);
-      itemElement.appendChild(quantityControl);
-      cartItemsElement.appendChild(itemElement);
-    });
+        // Assembling the quantity controls
+        quantityControl.appendChild(decrementBtn);
+        quantityControl.appendChild(quantityDisplay);
+        quantityControl.appendChild(incrementBtn);
+
+        // Assembling the item element
+        itemElement.appendChild(itemInfo);
+        itemElement.appendChild(quantityControl);
+        cartItemsElement.appendChild(itemElement);
+      });
+    } else {
+      console.log("Cart is empty. Hiding cart.");
+      shoppingCartElement.style.display = "none";
+    }
 
     // Update total price display
     document.getElementById(
