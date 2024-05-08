@@ -248,7 +248,7 @@ async function updateWeeklyMenuDisplay(burger, day, burgerId, dayId) {
     // Update image source
     menuEntry.querySelector(
       ".menu_item_image"
-    ).src = `http://127.0.0.1:3000/api/v1/burgers/${burger[0].filename}`;
+    ).src = baseUrl + `/api/v1/burgers/${burger[0].filename}`;
     menuEntry.querySelector(".menu_item_image").alt = burger[0].Name;
 
     // Update item description
@@ -407,7 +407,7 @@ async function updateMenuDisplay(burger, date, burgerId) {
   <p>Menu for: ${date}</p>
   <h2>${burger[0].Name}</h2>
   <div class="menu_entry">
-      <img src="http://127.0.0.1:3000/api/v1/burgers/${burger[0].filename}" alt="${
+      <img src="${baseUrl}/api/v1/burgers/${burger[0].filename}" alt="${
       burger[0].Name
     }" class="menu_item_image">
       <div class="item_description">
