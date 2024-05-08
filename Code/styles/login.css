@@ -37,6 +37,10 @@ body {
   border: 5px rgb(84, 141, 122) solid;
   background-color: antiquewhite;
 }
+
+#preview-image {
+  border-radius: 0;
+}
 .banner_content {
   display: flex;
   flex-wrap: wrap;
@@ -61,8 +65,9 @@ img {
 #frontpage-button {
   cursor: pointer;
   margin: auto;
-  width: 20%;
+  width: max-content;
   font-weight: bold;
+  box-sizing: content-box;
   font-size: 48px;
   background-color: rgb(75, 119, 104);
   padding: 1rem;
@@ -185,7 +190,7 @@ table tr:nth-child(even) {
 }
 
 th {
-  font-size: 24px;
+  font-size: 18px;
   padding: 5px;
   border: 1px solid;
 }
@@ -217,89 +222,21 @@ td {
   to { transform: rotate(360deg); }           
 }
 
-@media (max-width: 600px) {
-  .content-wrapper {
-    flex-direction: column;
-  }
-
-  .options-input {
-    margin-left: 10px;
-    width: 90vw;
-    min-height: 60vh;
-  }
-
-  .sidebanner {
-    width: 90vw;
-    height: 35vh;
-  }
+#order-history {
+  margin: 1rem;
 }
 
-@media (max-width: 400px) {
-  .sidebanner {
-    width: 30vw;
-    height: 60vh;
-  }
+
+#active-orders{
+  overflow-x: auto;
 }
 
-.login_button {
-  cursor: pointer;
-  position: absolute;
-  right: 3rem;
-  top: 1rem;
-  width: min-content;
-  height: min-content;
-  background-color: rgb(84, 141, 122);
+#update-order {
+  margin-bottom: 1rem;
 }
 
-.login_content {
-  cursor: pointer;
-  padding: 0.3rem 1rem 0.3rem 1rem;
-}
-
-.menu {
-  width: 80%;
-  margin: auto;
-}
-
-.weekday_buttons {
-  width: 100%;
-  margin: auto;
-}
-
-.weekdays {
-  list-style: none;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-evenly;
-  padding: 0;
-}
-
-.weekday_link {
-  background-image: linear-gradient(
-    to right,
-    rgb(121, 180, 161),
-    rgb(110, 233, 192)
-  );
-  padding: 1rem;
-}
-
-.menu_items {
-  width: 70%;
-  margin: auto;
-  margin-bottom: 2rem;
-  background-image: linear-gradient(
-    to right,
-    rgb(75, 119, 104),
-    rgb(110, 233, 192)
-  );
-  padding: 2rem;
-}
-
-.menu_entry {
-  display: flex;
-  flex-wrap: wrap;
-  width: 100%;
-  margin: auto;
+#user-avatar {
+  max-width: 35%;
 }
 
 .menu_item_image {
@@ -308,16 +245,6 @@ td {
   margin-bottom: 1rem;
   border-radius: 0 1rem 1rem 0;
   border: 5px rgb(84, 141, 122) solid;
-}
-
-.item_description {
-  width: calc(50% - 0.5rem);
-  margin-bottom: 1rem;
-  margin-top: 0;
-  padding: 1rem;
-  border-radius: 1rem 0 0 1rem;
-  border: 5px rgb(50, 90, 77) solid;
-  background-color: rgb(84, 141, 122);
 }
 
 .admin-only a {
@@ -335,4 +262,34 @@ td {
 
 .admin-only {
   display: none;
+}
+
+@media (max-width: 800px) {
+  .content-wrapper {
+    display: block;
+  }
+  .sidebanner {
+    margin: auto;
+  }
+  #user-avatar {
+    max-width: 50%;
+  }
+  .options-input {
+    width: 80%;
+  }
+  #frontpage-button {
+    font-size: 24px;
+  }
+
+  th {
+    font-size: 12px;
+  }
+}
+
+
+@media (max-width: 400px) {
+  .sidebanner {
+    width: 30vw;
+    height: 60vh;
+  }
 }
