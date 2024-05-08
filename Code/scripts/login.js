@@ -399,7 +399,7 @@ document
         console.log("OK");
         userData.avatar = json.avatar;
         localStorage.setItem("user", JSON.stringify(userData));
-        document.getElementById("user-avatar").src = "../" + json.avatar;
+        document.getElementById("user-avatar").src = baseUrl + "api/v1/" + json.avatar;
       } else {
         alert("Log in required.");
       }
