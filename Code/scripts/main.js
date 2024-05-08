@@ -29,10 +29,32 @@ document.addEventListener("DOMContentLoaded", async () => {
   setWeekDates();
   ShoppingCart.loadCart();
   ShoppingCart.updateCartDisplay();
-  populateWeeklyMenu();
+ // populateWeeklyMenu();
   fetchAndDisplayOffers();
   updateButtonVisibility();
+  const today = new Date();
+  console.log(formatDate(today), 'formatted');
+  const year = new Date().getFullYear();
+  getDaysMenu(formatDate(today), year)
 });
+
+const getDaysMenu = async (today, year) => {
+  console.log(today, year)
+  try {
+    const menus = await fetchMenuByDate(today + year);
+    if (menus.length > 0) {
+      menus.forEach(async (menu) => {
+        const burgerDetails = await fetchBurgerByID(menu.burger_id);
+        updateMenuDisplay(burgerDetails, today, menu.burger_id);
+        clearMenuDisplay();
+      });
+    } else {
+      console.log("No burgers found for this date");
+    }
+  } catch (error) {
+    console.error("Error processing menus:", error);
+  }
+}
 
 document
   .getElementById("checkout-button")
@@ -237,92 +259,74 @@ function formatDate(date) {
 //   });
 // }
 
-async function updateWeeklyMenuDisplay(burger, day, burgerId, dayId) {
-  const menuEntry = document.getElementById(dayId);
-  console.log(menuEntry, "menuEnetry");
+// async function updateWeeklyMenuDisplay(burger, day, burgerId, dayId) {
+//   const menuEntry = document.getElementById(dayId);
+//   console.log(menuEntry, "menuEnetry");
 
-  try {
-    const response = await fetch(`${allergensUrl}${burgerId}`);
-    if (!response.ok) throw new Error("Failed to fetch allergens");
-    const allergens = await response.json();
-    const allergenDisplay = allergens.map((a) => a.acronym).join(", ");
-    //console.log("day:", day);
+//   try {
+//     const response = await fetch(`${allergensUrl}${burgerId}`);
+//     if (!response.ok) throw new Error("Failed to fetch allergens");
+//     const allergens = await response.json();
+//     const allergenDisplay = allergens.map((a) => a.acronym).join(", ");
+//     //console.log("day:", day);
 
-    // Update image source
-    menuEntry.querySelector(".menu_item_image").src =
-      baseUrl + `/api/v1/burgers/${burger.filename}`;
-    menuEntry.querySelector(".menu_item_image").alt = burger.Name;
+//     // Update image source
+//     menuEntry.querySelector(".menu_item_image").src =
+//       baseUrl + `/api/v1/burgers/${burger.filename}`;
+//     menuEntry.querySelector(".menu_item_image").alt = burger.Name;
 
-    // Update item description
-    menuEntry.querySelector(".item_description").innerHTML = `
-      <p>${day}</p>
-      <h2>${burger.Name}</h2>
-      <p>${burger.Description}</p>
-      <p>${burger.Price} €</p>
-      <p>Allergens: ${allergenDisplay}</p>
-      <button class="add-to-cart-btn" data-id="${
-        burger.ID
-      }" data-burger='${JSON.stringify(burger)}'>
-          <i class="fas fa-shopping-cart"></i> Add to Cart
-      </button>
-  </div>`;
-    updateButtonVisibility();
-  } catch (error) {
-    console.error("Error updating weekly menu display:", error);
-    menuEntry.querySelector(
-      ".item_description"
-    ).innerHTML = `<p>Error loading menu details for ${day}.</p>`;
-  }
-  menuEntry
-    .querySelector(".add-to-cart-btn")
-    .addEventListener("click", function (e) {
-      const burger = JSON.parse(e.target.dataset.burger);
+//     // Update item description
+//     menuEntry.querySelector(".item_description").innerHTML = `
+//       <p>${day}</p>
+//       <h2>${burger.Name}</h2>
+//       <p>${burger.Description}</p>
+//       <p>${burger.Price} €</p>
+//       <p>Allergens: ${allergenDisplay}</p>
+//       <button class="add-to-cart-btn" data-id="${
+//         burger.ID
+//       }" data-burger='${JSON.stringify(burger)}'>
+//           <i class="fas fa-shopping-cart"></i> Add to Cart
+//       </button>
+//   </div>`;
+//     updateButtonVisibility();
+//   } catch (error) {
+//     console.error("Error updating weekly menu display:", error);
+//     menuEntry.querySelector(
+//       ".item_description"
+//     ).innerHTML = `<p>Error loading menu details for ${day}.</p>`;
+//   }
+//   menuEntry
+//     .querySelector(".add-to-cart-btn")
+//     .addEventListener("click", function (e) {
+//       const burger = JSON.parse(e.target.dataset.burger);
 
-      alert("Burger added to cart!");
-      console.log("burger data:", burger);
-      ShoppingCart.addItem({
-        id: burger.ID,
-        name: burger.Name,
-        price: burger.Price,
-        quantity: 1,
-      });
-    });
-}
+//       alert("Burger added to cart!");
+//       console.log("burger data:", burger);
+//       ShoppingCart.addItem({
+//         id: burger.ID,
+//         name: burger.Name,
+//         price: burger.Price,
+//         quantity: 1,
+//       });
+//     });
+// }
 
 const weekdayButtons = document.getElementsByClassName("weekday_link");
 
 // TODO: add error handling for when a burger is not found for the date
 
+
 for (let button of weekdayButtons) {
   button.addEventListener("click", async (e) => {
     const selectedDate = e.target.innerText;
+    console.log(e.target.innerText)
     const year = new Date().getFullYear();
     const specials = document.getElementsByClassName(
       "special-offers-section"
     )[0];
-    //if (specials) {
-    //  specials.style.display = "none";
-    //}
 
-    try {
-      const menus = await fetchMenuByDate(selectedDate + year);
-      if (menus.length > 0) {
-        // Clear previous details if any
-        //clearMenuDisplay();
-        // Process each menu item
-        menus.forEach(async (menu) => {
-          const burgerDetails = await fetchBurgerByID(menu.burger_id);
-          updateMenuDisplay(burgerDetails, selectedDate, menu.burger_id);
-          clearMenuDisplay();
-        });
-      } else {
-        console.log("No burgers found for this date");
-      }
-    } catch (error) {
-      console.error("Error processing menus:", error);
-    }
+    getDaysMenu(selectedDate, year);
 
-    // Manage active class on buttons
     for (let button of weekdayButtons) {
       button.classList.remove("active");
     }
@@ -426,7 +430,7 @@ async function fetchBurgerByID(burgerId) {
 }
 
 async function updateMenuDisplay(burger, date, burgerId) {
-  const menuContainer = document.getElementsByClassName("menu_items")[0]; // This should be a container that will hold all menu entries
+  const menuContainer = document.getElementsByClassName("menu_items")[0]; 
 
   try {
     const response = await fetch(`${allergensUrl}${burgerId}`);
@@ -440,10 +444,9 @@ async function updateMenuDisplay(burger, date, burgerId) {
     burgerDiv.innerHTML = `
       
       <img src="${baseUrl}/api/v1/burgers/${burger.filename}" alt="${
-      burger.Name
-    }" class="menu_item_image">
+      burger.Name}
+      "class="menu_item_image">
       <div class="item_description">
-          <p>Menu for: ${date}</p>
           <h2>${burger.Name}</h2>
           <p>${burger.Description}</p>
           <p>${burger.Price} €</p>
