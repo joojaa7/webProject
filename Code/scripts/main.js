@@ -16,7 +16,7 @@ const loggedElement = document.getElementById("logged");
 let user = JSON.parse(localStorage.getItem("user"));
 const avatar = document.getElementById("avatar");
 //const baseUrl = 'http://127.0.0.1:3001/';
-const baseUrl = 'http://10.120.32.51/web/'
+const baseUrl = "http://10.120.32.51/web/";
 
 // En tiedä tarvitaanko, kun script tagissa on defer. Kokeilin ilman ja toimi.
 document.addEventListener("DOMContentLoaded", async () => {
@@ -248,19 +248,19 @@ async function updateWeeklyMenuDisplay(burger, day, burgerId, dayId) {
     // Update image source
     menuEntry.querySelector(
       ".menu_item_image"
-    ).src = `http://127.0.0.1:3000/api/v1/burgers/${burger[0].filename}`;
-    menuEntry.querySelector(".menu_item_image").alt = burger[0].Name;
+    ).src = `http://127.0.0.1:3001/api/v1/burgers/${burger.filename}`;
+    menuEntry.querySelector(".menu_item_image").alt = burger.Name;
 
     // Update item description
     menuEntry.querySelector(".item_description").innerHTML = `
       <p>Menu for: ${day}</p>
-      <h2>${burger[0].Name}</h2>
-      <p>${burger[0].Description}</p>
-      <p>${burger[0].Price} €</p>
+      <h2>${burger.Name}</h2>
+      <p>${burger.Description}</p>
+      <p>${burger.Price} €</p>
       <p>Allergens: ${allergenDisplay}</p>
       <button class="add-to-cart-btn" data-id="${
-        burger[0].ID
-      }" data-burger='${JSON.stringify(burger[0])}'>
+        burger.ID
+      }" data-burger='${JSON.stringify(burger)}'>
           <i class="fas fa-shopping-cart"></i> Add to Cart
       </button>
   </div>`;
@@ -360,9 +360,8 @@ async function fetchAndDisplayOffers() {
     offers.slice(0, 3).forEach((offer, index) => {
       const offerDiv = document.getElementById(`offer${index + 1}`);
       if (offerDiv) {
-        offerDiv.querySelector(
-          ".offer-image"
-        ).src =  baseUrl + `api/v1/specials/${offer.filename}`;
+        offerDiv.querySelector(".offer-image").src =
+          baseUrl + `api/v1/specials/${offer.filename}`;
         offerDiv.querySelector(".offer-title").textContent = offer.name;
         offerDiv.querySelector(".offer-description").textContent =
           offer.description;
@@ -405,20 +404,20 @@ async function updateMenuDisplay(burger, date, burgerId) {
 
     menuItems.innerHTML = `
   <p>Menu for: ${date}</p>
-  <h2>${burger[0].Name}</h2>
+  <h2>${burger.Name}</h2>
   <div class="menu_entry">
-      <img src="http://127.0.0.1:3000/api/v1/burgers/${burger[0].filename}" alt="${
-      burger[0].Name
+      <img src="http://127.0.0.1:3001/api/v1/burgers/${burger.filename}" alt="${
+      burger.Name
     }" class="menu_item_image">
       <div class="item_description">
-          <p>${burger[0].Description}</p>
-          <p>${burger[0].Price} €</p>
+          <p>${burger.Description}</p>
+          <p>${burger.Price} €</p>
           <p>Allergens: ${allergenDisplay}</p>
       </div>
       
       <button class="add-to-cart-btn" data-id="${
-        burger[0].ID
-      }" data-burger='${JSON.stringify(burger[0])}'>
+        burger.ID
+      }" data-burger='${JSON.stringify(burger)}'>
           <i class="fas fa-shopping-cart"></i> Add to Cart
       </button>
   </div>`;
@@ -518,7 +517,7 @@ document.getElementById("login-apply").addEventListener("click", async (e) => {
     if (user.avatar === null) {
       avatar.src = baseUrl + "api/v1/default.jpg";
     }
-    console.log(user.avatar)
+    console.log(user.avatar);
     toggleLogin(true);
   }
 });
@@ -573,10 +572,7 @@ document
       body: formData,
     };
     console.log(options);
-    const response = await fetch(
-      baseUrl + "api/v1/users/register",
-      options
-    );
+    const response = await fetch(baseUrl + "api/v1/users/register", options);
     console.log(response);
 
     // Login if registrartion successful
@@ -595,10 +591,7 @@ document
         },
         body: JSON.stringify(loginUser),
       };
-      const response = await fetch(
-        baseUrl + "api/v1/auth/",
-        options
-      );
+      const response = await fetch(baseUrl + "api/v1/auth/", options);
       console.log(response);
       const json = await response.json();
       if (!json.user) {
@@ -608,11 +601,11 @@ document
         localStorage.setItem("user", JSON.stringify(json.user));
         loginForm.style.display = "none";
         user = JSON.parse(localStorage.getItem("user"));
-        document.getElementById("avatar").src = 
+        document.getElementById("avatar").src =
           baseUrl + "api/v1/" + user.avatar;
-          if (user.avatar === null) {
-            avatar.src = baseUrl + "api/v1/default.jpg";
-          };
+        if (user.avatar === null) {
+          avatar.src = baseUrl + "api/v1/default.jpg";
+        }
         toggleLogin(true);
       }
     }
@@ -648,10 +641,7 @@ document.getElementById("profile-button").addEventListener("click", () => {
           "Content-Type": "application/json",
         },
       };
-      const response = await fetch(
-        baseUrl + "api/v1/auth/verify",
-        options
-      );
+      const response = await fetch(baseUrl + "api/v1/auth/verify", options);
       console.log(response);
       if (response.ok) {
         toggleLogin(true);
