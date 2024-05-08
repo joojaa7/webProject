@@ -237,7 +237,6 @@ async function populateWeeklyMenu() {
 
 async function updateWeeklyMenuDisplay(burger, day, burgerId, dayId) {
   const menuEntry = document.getElementById(dayId);
-  console.log(menuEntry,'menuEnetry')
 
   try {
     const response = await fetch(`${allergensUrl}${burgerId}`);
