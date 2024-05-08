@@ -65,13 +65,18 @@
 #dayCarousel {
   display: flex;
   gap: 15vw;
-  margin: 20px 0;
+
   margin-left: 20px;
 }
 
 #loadReservationsForDate {
   padding: 10px;
   margin: 10px;
+}
+
+#previousDayBtn,
+#nextDayBtn {
+  margin-top: 98px;
 }
 
 #dayCarousel button {
