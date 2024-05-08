@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   setWeekDates();
   ShoppingCart.loadCart();
   //ShoppingCart.updateCartDisplay();
-  populateWeeklyMenu();
+  // populateWeeklyMenu();
   fetchAndDisplayOffers();
   updateButtonVisibility();
 });
@@ -186,54 +186,54 @@ function formatDate(date) {
   return `${day}.${month}.`; // Returns 'DD.MM.'
 }
 
-async function populateWeeklyMenu() {
-  const days = [
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-    "Sunday",
-  ];
-  const dayIds = [
-    "menu-monday",
-    "menu-tuesday",
-    "menu-wednesday",
-    "menu-thursday",
-    "menu-friday",
-    "menu-saturday",
-    "menu-sunday",
-  ];
+// async function populateWeeklyMenu() {
+//   const days = [
+//     "Monday",
+//     "Tuesday",
+//     "Wednesday",
+//     "Thursday",
+//     "Friday",
+//     "Saturday",
+//     "Sunday",
+//   ];
+//   const dayIds = [
+//     "menu-monday",
+//     "menu-tuesday",
+//     "menu-wednesday",
+//     "menu-thursday",
+//     "menu-friday",
+//     "menu-saturday",
+//     "menu-sunday",
+//   ];
 
-  days.forEach(async (day, index) => {
-    const dayElement = document.getElementById(`day${index}`);
-    const formattedDate = dayElement.textContent;
-    const year = new Date().getFullYear();
+//   days.forEach(async (day, index) => {
+//     const dayElement = document.getElementById(`day${index}`);
+//     const formattedDate = dayElement.textContent;
+//     const year = new Date().getFullYear();
 
-    try {
-      const burgerId = await fetchMenuByDates(formattedDate + year);
-      if (burgerId) {
-        const burgerDetails = await fetchBurgerByID(burgerId);
-        updateWeeklyMenuDisplay(burgerDetails, day, burgerId, dayIds[index]);
-      } else {
-        console.log(`No burger found for ${day}`);
-        document
-          .getElementById(dayIds[index])
-          .querySelector(
-            ".item_description"
-          ).innerHTML = `<p>No menu available for ${day}.</p>`;
-      }
-    } catch (error) {
-      console.error(`Error fetching menu for ${day}:`, error);
-      document
-        .getElementById(dayIds[index])
-        .querySelector(
-          ".item_description"
-        ).innerHTML = `<p>Error loading menu for ${day}.</p>`;
-    }
-  });
-}
+//     try {
+//       const burgerId = await fetchMenuByDates(formattedDate + year);
+//       if (burgerId) {
+//         const burgerDetails = await fetchBurgerByID(burgerId);
+//         updateWeeklyMenuDisplay(burgerDetails, day, burgerId, dayIds[index]);
+//       } else {
+//         console.log(`No burger found for ${day}`);
+//         document
+//           .getElementById(dayIds[index])
+//           .querySelector(
+//             ".item_description"
+//           ).innerHTML = `<p>No menu available for ${day}.</p>`;
+//       }
+//     } catch (error) {
+//       console.error(`Error fetching menu for ${day}:`, error);
+//       document
+//         .getElementById(dayIds[index])
+//         .querySelector(
+//           ".item_description"
+//         ).innerHTML = `<p>Error loading menu for ${day}.</p>`;
+//     }
+//   });
+// }
 
 async function updateWeeklyMenuDisplay(burger, day, burgerId, dayId) {
   const menuEntry = document.getElementById(dayId);
@@ -299,7 +299,7 @@ for (let button of weekdayButtons) {
       "special-offers-section"
     )[0];
     if (specials) {
-      specials.style.display = "none";
+     // specials.style.display = "none";
     }
 
     try {
