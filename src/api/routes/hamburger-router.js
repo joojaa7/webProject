@@ -27,7 +27,7 @@ const hamburgerRouter = express.Router();
 /**
  * @api {delete} /hamburgers/:id Delete Burger
  * @apiName DeleteBurger
- * @apiGroup Hamburgers
+ * @apiGroup Burgers
  *
  * @apiParam {Number} id Unique identifier of the Burger to delete.
  *
@@ -62,7 +62,7 @@ hamburgerRouter.delete("/:id", deleteBurgerController);
 /**
  * @api {get} /hamburgers/:id Get Burger by ID
  * @apiName GetBurgerById
- * @apiGroup Hamburgers
+ * @apiGroup Burgers
  *
  * @apiParam {Number} id Unique identifier of the Burger to retrieve.
  *
@@ -103,7 +103,7 @@ hamburgerRouter.get("/:id", getBurgerByIdController);
 /**
  * @api {get} /hamburgers/ List All Hamburgers
  * @apiName GetAllHamburgers
- * @apiGroup Hamburgers
+ * @apiGroup Burgers
  *
  * @apiSuccess {Object[]} hamburgers Array of all hamburger objects.
  * @apiSuccess {Number} hamburgers.ID Identifier of the Hamburger.
@@ -142,7 +142,7 @@ hamburgerRouter.get("/:id", getBurgerByIdController);
 /**
  * @api {post} /hamburgers/ Add New Burger
  * @apiName AddNewBurger
- * @apiGroup Hamburgers
+ * @apiGroup Burgers
  *
  * @apiParam {String} add-burger-name Name of the Burger.
  * @apiParam {String} add-burger-description Description of the Burger.

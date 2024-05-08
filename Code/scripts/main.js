@@ -275,8 +275,9 @@ async function updateWeeklyMenuDisplay(burger, day, burgerId, dayId) {
     .querySelector(".add-to-cart-btn")
     .addEventListener("click", function (e) {
       const burger = JSON.parse(e.target.dataset.burger);
+
       alert("Burger added to cart!");
-      //console.log("burger data:", burger);
+      console.log("burger data:", burger);
       ShoppingCart.addItem({
         id: burger.ID,
         name: burger.Name,
@@ -289,40 +290,6 @@ async function updateWeeklyMenuDisplay(burger, day, burgerId, dayId) {
 const weekdayButtons = document.getElementsByClassName("weekday_link");
 
 // TODO: add error handling for when a burger is not found for the date
-/*
-for (let button of weekdayButtons) {
-  button.addEventListener("click", async (e) => {
-    const selectedDate = e.target.innerText;
-    const year = new Date().getFullYear();
-    const specials = document.getElementsByClassName(
-      "special-offers-section"
-    )[0];
-    if (specials) {
-      specials.style.display = "none";
-    }
-
-    try {
-      const burgersForDate = await fetchMenuByDate(selectedDate + year);
-      console.log("burgersForDate", burgersForDate);
-      console.log("burgerID", burgerId);
-      if (burgerId) {
-        const burgerDetails = await fetchBurgerByID(burgerId);
-
-        updateMenuDisplay(burgerDetails, selectedDate, burgerId);
-      } else {
-        console.log("No burger found for this date");
-      }
-    } catch (error) {
-      console.error("Error fetching menu:", error);
-    }
-
-    for (let button of weekdayButtons) {
-      button.classList.remove("active");
-    }
-    e.target.classList.add("active");
-  });
-}
-*/
 
 for (let button of weekdayButtons) {
   button.addEventListener("click", async (e) => {
@@ -412,14 +379,29 @@ async function fetchAndDisplayOffers() {
       (a, b) => new Date(a.start_date) - new Date(b.start_date)
     );
 
-    offers.slice(0, 3).forEach((offer, index) => {
+    offers.slice(0, 3).forEach(async (offer, index) => {
       const offerDiv = document.getElementById(`offer${index + 1}`);
       if (offerDiv) {
-        offerDiv.querySelector(".offer-image").src =
-          baseUrl + `api/v1/specials/${offer.filename}`;
-        offerDiv.querySelector(".offer-title").textContent = offer.name;
+        const burgerDetailsResponse = await fetch(
+          `${baseUrl}api/v1/hamburgers/${offer.burger_id}`
+        );
+        if (!burgerDetailsResponse.ok)
+          throw new Error("Failed to fetch burger details");
+        const burger = await burgerDetailsResponse.json();
+
+        const allergensResponse = await fetch(
+          `${allergensUrl}${offer.burger_id}`
+        );
+        if (!allergensResponse.ok) throw new Error("Failed to fetch allergens");
+        const allergens = await allergensResponse.json();
+        const allergenDisplay = allergens.map((a) => a.acronym).join(", ");
+
+        offerDiv.querySelector(
+          ".offer-image"
+        ).src = `${baseUrl}/api/v1/burgers/${burger.filename}`;
+        offerDiv.querySelector(".offer-title").textContent = burger.name;
         offerDiv.querySelector(".offer-description").textContent =
-          offer.description;
+          burger.description;
         offerDiv.querySelector(".offer-price").textContent = `${offer.price} €`;
         offerDiv.querySelector(
           ".offer-dates"
@@ -447,57 +429,6 @@ async function fetchBurgerByID(burgerId) {
   const burger = await response.json();
   return burger;
 }
-
-/*
-async function updateMenuDisplay(burger, date, burgerId) {
-  const menuItems = document.getElementsByClassName("menu_items")[0];
-  try {
-    const response = await fetch(`${allergensUrl}${burgerId}`);
-    if (!response.ok) throw new Error("Failed to fetch allergens");
-    const allergens = await response.json();
-    const allergenDisplay = allergens.map((a) => a.acronym).join(", ");
-
-    menuItems.innerHTML = `
-  <p>Menu for: ${date}</p>
-  <h2>${burger.Name}</h2>
-  <div class="menu_entry">
-      <img src="${baseUrl}/api/v1/burgers/${burger.filename}" alt="${
-      burger.Name
-    }" class="menu_item_image">
-      <div class="item_description">
-          <p>${burger.Description}</p>
-          <p>${burger.Price} €</p>
-          <p>Allergens: ${allergenDisplay}</p>
-      </div>
-      
-      <button class="add-to-cart-btn" data-id="${
-        burger.ID
-      }" data-burger='${JSON.stringify(burger)}'>
-          <i class="fas fa-shopping-cart"></i> Add to Cart
-      </button>
-  </div>`;
-    updateButtonVisibility();
-  } catch (error) {
-    console.error("Error fetching allergens:", error);
-    menuItems.innerHTML = `<p>Error loading menu details.</p>`;
-  }
-
-  menuItems
-    .querySelector(".add-to-cart-btn")
-    .addEventListener("click", function (e) {
-      const burger = JSON.parse(e.target.dataset.burger);
-      //console.log("burger data:", burger);
-      alert("Burger added to cart!");
-      ShoppingCart.addItem({
-        id: burger.ID,
-        name: burger.Name,
-        price: burger.Price,
-        quantity: 1,
-      });
-      //console.log(ShoppingCart.cartKey());
-    });
-}
-*/
 
 async function updateMenuDisplay(burger, date, burgerId) {
   const menuContainer = document.getElementsByClassName("menu_items")[0]; // This should be a container that will hold all menu entries
