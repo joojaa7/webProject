@@ -1,5 +1,7 @@
 # webProject
 
+Mikael Asikainen, Johannes Liikanen, Jimi Pettilä
+
 ## API documentation
 
 [API](https://users.metropolia.fi/~mikaelea/API/)
