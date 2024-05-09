@@ -234,7 +234,7 @@ function loadTablesAndReservations(date) {
     });
 }
 
-// TODO: implement a check to see if user exists before adding a new user
+
 function createAddReservationForm(timeSlot) {
   const modificationsDiv = document.getElementById("reservationModifications");
   modificationsDiv.innerHTML = "";
@@ -329,7 +329,7 @@ async function fetchCustomerByReservationId(reservationId) {
 
 function displayModifyReservationForm(userDetails, reservationId) {
   const modificationsDiv = document.getElementById("reservationModifications");
-  modificationsDiv.innerHTML = ""; // Clear any existing content
+  modificationsDiv.innerHTML = ""; 
 
   const form = document.createElement("form");
 
@@ -421,7 +421,7 @@ function addReservation(timeSlot, customerId, numberOfGuests, date) {
       number_of_guests: numberOfGuests,
       start_time: startTimeFormatted,
       end_time: endTimeFormatted,
-      status: "Confirmed", // Default status
+      status: "Confirmed", 
     }),
   })
     .then((response) => {
@@ -585,7 +585,7 @@ const addCustomer = async (name, email) => {
       throw new Error("Failed to add new customer: " + response.statusText);
     }
     const addedCustomer = await response.json();
-    console.log("Added a new customer: ", addedCustomer);
+
     return addedCustomer;
   } catch (err) {
     console.error(err);

@@ -208,16 +208,15 @@ td {
   background-color: red;
   color: white;
   font-size: 50px;
-  animation: rotate360 1.2s linear infinite;  /* Poista */
-  animation-play-state: paused;      /* Poista */         
+  animation: rotate360 1.2s linear infinite;  
+  animation-play-state: paused;             
 }
 
 #delete-account:hover {
   background-color: rgb(95, 19, 19);
-  animation-play-state: running;  /* Poista */
+  animation-play-state: running;  
 }
 
-/* Poista */
 @keyframes rotate360 {
   to { transform: rotate(360deg); }           
 }

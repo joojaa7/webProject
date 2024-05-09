@@ -84,21 +84,17 @@ function populateAllergensSelect(allergens) {
   const select = document.getElementById("allergens-select");
   allergens.forEach((allergen) => {
     const option = document.createElement("option");
-    option.value = allergen.ID; // Assuming your allergen objects have an ID property
-    option.textContent = allergen.name; // Assuming your allergen objects have a name property
+    option.value = allergen.ID; 
+    option.textContent = allergen.name; 
     select.appendChild(option);
   });
 }
 
 const linksToContentMap = {
   "avatar-link": "avatar-content",
-  "bio-link": "bio-content",
   "contact_info-link": "contact_info-content",
-  "preferences-link": "preferences-content",
   "order_history-link": "order_history-content",
-  "bonus-link": "bonus-content",
   "admin_update_menu-link": "admin-update-menu-content",
-  "admin_update_users-link": "admin-update-users-content",
   "admin-order": "active-order-content",
   "reservations-link": "reservations-content",
   "admin_special_offers-link": "admin-special-offers-content",
@@ -146,7 +142,6 @@ const fetchBurgersForSpecialOffers = async () => {
 
 function populateBurgers(burgers, selectId) {
   const select = document.getElementById(selectId);
-  //select.innerHTML = "";
   burgers.forEach((burger) => {
     const option = document.createElement("option");
     option.value = burger.ID;
@@ -292,13 +287,8 @@ async function addBurger(form) {
 
 const addMenu = async () => {
   const burger = document.getElementById("menu-burger").value;
-  //console.log("burger", burger); // logs burger id (number)
-
-  const date = document.getElementById("menu-date").value; // Date format: YYYY-MM-DD
-  //console.log("date", date); // logs YYYY-MM-DD
-
+  const date = document.getElementById("menu-date").value; 
   const formattedDate = convertDateFormat(date);
-  //console.log("formattedDate", formattedDate); // logs DD.MM.YYYY
 
   const data = { burger_id: burger, date: formattedDate };
 
@@ -314,9 +304,7 @@ const addMenu = async () => {
     if (!response.ok) {
       throw new Error("Failed to add menu item: " + response.statusText);
     }
-
     const result = await response.json();
-    //console.log("Success:", result);
     alert("Menu item added successfully!");
   } catch (error) {
     console.error("Error:", error);
@@ -324,7 +312,7 @@ const addMenu = async () => {
   }
 };
 
-// Helper function to format date
+
 function convertDateFormat(dateStr) {
   if (!dateStr) return null;
 
@@ -335,7 +323,6 @@ function convertDateFormat(dateStr) {
 
   const [year, month, day] = parts;
 
-  // Check if the date parts are valid numbers
   if (isNaN(new Date(year, month - 1, day))) {
     throw new Error("Invalid date components.");
   }
@@ -343,13 +330,11 @@ function convertDateFormat(dateStr) {
   return `${day}.${month}.${year}`;
 }
 
-// Attach event listeners to each link
+
 Object.keys(linksToContentMap).forEach((linkId) => {
   const link = document.getElementById(linkId);
   if (link) {
     link.addEventListener("click", function (event) {
-      //console.log("link:", link);
-      //console.log("linkId:", linkId);
       if (linkId === "admin_update_menu-link") {
         fetchBurgersForMenu();
         fetchBurgersForDelete();
@@ -357,7 +342,7 @@ Object.keys(linksToContentMap).forEach((linkId) => {
         fetchBurgersForSpecialOffers();
       }
 
-      event.preventDefault(); // Prevent default anchor behavior
+      event.preventDefault();
       updateOptionsInput(linksToContentMap[linkId]);
     });
   }
@@ -372,7 +357,6 @@ document
   .addEventListener("click", async (e) => {
     const avatarFile = document.querySelector("#avatar-file");
     const inputForm = document.getElementById("avatar-form");
-    console.log(e);
     let avatar = null;
     const formData = new FormData();
     if (avatarFile.files[0]) {
@@ -397,8 +381,6 @@ document
       const json = await response.json();
       inputForm.reset();
       if (response.ok) {
-        console.log(json);
-        console.log("OK");
         userData.avatar = json.avatar;
         localStorage.setItem("user", JSON.stringify(userData));
         document.getElementById("user-avatar").src =
@@ -454,7 +436,6 @@ const populateOrderHistory = async (username) => {
     const tr = document.createElement("tr");
     tr.innerHTML = `<td>${order.name}</td><td>${order.quantity}</td><td>${order.Date}</td><td>${order.Status}</td>`;
     orderHistory.append(tr);
-    // Tilauksen kokonaishinta mukaan?
   });
 };
 
@@ -465,7 +446,6 @@ const activeOrderHandling = {
 const populateActiveOrders = async () => {
   const response = await fetch(baseUrl + `api/v1/users/admin/orders/active`);
   const json = await response.json();
-  //console.log(json);
   json.forEach((order) => {
     const tr = document.createElement("tr");
     tr.innerHTML = `<td>${order.order_id}</td><td>${order.name}</td><td>${order.quantity}</td>
@@ -475,12 +455,10 @@ const populateActiveOrders = async () => {
     tr.setAttribute("class", "active");
     tr.addEventListener("click", () => {
       const clickedOrderId = order.order_id;
-      console.log("click");
       if (!activeOrderHandling.orders.includes(clickedOrderId)) {
         activeOrderHandling.orders.push(order.order_id);
       }
 
-      // Löytyykö siistimpää tapaa muuttaa taustan väriä?
 
       document.querySelectorAll("tr.active").forEach((tr) => {
         const tdContent = tr
@@ -500,7 +478,6 @@ const populateActiveOrders = async () => {
       });
     });
     activeOrders.append(tr);
-    // Tilauksen kokonaishinta mukaan?
   });
 };
 
@@ -522,10 +499,8 @@ const updateOrderStatus = async () => {
     baseUrl + `api/v1/users/admin/orders/active`,
     options
   );
-  console.log(response);
   if (response.ok) {
     alert("Success.");
-    console.log("OK");
   }
 };
 
@@ -555,7 +530,6 @@ document
         baseUrl + `api/v1/users/${user.username}`,
         options
       );
-      console.log(response);
       if (response.ok) {
         localStorage.removeItem("token");
         localStorage.removeItem("user");
@@ -567,3 +541,22 @@ document
 
 populateOrderHistory(user.username);
 populateActiveOrders();
+
+(async () => {
+  if (localStorage.getItem("token") && localStorage.getItem("user")) {
+    try {
+      const options = {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"),
+          "Content-Type": "application/json",
+        },
+      };
+      const response = await fetch(baseUrl + "api/v1/auth/verify", options);
+      if (!response.ok) {
+        window.location = "index.html";
+      }
+    } catch (e) {
+
+    }
+  }
+})();
