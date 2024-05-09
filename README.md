@@ -58,4 +58,8 @@ npm run dev
 
 ```
 
+## Project Scope
+
+The application is a restaurants' web page, intended to be used by both customers and staff of the restaurant.
+
 
