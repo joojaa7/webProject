@@ -58,6 +58,19 @@ npm run dev
 
 ```
 
+Alternatively clone the [backend](https://github.com/joojaa7/webProject_backend) separately and run
+```
+npm start
+
+OR
+
+npm run dev
+
+```
+in the backend folder.
+
+Open the webpage by opening index.html file.
+
 ## Project Scope
 
 The application is a restaurants' web page, intended to be used by both customers and staff of the restaurant.
