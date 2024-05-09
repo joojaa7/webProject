@@ -148,13 +148,7 @@ reservationRouter.post("/", addReservation);
  * @apiGroup Reservations
  *
  * @apiParam {Number} id Unique identifier of the reservation to update.
- *
- * @apiBody {Number} [table_id] Optionally update the table ID for the reservation.
- * @apiBody {Number} [customer_id] Optionally update the customer ID for the reservation.
- * @apiBody {Number} [number_of_guests] Optionally update the number of guests.
- * @apiBody {String} [start_time] Optionally update the start time of the reservation (format: YYYY-MM-DD HH:MM:SS).
- * @apiBody {String} [end_time] Optionally update the end time of the reservation (format: YYYY-MM-DD HH:MM:SS).
- * @apiBody {String} [status] Optionally update the status of the reservation (e.g., "confirmed", "cancelled").
+ * @apiBody {Number} [number_of_guests] Update the number of guests.
  *
  * @apiSuccess {String} message Confirmation message stating the reservation was updated successfully.
  * @apiSuccessExample {json} Success-Response:
