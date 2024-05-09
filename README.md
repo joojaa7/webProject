@@ -2,6 +2,8 @@
 
 Mikael Asikainen, Johannes Liikanen, Jimi Pettilä
 
+## Link to the app
+[Link](https://users.metropolia.fi/~mikaelea/project/views/)
 ## API documentation
 
 [API](https://users.metropolia.fi/~mikaelea/API/)
