@@ -13,7 +13,6 @@ Mikael Asikainen, Johannes Liikanen, Jimi Pettilä
 Clone the git repository to a local folder
 ```
 git clone https://github.com/joojaa7/webProject.git
-
 ```
 Install [Node.js](https://nodejs.org/en) LTS version
 
