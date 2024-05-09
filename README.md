@@ -73,6 +73,20 @@ Open the webpage by opening index.html file.
 
 The application is a restaurants' web page, intended to be used by both customers and staff of the restaurant.
 
-After entering the page a user can 
-Once logged in, the user 
+After entering the page a user can browse the menus for different days.
+
+User can click the register button to create an account and log in.
+
+Once logged in, the user can add items to the shopping cart and choose 'checkout' to finalize the purchase.
+
+The logged in user can also set and manage their profile picture, update contact information, view their ordery history and delete their account.
+
+The staff of the restaurant will be granted the admin role, with access to additional features:
+
+- Manage table reservations
+- Add and remove burgers
+- Add menus to different dates
+- Manage pending orders
+- Post special offers that will be displayed on the main page
+
 
