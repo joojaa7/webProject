@@ -1,5 +1,5 @@
-//const baseUrl = "http://127.0.0.1:3001/";
-const baseUrl = "https://10.120.32.51/web/";
+const baseUrl = "http://127.0.0.1:3001/";
+//const baseUrl = "https://10.120.32.51/web/";
 
 export const apiUrl = "https://10.120.32.94/restaurant/api/v1/restaurants";
 export const userUrl = baseUrl + "api/v1/users/";
