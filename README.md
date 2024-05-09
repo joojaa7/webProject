@@ -34,7 +34,7 @@ Install all the dependencies by running
 npm i bcrypt cors dotenv express jsonwebtoken multer mysql2 nodemon
 ```
 
-Create a database using the web_project.sql script
+Create a database using the [web_project.sql](https://github.com/joojaa7/webProject/blob/main/web_project.sql) script
 
 Create a .env file in the root of the folder and add the following lines
 
