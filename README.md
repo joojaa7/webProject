@@ -75,4 +75,6 @@ Open the webpage by opening index.html file.
 
 The application is a restaurants' web page, intended to be used by both customers and staff of the restaurant.
 
+After entering the page a user can 
+Once logged in, the user 
 
