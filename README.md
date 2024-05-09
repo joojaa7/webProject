@@ -4,7 +4,9 @@ Mikael Asikainen, Johannes Liikanen, Jimi Pettilä
 
 ## Link to the app
 
-[Link](https://users.metropolia.fi/~mikaelea/project/views/)
+[Link](https://users.metropolia.fi/~mikaelea/group-project/views/)
+
+If you are using Chrome and are getting a CERT_AUTHORITY_INVALID error go to [this](https://10.120.32.51/web/api/v1/users/orders/root) address and type "thisisunsafe" then refresh the page.
 
 ## API documentation
 
@@ -16,7 +18,6 @@ Clone the git repository to a local folder
 
 ```
 git clone https://github.com/joojaa7/webProject.git
-
 ```
 
 Install [Node.js](https://nodejs.org/en) LTS version
