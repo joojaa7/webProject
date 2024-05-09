@@ -6,8 +6,8 @@ import {
   allergensUrl,
 } from "./variables.js";
 
-const baseUrl = 'http://127.0.0.1:3001/';
-//const baseUrl = "https://10.120.32.51/web/";
+//const baseUrl = 'http://127.0.0.1:3001/';
+const baseUrl = "https://10.120.32.51/web/";
 const orderHistory = document.getElementById("history-table");
 const activeOrders = document.getElementById("active-table");
 let user = JSON.parse(localStorage.getItem("user"));
