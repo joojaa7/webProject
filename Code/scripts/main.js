@@ -16,7 +16,7 @@ const loggedElement = document.getElementById("logged");
 let user = JSON.parse(localStorage.getItem("user"));
 const avatar = document.getElementById("avatar");
 //const baseUrl = 'http://127.0.0.1:3001/';
-const baseUrl = "http://10.120.32.51/web/";
+const baseUrl = "https://10.120.32.51/web/";
 
 document.addEventListener("DOMContentLoaded", async () => {
   const storedUser = JSON.parse(localStorage.getItem("user"));
