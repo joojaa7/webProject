@@ -14,12 +14,10 @@ const getAllReservations = async (req, res) => {
     res.json(reservations);
   } catch (error) {
     console.error("Error fetching reservations:", error);
-    res
-      .status(500)
-      .json({
-        message: "Failed to retrieve reservations",
-        error: error.message,
-      });
+    res.status(500).json({
+      message: "Failed to retrieve reservations",
+      error: error.message,
+    });
   }
 };
 
@@ -55,9 +53,19 @@ const addReservation = async (req, res) => {
 // Controller to update an existing reservation
 const updateReservation = async (req, res) => {
   const reservationId = req.params.id;
-  const updates = req.body; // Object containing fields to update
+  const { number_of_guests } = req.body;
+  //const updates = req.body; // Object containing fields to update
+  console.log("Updating reservation in controller:", reservationId, {
+    number_of_guests,
+  });
+  if (number_of_guests === undefined) {
+    return res.status(400).json({ message: "Missing number_of_guests field" });
+  }
   try {
-    const result = await updateReservationModel(reservationId, updates);
+    const result = await updateReservationModel(
+      reservationId,
+      number_of_guests
+    );
     if (result > 0) {
       res.json({ message: "Reservation updated successfully" });
     } else {
@@ -99,12 +107,10 @@ const getReservationsByTableAndDate = async (req, res) => {
     res.json(reservations);
   } catch (error) {
     console.error("Error fetching reservations:", error);
-    res
-      .status(500)
-      .json({
-        message: "Failed to retrieve reservations",
-        error: error.message,
-      });
+    res.status(500).json({
+      message: "Failed to retrieve reservations",
+      error: error.message,
+    });
   }
 };
 

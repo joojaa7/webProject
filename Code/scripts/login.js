@@ -249,19 +249,17 @@ async function submitOfferData(formData) {
   return await response.json();
 }
 
-// const optionsInput = document.querySelector(".options-input");
-let currentVisibleContent = null; // To keep track of the currently displayed content
+let currentVisibleContent = null;
 
 function updateOptionsInput(contentId) {
   if (currentVisibleContent) {
-    currentVisibleContent.style.display = "none"; // Hide current content
+    currentVisibleContent.style.display = "none";
   }
   const contentToShow = document.getElementById(contentId);
   if (contentToShow !== currentVisibleContent) {
-    contentToShow.style.display = "block"; // Show new content
-    currentVisibleContent = contentToShow; // Update the reference to the current content
+    contentToShow.style.display = "block";
+    currentVisibleContent = contentToShow;
   } else {
-    // If the same content is clicked again, toggle its visibility
     contentToShow.style.display = "none";
     currentVisibleContent = null;
   }
@@ -274,7 +272,7 @@ async function addBurger(form) {
   try {
     const response = await fetch(hamburgersUrl, {
       method: "POST",
-      body: formData, // FormData object automatically sets the Content-Type to 'multipart/form-data'
+      body: formData,
     });
 
     if (response.ok) {

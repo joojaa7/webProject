@@ -234,7 +234,6 @@ function loadTablesAndReservations(date) {
     });
 }
 
-// function to add a new customer and make them a reservation
 // TODO: implement a check to see if user exists before adding a new user
 function createAddReservationForm(timeSlot) {
   const modificationsDiv = document.getElementById("reservationModifications");
@@ -328,33 +327,11 @@ async function fetchCustomerByReservationId(reservationId) {
   return await response.json();
 }
 
-// TODO: Implement the updateReservation function to send a PUT request to the API to modify a reservation
-// TODO: Modify add reservation form to ask for customer data, save customer details as reservation is being made
-// TODO: Create "add new customer" and "use existing customer" buttons in the add reservation form
-
-// TODO: Implement a way to delete reservations
-// TODO: Implement a way to change the status of a reservation (e.g., from "Confirmed" to "Cancelled")
-// TODO: Display amount of customers and reservations and other data for a selected date
-// TODO: Implement a way to filter reservations by status (e.g., show only "Confirmed" reservations)
-// TODO: Implement visual to table reservations (e.g., color the table divs based on the number of reservations or customers)
-// TODO: Implement a way to search for reservations by customer name or ID
-
 function displayModifyReservationForm(userDetails, reservationId) {
   const modificationsDiv = document.getElementById("reservationModifications");
   modificationsDiv.innerHTML = ""; // Clear any existing content
-  console.log(userDetails);
 
   const form = document.createElement("form");
-  form.onsubmit = (e) => {
-    e.preventDefault();
-    console.log(
-      "calling updateReservation with: ",
-      reservationId,
-      nameInput.value,
-      contactInfoInput.value
-    );
-    updateReservation(reservationId, nameInput.value, contactInfoInput.value);
-  };
 
   const nameInput = document.createElement("input");
   nameInput.type = "text";
@@ -396,6 +373,33 @@ function displayModifyReservationForm(userDetails, reservationId) {
 
   modificationsDiv.appendChild(form);
   modificationsDiv.style.display = "block";
+
+  form.onsubmit = async (e) => {
+    e.preventDefault();
+    try {
+      console.log(
+        "calling updateReservation with: ",
+        reservationId,
+        nameInput.value,
+        contactInfoInput.value
+      );
+      await updateCustomer({
+        customer_id: userDetails.customer_id,
+        name: nameInput.value,
+        contact_info: contactInfoInput.value,
+      });
+
+      await updateReservation(reservationId, numberOfGuestsInput.value);
+
+      alert("Reservation updated successfully!");
+      modificationsDiv.style.display = "none";
+      const currentDate = document.getElementById("reservationDate").value;
+      displayTableReservations(currentTableId, currentDate);
+    } catch (error) {
+      console.error("Error updating reservation:", error);
+      alert("Error updating reservation: " + error.message);
+    }
+  };
 }
 
 function addReservation(timeSlot, customerId, numberOfGuests, date) {
@@ -438,6 +442,10 @@ function addReservation(timeSlot, customerId, numberOfGuests, date) {
 }
 
 async function deleteReservation(reservationId) {
+  console.log(
+    "url in deleteresevation: ",
+    `${reservationsUrl}/${reservationId}`
+  );
   try {
     const response = await fetch(`${reservationsUrl}/${reservationId}`, {
       method: "DELETE",
@@ -458,8 +466,57 @@ async function deleteReservation(reservationId) {
   }
 }
 
-async function updateReservation(reservationId, name, contactInfo) {
-  // make a PUT request to the API to update the reservation
+async function updateReservation(reservationId, numberOfGuests) {
+  try {
+    const response = await fetch(`${reservationsUrl}${reservationId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        number_of_guests: numberOfGuests,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to update reservation: ${response.statusText}`);
+    }
+
+    console.log("Reservation updated successfully");
+    return await response.json();
+  } catch (error) {
+    console.error("Error updating reservation:", error.message);
+    throw error;
+  }
+}
+
+async function updateCustomer(customerDetails) {
+  console.log("updatecustomer called");
+  try {
+    const response = await fetch(
+      `${customersUrl}/${customerDetails.customer_id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          customer_name: customerDetails.name,
+          contact_info: customerDetails.contact_info,
+        }),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`Failed to update customer: ${response.statusText}`);
+    }
+
+    console.log("Customer updated successfully");
+    return await response.json(); // Assuming API returns updated customer details
+  } catch (error) {
+    console.error("Error updating customer:", error.message);
+    throw error;
+  }
 }
 
 function displayTableReservations(tableId, dateString) {
