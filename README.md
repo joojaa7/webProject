@@ -1,5 +1,9 @@
 # webProject
 
+## API documentation
+
+[API](https://users.metropolia.fi/~mikaelea/API/)
+
 ## Installation
 
 Clone the git repository to a local folder
@@ -12,13 +16,11 @@ Install [Node.js](https://nodejs.org/en) LTS version
 Go to the folder you cloned the repository to and run
 ```
 npm init -y
-
 ```
 Install all the dependencies by running
 
 ```
 npm i bcrypt cors dotenv express jsonwebtoken multer mysql2 nodemon
-
 ```
 Create a database using the web_project.sql script
 
@@ -30,7 +32,6 @@ DB_USER=userforthedatabase
 DB_PASSWORD=password
 DB_NAME=nameofthedatabase
 JWT_SECRET=arandomsetofcharacters
-
 ```
 Go to main.js, login.js and variables.js and change the baseUrl
 
@@ -44,7 +45,6 @@ to:
 
 const baseUrl = 'http://127.0.0.1:3001/';
 //const baseUrl = "https://10.120.32.51/web/";
-
 ```
 
 To start up the backend run
@@ -55,7 +55,6 @@ npm start
 OR
 
 npm run dev
-
 ```
 
 Alternatively clone the [backend](https://github.com/joojaa7/webProject_backend) separately and run
@@ -65,7 +64,6 @@ npm start
 OR
 
 npm run dev
-
 ```
 in the backend folder.
 
